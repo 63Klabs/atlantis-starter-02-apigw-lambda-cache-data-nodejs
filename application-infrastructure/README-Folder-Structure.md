@@ -2,7 +2,7 @@
 
 It is recommended you keep this README in your application-infrastructure directory as reference for you and others who are maintaining the application.
 
-The original (and updated) document for this README may be found on the [API Gateway with Lambda utilizing 63klabs/cache-proxy Written in Node.js](https://github.com/63Klabs/atlantis-starter-02-apigw-lambda-cache-data-nodejs).
+The original (and updated) document for this README may be found on the [API Gateway with Lambda utilizing 63klabs/cache-data Written in Node.js](https://github.com/63Klabs/atlantis-starter-02-apigw-lambda-cache-data-nodejs).
 
 ## Application Infrastructure
 

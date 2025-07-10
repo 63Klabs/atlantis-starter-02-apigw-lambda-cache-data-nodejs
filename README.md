@@ -1,4 +1,4 @@
-# API Gateway with Lambda utilizing 63klabs/cache-proxy Written in Node.js
+# API Gateway with Lambda utilizing 63klabs/cache-data Written in Node.js
 
 > For use with template-pipeline.yml which can be deployed using [Atlantis Configuration Repository for Serverless Deployments using AWS SAM](https://github.com/63Klabs/atlantis-cfn-configuration-repo-for-serverless-deployments)
 
