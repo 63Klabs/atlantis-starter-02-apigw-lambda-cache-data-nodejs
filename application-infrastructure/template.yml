@@ -68,6 +68,7 @@ Metadata:
         Parameters:
           - CacheDataDynamoDbTableName
           - CacheDataS3BucketName
+          - CacheDataTimeZoneForInterval
 
 # =============================================================================
 # PARAMETERS
@@ -224,19 +225,30 @@ Parameters:
     AllowedValues: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653]
 
   # ---------------------------------------------------------------------------
-  # CloudWatch Dashboard Settings
+  # Cache-Data Parameters
+  # Most of these parameters are passed to Lambda Environment Variables
+  # From: https://www.npmjs.com/package/@63klabs/cache-data
 
   CacheDataDynamoDbTableName:
     Type: String
-    Description: "The DynamoDb table name to use for caching data. This is used by the 63klabs/cache-data library."
-    AllowedPattern: "^[a-zA-Z0-9_.-]{3,255}$"
-    ConstraintDescription: "Must be between 3 and 255 characters. Can contain alphanumeric characters, underscores, dashes, and periods."
+    Description: "The DynamoDb table name to use for caching data. This is used by the 63klabs/cache-data package. If left blank, it will use the imported value from the Cache Data storage stack output."
+    Default: ""
+    AllowedPattern: "^[a-zA-Z0-9_.-]{3,255}$|^$"
+    ConstraintDescription: "Blank to use ImportedValue, otherwise: Must be between 3 and 255 characters. Can contain alphanumeric characters, underscores, dashes, and periods."
   
   CacheDataS3BucketName:
     Type: String
-    Description: "The S3 bucket name to use for caching data. This is used by the 63klabs/cache-data library."
-    AllowedPattern: "^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$"
-    ConstraintDescription: "Must be between 3 and 63 characters. Lower case alphanumeric and dashes. Must start and end with a letter or number."
+    Description: "The S3 bucket name to use for caching data. This is used by the 63klabs/cache-data package. If left blank, it will use the imported value from the Cache Data storage stack output."
+    Default: ""
+    AllowedPattern: "^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$|^$"
+    ConstraintDescription: "Blank to use ImportedValue, otherwise: Must be between 3 and 63 characters. Lower case alphanumeric and dashes. Must start and end with a letter or number."
+
+  CacheDataTimeZoneForInterval:
+    Type: String
+    Description: "Cache-Data may expire using an interval such as every four, six, twelve, ... hours on the hour starting at midnight. What timezone holds the midnight to calculate from?"
+    Default: "Etc/UTC"
+    AllowedValues: ["Etc/UTC", "America/Puerto_Rico", "America/New_York", "America/Indianapolis", "America/Chicago", "America/Denver", "America/Phoenix", "America/Los_Angeles", "America/Anchorage", "Pacific/Honolulu"] # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+    ConstraintDescription: "Common examples for United States of America. Accepted values can be changed in the template for your region."
 
 # =============================================================================
 # MAPPINGS
@@ -330,6 +342,8 @@ Conditions:
   CreateAlarms: !Equals [!Ref DeployEnvironment, "PROD"] # !Equals ["ALWAYS", "ALWAYS"] # Option if you want to ALWAYS create an alarm or only in PROD. Alarms cost money so you may only want them in Prod (or temporarily in test)
   HasPermissionsBoundaryArn: !Not [!Equals [!Ref PermissionsBoundaryArn, ""]]
   IsArmArch: !Equals [!Ref FunctionArchitecture, "arm64"]
+  HasCacheDataDynamoDbTableName: !Not [!Equals [!Ref CacheDataDynamoDbTableName, ""]]
+  HasCacheDataS3BucketName: !Not [!Equals [!Ref CacheDataS3BucketName, ""]]
 
 # =============================================================================
 # GLOBALS
@@ -468,18 +482,26 @@ Resources:
           DEPLOY_ENVIRONMENT: !Ref DeployEnvironment # PROD, TEST, DEV - a different category of environment
           LOG_LEVEL: !If [ IsProduction, "0", "5"] # 0 for prod, 2-5 for non-prod
           PARAM_STORE_PATH: !Ref ParameterStoreHierarchy # SSM Parameter store can use a hierarchy to organize your apps parameters
-                    
-          # Cache-Data settings - Parameters may be used instead of hard-coded values - see docs/00-example-implementation/example-template-parameters.yml
-          CACHE_DATA_DYNAMO_DB_TABLE: !Ref CacheDataDynamoDbTableName # The DynamoDb table name to use for caching data
-          CACHE_DATA_S3_BUCKET: !Ref CacheDataS3BucketName # The S3 bucket name to use for caching data
-          CACHE_DATA_SECURE_DATA_ALGORITHM: "aes-256-cbc" # The cryptographic algorithm to use for storing sensitive cached data in S3 and DynamoDb
-          CACHE_DATA_ID_HASH_ALGORITHM: "RSA-SHA256" # The hash algorithm to use for generating the URI ID to identify cached requests
-          CACHE_DATA_DYNAMO_DB_MAX_CACHE_SIZE_KB: 10 # The cut-off in KB that large objects should be stored in S3 instead of DynamoDb
-          CACHE_DATA_PURGE_EXPIRED_CACHE_ENTRIES_AFTER_X_HRS: 24 # The number of hours expired cached data should be kept before purging
-          CACHE_DATA_ERROR_EXP_IN_SECONDS: 300 # How long should errors be cached? This prevents retrying a service that is currently in error too often
-          CACHE_DATA_TIME_ZONE_FOR_INTERVAL: "Etc/UTC" # Cache-Data may expire using an interval such as every four, six, twelve, ... hours on the hour starting at midnight. What timezone holds the midnight to calculate from?
-          CACHE_DATA_AWS_X_RAY_ON: true # Enable X-Ray tracing for Cache-Data
-          CACHE_DATA_USE_TOOLS_HASH_METHOD: true # Use the tools.hash method for generating the URI ID to identify cached requests (default is false)
+
+          # Cache-Data Settings
+          # If you do not provide these environment variables, cache-data will use the default values (shown below)
+          # CACHE_DATA_DYNAMO_DB_TABLE and CACHE_DATA_S3_BUCKET are required for cache-data to work
+          # See https://github.com/63Klabs/cache-data/blob/main/docs/00-example-implementation/example-template-lambda-function.yml
+          # -- Optional --
+          CACHE_DATA_TIME_ZONE_FOR_INTERVAL: !Ref CacheDataTimeZoneForInterval # Cache-Data may expire using an interval such as every four, six, twelve, ... hours on the hour starting at midnight. What timezone holds the midnight to calculate from?
+          CACHE_DATA_AWS_X_RAY_ON: true # (default is false) Enable X-Ray tracing for Cache-Data 
+          CACHE_DATA_USE_TOOLS_HASH_METHOD: true # (default is false) Use the tools.hash method for generating the URI ID to identify cached requests
+          # -- Required --
+          CACHE_DATA_DYNAMO_DB_TABLE: !If 
+            - HasCacheDataDynamoDbTableName
+            - !Ref CacheDataDynamoDbTableName
+            - Fn::ImportValue:
+                'Fn::Sub': '${Prefix}-CacheDataDynamoDbTable' # relies on the Cache Data storage stack output
+          CACHE_DATA_S3_BUCKET: !If 
+            - HasCacheDataS3BucketName
+            - !Ref CacheDataS3BucketName
+            - Fn::ImportValue:
+                'Fn::Sub': '${Prefix}-CacheDataS3Bucket' # relies on the Cache Data storage stack output
 
       Events:
         GetApiData:
