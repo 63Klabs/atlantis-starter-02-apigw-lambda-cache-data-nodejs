@@ -14,7 +14,7 @@
 # This template is designed to be used with 63KLabs Atlantis for automated deployments.
 
 # USE WITH:
-# - Atlantis pipeline/template.yml
+# - Atlantis pipeline/pipeline-template.yml
 
 AWSTemplateFormatVersion: "2010-09-09"
 Transform:  AWS::Serverless-2016-10-31
@@ -675,9 +675,15 @@ Outputs:
   APIEndpointTest:
     Description: "Endpoint Test URL"
     Value: !Sub "https://${WebApi}.execute-api.${AWS::Region}.amazonaws.com/${ApiPathBase}/?q=Chicago"
-  CloudWatchLogGroup:
-    Description: "Cloud Watch Log Group for application"
+  CloudWatchLambdaExecutionLogGroup:
+    Description: "Cloud Watch Log Group for Lambda Execution Logs"
     Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Flambda%2F${AppFunction}"
+  # CloudWatchApiGatewayExecutionLogGroup:
+  #   Description: "Cloud Watch Log Group for API Gateway Execution Logs"
+  #   Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-execution-logs"
+  # CloudWatchApiGatewayAccessLogGroup:
+  #   Description: "Cloud Watch Log Group for API Gateway Access Logs"
+  #   Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-access-logs"
   CloudWatchDashboard:
     Condition: CreateProdResources
     Description: "Cloud Watch Dashboard (for production environments only)"
