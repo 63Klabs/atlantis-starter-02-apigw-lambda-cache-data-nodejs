@@ -3,7 +3,8 @@ const {
 	cache: {
 		Cache,
 		CacheableDataAccess
-	}, tools: {
+	},
+	tools: {
 		DebugAndLog,
 		Timer,
 		CachedParameterSecrets,
