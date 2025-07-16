@@ -1,5 +1,5 @@
-const Data = require("./data.view");
+const ExampleView = require("./example.view");
 
 module.exports = {
-	Data
+	ExampleView
 };

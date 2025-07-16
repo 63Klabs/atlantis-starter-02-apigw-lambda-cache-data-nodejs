@@ -24,12 +24,13 @@ For other notes and info, refer to README.md
 
 "use strict";
 
-const { Config } = require("./config/index.js");
-const Routes = require("./routes/index.js");
-const { tools } = require("@63klabs/cache-data");
+const { tools: {DebugAndLog, Response, Timer} } = require("@63klabs/cache-data");
+
+const { Config } = require("./config");
+const Routes = require("./routes");
 
 /* log a cold start and keep track of init time */
-const coldStartInitTimer = new tools.Timer("coldStartTimer", true);
+const coldStartInitTimer = new Timer("coldStartTimer", true);
 
 /* initialize the Config */
 Config.init(); // we will await completion in the handler
@@ -39,7 +40,6 @@ Config.init(); // we will await completion in the handler
  * 
  * @param {object} event Lambda event - doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
  * @param {object} context Lambda context - doc: https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html 
- * @param {object} callback Callback function to submit response
  */
 exports.handler = async (event, context) => {
 
@@ -51,7 +51,7 @@ exports.handler = async (event, context) => {
 		await Config.promise(); // makes sure general config init is complete
 		await Config.prime(); // makes sure all prime tasks (tasks that need to be completed AFTER init but BEFORE handler) are completed
 		/* If the cold start init timer is running, stop it and log. This won't run again until next cold start */
-		if (coldStartInitTimer.isRunning()) { tools.DebugAndLog.log(coldStartInitTimer.stop(),"COLDSTART"); }
+		if (coldStartInitTimer.isRunning()) { DebugAndLog.log(coldStartInitTimer.stop(),"COLDSTART"); }
 
 		/* Process the request and wait for result */
 		response = await Routes.process(event, context);
@@ -59,16 +59,16 @@ exports.handler = async (event, context) => {
 	} catch (error) {
 
 		/* Log the error */
-		tools.DebugAndLog.error(`Unhandled Execution Error in Handler  Error: ${error.message}`, error.stack);
+		DebugAndLog.error(`Unhandled Execution Error in Handler  Error: ${error.message}`, error.stack);
 
 		/* This failed before we even got to parsing the request so we don't have all the log info */
-		response = new tools.Response({statusCode: 500});
+		response = new Response({statusCode: 500});
 		response.setBody({
 			message: 'Error initializing request - 1701-D' // 1701-D just so we know it is an app and not API Gateway error
 		});
 
 	} finally {
-		tools.DebugAndLog.debug("Response from Handler: ", response);
+		DebugAndLog.debug("Response from Handler: ", response);
 		/* Send the result back to API Gateway */
 		return response.finalize();
 	}

@@ -1,5 +1,5 @@
-const Data = require("./games.controller");
+const ExampleCtrl = require("./example.controller");
 
 module.exports = {
-	Data
+	ExampleCtrl
 };

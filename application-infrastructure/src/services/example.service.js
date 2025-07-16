@@ -9,9 +9,9 @@ const {
 } = require("@63klabs/cache-data");
 
 const { Config } = require("../config");
-const GamesSample = require("../models/GamesSample.class.dao");
+const { ExampleDao } = require("../models");
 
-const logIdentifier = "GamesSample Service GET";
+const logIdentifier = "Example Service GET";
 
 exports.fetch = async (query) => {
 
@@ -47,7 +47,7 @@ exports.fetch = async (query) => {
 			use the response to get the data. */
 			const cacheObj = await CacheableDataAccess.getData(
 				cacheCfg, 
-				GamesSample.getGames,
+				ExampleDao.getGames,
 				conn, 
 				daoQuery
 			);

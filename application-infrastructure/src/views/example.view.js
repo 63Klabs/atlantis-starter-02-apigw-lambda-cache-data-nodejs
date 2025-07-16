@@ -4,7 +4,7 @@
 
 const { tools: {Timer} } = require("@63klabs/cache-data");
 
-const logIdentifier = "GamesSample View";
+const logIdentifier = "Example View";
 
 /** 
  * Generic filter

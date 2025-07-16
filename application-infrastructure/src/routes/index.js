@@ -49,7 +49,7 @@ const process = async function(event, context) {
 
 				switch (route) {
 					case "api/data":
-						RESP.setBody( await Controllers.Data.get(props));
+						RESP.setBody( await Controllers.ExampleCtrl.get(props));
 						break;
 					default:
 						RESP.reset({statusCode: 404});

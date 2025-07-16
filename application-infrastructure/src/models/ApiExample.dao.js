@@ -1,6 +1,6 @@
 const { tools: {DebugAndLog, APIRequest} } = require("@63klabs/cache-data");
 
-class ApiSample {
+class ApiExampleDao {
 
 	constructor(connection) {
 
@@ -107,9 +107,10 @@ class ApiSample {
 
 		} catch (error) {
 			DebugAndLog.error(`Error in call to ApiSample remote endpoint: Error: ${error.message}`, error.stack);
+		} finally {
+			return response;
 		}
 			
-		return response;
 	}
 
 	async _call() {
@@ -123,14 +124,14 @@ class ApiSample {
 		} catch (error) {
 			DebugAndLog.error(`Error in ApiSample call: Error: ${error.message}`, error.stack);
 			response = APIRequest.responseFormat(false, 500, "Error in call()");
+		} finally {
+			return response;
 		}
-
-		return response;
 
 	};
 
 };
 
 module.exports = {
-	ApiSample
+	ApiExampleDao
 };

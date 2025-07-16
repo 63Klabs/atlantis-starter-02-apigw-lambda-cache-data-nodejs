@@ -1,8 +1,9 @@
 const { tools: {Timer, DebugAndLog} } = require("@63klabs/cache-data");
-const GamesSampleSvc = require("../models/gamesSample.service");
-const GamesSample = require("../views/gamesSample.view");
 
-const logIdentifier = "GamesSample Controller GET";
+const { ExampleSvc } = require("../services");
+const { ExampleView } = require("../views");
+
+const logIdentifier = "Example Controller GET";
 
 /**
  * Get function called by Router. This function will dispatch the appropriate task 
@@ -30,9 +31,9 @@ exports.get = async (props) => {
 				deadline: props?.deadline
 			};
 
-			data = GamesSample.view( await GamesSampleSvc.fetch(query) );
+			data = ExampleView.view( await ExampleSvc.fetch(query) );
 
-			DebugAndLog.debug(`${logIdentifier}: GamesSample by Id: ${query?.id}`, data);
+			DebugAndLog.debug(`${logIdentifier}: Example by Id: ${query?.id}`, data);
 
 		} catch (error) {
 			DebugAndLog.error(`${logIdentifier}: Error: ${error.message}`, error.stack);
