@@ -137,23 +137,13 @@ All (non secret) configuration files and methods safe for repositories and used 
 
 Shared methods that serve as tools, helpers, and utilities can be stored in the `utils` directory. These methods should be independent of Configurations, controllers, views, and models here. As your organization develops methods that are constantly re-used, they should probably be deployed as a Lambda Layer.
 
-### Data Directory
+### Tests directory
 
-`src/data/`
+`src/tests/`
 
-The `data` directory contains supplemental static data that can be used for mapping and enhancing data returned by your application.
+The `tests` directory can be used to store your tests written using Chai or other testing framework.
 
-Any data that isn't dynamic can be stored and used as labels, mappings, enhancements, etc.
-
-For example, suppose data from an outside system returns coded location information. For example, `US-CHI` for Chicago. You can store a JSON object with the code mappings so that your API web service can return a fully formatted, human readable location.
-
-### Test directory
-
-`src/test/`
-
-The `test` directory can be used to store your tests written using Chai or other testing framework.
-
-There is a sample-data directory in tests to store data that can be used for mocking requests, or conducting tests against.
+There is a sample-data directory in models to store data that can be used for mocking requests, or conducting tests against.
 
 ### Package JSON file
 
@@ -243,3 +233,13 @@ Why you might do this:
 - Easier authentication across all endpoints by placing in super class. Less repetitive data in `Connection`.
 - Easier to implement shared header or query string parameters (such as `format=json` if your endpoint requires such things)
 - Easier to provide limits, pagination, and unique error code handling for the endpoints.
+
+### Static Data Directory
+
+`src/models/static/`
+
+The `models/static` directory contains supplemental static data that can be used for mapping and enhancing data returned by your application.
+
+Any data that isn't dynamic can be stored and used as labels, mappings, enhancements, etc.
+
+For example, suppose data from an outside system returns coded location information. For example, `US-CHI` for Chicago. You can store a JSON object with the code mappings so that your API web service can return a fully formatted, human readable location.
