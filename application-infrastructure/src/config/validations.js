@@ -1,4 +1,4 @@
-const { statusCodes } = require("../data/index.js");
+const { statusCodes } = require("../models/static/index.js");
 const { tools: {DebugAndLog} } = require("@63klabs/cache-data");
 
 const referrers = [

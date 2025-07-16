@@ -37,7 +37,7 @@ describe('Test validations from config/validations.js', () => {
 
 		before(async () => {
 			try {
-				const filePath = path.join(__dirname, '..', 'data', 'statusCodes.json');
+				const filePath = path.join(__dirname, '..', 'models', 'static', 'statusCodes.json');
 				const fileContent = await readFile(filePath, 'utf8');
 				statusCodes = JSON.parse(fileContent);
 			} catch (error) {
