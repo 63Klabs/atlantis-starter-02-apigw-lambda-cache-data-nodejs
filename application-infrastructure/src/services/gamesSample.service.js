@@ -1,5 +1,14 @@
+const { 
+	cache: { 
+		CacheableDataAccess 
+	},
+	tools: {
+		DebugAndLog,
+		Timer
+	}
+} = require("@63klabs/cache-data");
+
 const { Config } = require("../config");
-const { tools: {DebugAndLog, Timer}, cache } = require("@63klabs/cache-data");
 const GamesSample = require("../models/GamesSample.class.dao");
 
 const logIdentifier = "GamesSample Service GET";
@@ -36,7 +45,7 @@ exports.fetch = async (query) => {
 			If we do, we will return it. If not, we will call the function passed as the
 			second parameter with the conn and query as parameters to that function and
 			use the response to get the data. */
-			const cacheObj = await cache.CacheableDataAccess.getData(
+			const cacheObj = await CacheableDataAccess.getData(
 				cacheCfg, 
 				GamesSample.getGames,
 				conn, 

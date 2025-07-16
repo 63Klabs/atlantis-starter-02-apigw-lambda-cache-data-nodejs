@@ -1,4 +1,10 @@
-const { tools } = require("@63klabs/cache-data");
+const { 
+	tools: {
+		DebugAndLog,
+		ClientRequest,
+		Response
+	} 
+} = require("@63klabs/cache-data");
 
 const Controllers = require("../controllers");
 
@@ -7,17 +13,17 @@ const Controllers = require("../controllers");
  * 
  * @param {object} event The event passed to the lambda function
  * @param {object} context The context passed to the lambda function
- * @returns {tools.Response} The response to the request as a Response class object
+ * @returns {Response} The response to the request as a Response class object
  */
 const process = async function(event, context) {
 
-	tools.DebugAndLog.debug("Received event", event);
+	DebugAndLog.debug("Received event", event);
 
 	/*
 	 * Process the request information, get a response ready
 	 */
-	const REQ = new tools.ClientRequest(event, context);
-	const RESP = new tools.Response(REQ);
+	const REQ = new ClientRequest(event, context);
+	const RESP = new Response(REQ);
 
 	try {
 		
@@ -66,11 +72,11 @@ const process = async function(event, context) {
 		}
 
 	} catch (error) {
-		tools.DebugAndLog.error(`Fatal error: ${error.message}`, error.stack);
+		DebugAndLog.error(`Fatal error: ${error.message}`, error.stack);
 		RESP.reset({statusCode: 500});
 	}
 
-	tools.DebugAndLog.debug("Response from Routes: ", RESP.toObject());
+	DebugAndLog.debug("Response from Routes: ", RESP.toObject());
 
 	return RESP;
 
