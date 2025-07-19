@@ -16,6 +16,16 @@ An application starter template to demonstrate Atlantis Template for AWS CodePip
   - Caching of data from remote endpoints using S3 and DynamoDb (provision separately or with application)
   - Request handling: Router, Validation, response formatting and logging
 
-## Tutorial: Installation and Use
+## Installation and Use
 
-Read the [Atlantis Tutorials introductory page](https://github.com/63Klabs/atlantis-tutorials), then perform the steps outlined in the [S3 and DynamoDb storage stack for API Gateway and Lambda using Cache-Data (Node) tutorial](https://github.com/63Klabs/atlantis-tutorials/tree/main/tutorials/02-s3-dynamo-api-gateway-lambda-cache-data-node).
+### Tutorial
+
+Read the [Atlantis Tutorials introductory page](https://github.com/63Klabs/atlantis-tutorials), then perform the steps outlined in [Tutorial #2: API Gateway and Lambda using Cache-Data (Node)](https://github.com/63Klabs/atlantis-tutorials/blob/main/tutorials/02-advanced-api-gateway-lambda-cache-data-node/README.md).
+
+### Checklist
+
+If this isn't your first rodeo and you know what you are doing with Atlantis, this template, and AWS in general, then you may want to use a [step-by-step checklist for first deployments](./TODO.md).
+
+### Application Code Structure Documentation
+
+The [Application Structure README](./application-infrastructure/README-Application-Structure.md) in the `application-infrastructure` directory is a valuable resource to understanding how this application written and structured.
