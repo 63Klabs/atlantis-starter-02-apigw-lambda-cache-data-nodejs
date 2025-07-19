@@ -475,12 +475,12 @@ Resources:
             - HasCacheDataDynamoDbTableName
             - !Ref CacheDataDynamoDbTableName
             - Fn::ImportValue:
-                'Fn::Sub': '${Prefix}-CacheDataDynamoDbTable' # relies on the Cache Data storage stack output
+                'Fn::Sub': '${Prefix}-cache-data-CacheDataDynamoDbTable' # relies on the Cache Data storage stack output
           CACHE_DATA_S3_BUCKET: !If 
             - HasCacheDataS3BucketName
             - !Ref CacheDataS3BucketName
             - Fn::ImportValue:
-                'Fn::Sub': '${Prefix}-CacheDataS3Bucket' # relies on the Cache Data storage stack output
+                'Fn::Sub': '${Prefix}-cache-data-CacheDataS3Bucket' # relies on the Cache Data storage stack output
 
       Events:
         GetApiData:
@@ -551,7 +551,13 @@ Resources:
             - s3:GetObject
             - s3:GetObjectVersion
             Effect: Allow
-            Resource: !Sub 'arn:aws:s3:::${CacheDataS3BucketName}/cache/*'
+            Resource: !Sub 
+              - 'arn:aws:s3:::${BucketName}/cache/*'
+              - BucketName: !If 
+                  - HasCacheDataS3BucketName
+                  - !Ref CacheDataS3BucketName
+                  - Fn::ImportValue: 
+                      'Fn::Sub': '${Prefix}-cache-data-CacheDataS3Bucket'
 
           # cache-data DynamoDb table (from: https://www.npmjs.com/package/@63klabs/cache-data)
           - Sid: LambdaAccessToDynamoDBTableCacheData
@@ -564,7 +570,13 @@ Resources:
             - dynamodb:UpdateItem
             - dynamodb:BatchWriteItem
             Effect: Allow
-            Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${CacheDataDynamoDbTableName}'
+            Resource: !Sub 
+              - 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableName}'
+              - TableName: !If 
+                  - HasCacheDataDynamoDbTableName
+                  - !Ref CacheDataDynamoDbTableName
+                  - Fn::ImportValue: 
+                      'Fn::Sub': '${Prefix}-cache-data-CacheDataDynamoDbTable'
 
   # -- Lambda permissions allowing API Gateway to Execute it --
 
