@@ -486,15 +486,15 @@ Resources:
         GetApiData:
           Type: Api
           Properties:
-            Path: /api/data
+            Path: /api/example
             Method: get
             RestApiId: !Ref WebApi
-        GetById:
-          Type: Api
-          Properties:
-            Path: /api/data/{id}
-            Method: get
-            RestApiId: !Ref WebApi
+        # GetById:
+        #   Type: Api
+        #   Properties:
+        #     Path: /api/example/{id}
+        #     Method: get
+        #     RestApiId: !Ref WebApi
 
   # -- LambdaFunction Execution Role --
 
@@ -685,9 +685,6 @@ Outputs:
   APIEndpoint:
     Description: "Endpoint URL"
     Value: !Sub "https://${WebApi}.execute-api.${AWS::Region}.amazonaws.com/${ApiPathBase}/"
-  APIEndpointTest:
-    Description: "Endpoint Test URL"
-    Value: !Sub "https://${WebApi}.execute-api.${AWS::Region}.amazonaws.com/${ApiPathBase}/?q=Chicago"
   CloudWatchLambdaExecutionLogGroup:
     Description: "Cloud Watch Log Group for Lambda Execution Logs"
     Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Flambda%2F${AppFunction}"

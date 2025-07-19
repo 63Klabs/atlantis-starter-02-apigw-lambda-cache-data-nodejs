@@ -1,7 +1,7 @@
 openapi: '3.0.0'
 info:
   title: "Web Service API"
-  description: "An API."
+  description: "An API"
   version: "0.1"
   contact:
     name: "Your Name"
@@ -15,9 +15,9 @@ info:
 
 paths: 
 
-  /api/:
+  /api/example/:
     get:
-      description: "GET API Data."
+      description: "GET API Example"
       # parameters:
       #   - $ref: '#/components/parameters/someParameter'
       responses:
