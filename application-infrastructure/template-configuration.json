@@ -4,8 +4,8 @@
     "ApiPathBase": "$PROJECT_ID$-$STAGE_ID$",
     "FunctionMaxMemoryInMB": "2048",
     "FunctionTimeOutInSeconds": "30",
-    "CacheDataS3BucketName": "replace-with-your-bucket-name",
-    "CacheDataDynamoDBTableName": "replace-with-your-table-name"
+    "CacheDataS3BucketName": "",
+    "CacheDataDynamoDbTableName": ""
   },
   "Tags": {
 
