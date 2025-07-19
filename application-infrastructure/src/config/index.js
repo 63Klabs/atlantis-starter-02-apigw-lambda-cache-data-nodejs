@@ -8,6 +8,7 @@ const {
 		DebugAndLog,
 		Timer,
 		CachedParameterSecrets,
+		CachedSSMParameter,
 		_ConfigSuperClass,
 		ClientRequest,
 		Response,

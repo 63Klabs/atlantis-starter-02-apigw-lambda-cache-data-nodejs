@@ -48,7 +48,7 @@ const process = async function(event, context) {
 				let route = REQ.getResource(2);
 
 				switch (route) {
-					case "api/data":
+					case "api/example":
 						RESP.setBody( await Controllers.ExampleCtrl.get(props));
 						break;
 					default:
