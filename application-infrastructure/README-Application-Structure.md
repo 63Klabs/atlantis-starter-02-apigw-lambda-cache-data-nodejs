@@ -4,6 +4,10 @@ It is recommended you keep this README in your application-infrastructure direct
 
 The original (and updated) document for this README may be found on the [API Gateway with Lambda utilizing 63klabs/cache-data Written in Node.js](https://github.com/63Klabs/atlantis-starter-02-apigw-lambda-cache-data-nodejs).
 
+By default, the pipeline will look for the `application-infrastructure` directory at the root of your repository.
+
+You can use this to your advantage by keeping documentation, specs, and TODO lists outside of your `application-infrastructure` deployment directory.
+
 ## Application Infrastructure
 
 `/application-infrastructure`
