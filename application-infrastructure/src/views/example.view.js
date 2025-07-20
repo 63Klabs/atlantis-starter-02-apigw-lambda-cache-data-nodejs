@@ -3,11 +3,12 @@
 */
 
 const { tools: {Timer} } = require("@63klabs/cache-data");
+const { DebugAndLog } = require("@63klabs/cache-data/src/lib/tools");
 
 const logIdentifier = "Example View";
 
 /** 
- * Generic filter
+ * Generic filter to exclude null values
  * @param {object} data 
  * @returns {boolean} exclude 
  */
@@ -37,14 +38,15 @@ const transform = (data) => {
 
 /**
  * Generic view
- * @param {object} data
+ * @param {object} resultsFromSvc
  * @returns {{count: number, items: Array<{id: number, display: string}>}} data
  */
-exports.view = (data) => {
+exports.view = (resultsFromSvc) => {
 	const viewTimer = new Timer(`Timer: ${logIdentifier}`, true);
+	DebugAndLog.debug(`View: ${logIdentifier}`, data);
 
 	// if data then data else empty array
-	const dataArray = data || [];
+	const dataArray = Array.isArray(resultsFromSvc?.gamechoices) ? resultsFromSvc?.gamechoices : [];
 
 	// The filter and transform functions can be customized or replaced as needed
 	// They can also be combined so that the filter and transform are done in one pass 
