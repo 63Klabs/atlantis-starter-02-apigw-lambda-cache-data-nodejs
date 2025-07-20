@@ -47,7 +47,7 @@ exports.fetch = async (query) => {
 			use the response to get the data. */
 			const cacheObj = await CacheableDataAccess.getData(
 				cacheCfg, 
-				ExampleDao.getGames,
+				ExampleDao.get,
 				conn, 
 				daoQuery
 			);
