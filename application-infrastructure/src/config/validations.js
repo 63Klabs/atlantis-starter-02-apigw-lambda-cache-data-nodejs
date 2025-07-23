@@ -1,4 +1,4 @@
-const { statusCodes } = require("../models/static/index.js");
+const { statusCodes } = require("../models/static-data/index.js");
 const { tools: {DebugAndLog} } = require("@63klabs/cache-data");
 
 const referrers = [
@@ -20,7 +20,7 @@ const isStringOfNumbers = (value) => {
 // used in the organizationCode route handler to validate the organizationCode parameter
 const statusCodePathParameter = (code) => {
 	if (!Array.isArray(statusCodes) || statusCodes.length < 1) {
-		DebugAndLog.error("No status codes found in the application's static data folder '/data'!");
+		DebugAndLog.error("No status codes found in the application's static data folder '/models/static-data'!");
 		return false;
 	}
 	if (!code) return false;
@@ -29,14 +29,19 @@ const statusCodePathParameter = (code) => {
 	return statusCodes.some((statusCode) => statusCode.code === code);
 };
 
-const idPathParameter = (gameId) => {
-	if (!gameId) return false;
-	if (!isString(gameId)) return false;
-	if (!isStringOfNumbers(gameId)) return false; // demonstrates isStringOfNumbers() but next check does further inspection.
-	// check if the gameId is a valid number between 0 and 14 (inclusive)
-	const idNumber = parseInt(gameId, 10);
+const idPathParameter = (id) => {
+	if (!id) return false;
+	if (!isString(id)) return false;
+	// separate id by -
+	const [char, gid] = id.split("-");
+	if (!char || !gid) return false;
+	if (!isStringOfNumbers(gid)) return false;
+	// check if char is a letter
+	if (!char.match(/[A-Z]/)) return false;
+	// check if number is a number within range
+	const idNumber = parseInt(gid, 10);
 	if (isNaN(idNumber)) return false; // not a number
-	if (idNumber < 0 || idNumber > 14) return false;
+	if (idNumber < 1 || idNumber > 15) return false;
 	return true;
 };
 

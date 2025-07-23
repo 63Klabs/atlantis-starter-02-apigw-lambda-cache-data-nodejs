@@ -141,14 +141,6 @@ All (non secret) configuration files and methods safe for repositories and used 
 
 Shared methods that serve as tools, helpers, and utilities can be stored in the `utils` directory. These methods should be independent of Configurations, controllers, views, and models here. As your organization develops methods that are constantly re-used, they should probably be deployed as a Lambda Layer.
 
-### Tests directory
-
-`src/tests/`
-
-The `tests` directory can be used to store your tests written using Chai or other testing framework.
-
-There is a sample-data directory in models to store data that can be used for mocking requests, or conducting tests against.
-
 ### Package JSON file
 
 `src/package.json`
@@ -238,12 +230,40 @@ Why you might do this:
 - Easier to implement shared header or query string parameters (such as `format=json` if your endpoint requires such things)
 - Easier to provide limits, pagination, and unique error code handling for the endpoints.
 
-### Static Data Directory
+#### Static Data Directory
 
-`src/models/static/`
+`src/models/static-data/`
 
-The `models/static` directory contains supplemental static data that can be used for mapping and enhancing data returned by your application.
+The `models/static-data` directory contains supplemental static data that can be used for mapping and enhancing data returned by your application.
 
-Any data that isn't dynamic can be stored and used as labels, mappings, enhancements, etc.
+Any data that isn't dynamic can be stored and used as labels, mappings, enhancements, valid parameter lists, etc.
 
 For example, suppose data from an outside system returns coded location information. For example, `US-CHI` for Chicago. You can store a JSON object with the code mappings so that your API web service can return a fully formatted, human readable location.
+
+Another example is validating passed parameters. Suppose your application accepts a query string parameter for color coded data where there is a limited number of options and they stay relatively static. `['RED', 'BLUE', 'YELLOW', 'ORANGE', 'GREEN']` You store these as a separate file in static data and then import into your validation script to validate that the value passed from the client matches one of the accepted values.
+
+#### Sample Data Directory
+
+`src/models/sample-data`
+
+The `models/sample-data` directory contains sample data that represents data is returned from Endpoints and Data Access Objects. They can be used during testing and early prototyping. 
+
+For example, you could create a unit test that passes the data from a sample data file into a view and compares it to the expected output contained within a test-data file (See [Test Data](#test-data-directory)).
+
+#### Test Data Directory
+
+`src/models/test-data`
+
+The `models/test-data` directory contains test data that represents data used for testing.
+
+For example, you could create a unit test that passes the data from a sample data file into a view and compares it to the expected output contained within a test-data file. (See [Sample Data](#sample-data-directory)).
+
+### Tests directory
+
+`src/tests/`
+
+The `tests` directory can be used to store your tests written using Mocha or other testing framework.
+
+You can utilize sample and test data from the models directory for mocking and comparing results.
+
+For example, you can read in a sample data file (written in JSON or JavaScript) and pass it to a method. You can then compare the output using a test data file. (See [Sample Data](#sample-data-directory) and [Test Data](#test-data-directory))

@@ -8,6 +8,7 @@ import { readFile } from 'fs/promises';
 import { expect } from "chai";
 
 import validations from '../config/validations.js';
+import { view as exampleView } from '../views/example.view.js';
 
 
 console.log(`Testing Against Node version ${tools.nodeVerMajor} (${tools.nodeVer})`);
@@ -37,7 +38,7 @@ describe('Test validations from config/validations.js', () => {
 
 		before(async () => {
 			try {
-				const filePath = path.join(__dirname, '..', 'models', 'static', 'statusCodes.json');
+				const filePath = path.join(__dirname, '..', 'models', 'static-data', 'statusCodes.json');
 				const fileContent = await readFile(filePath, 'utf8');
 				statusCodes = JSON.parse(fileContent);
 			} catch (error) {
@@ -82,27 +83,76 @@ describe('Test validations from config/validations.js', () => {
 		});
 	});
 
-	describe('validations.parameters.pathParameters.gamePrimaryId', () => {
+	describe('validations.parameters.pathParameters.id', () => {
 		it('should validate a valid game ID', () => {
-			const gamePrimaryId = '6';
-			expect(validations.parameters.pathParameters.id(gamePrimaryId)).to.be.true;
+			const id = 'G-6';
+			expect(validations.parameters.pathParameters.id(id)).to.be.true;
 		});
 
 		it('should reject an invalid game ID', () => {
-			const gamePrimaryId = 'invalid_game_id';
-			expect(validations.parameters.pathParameters.id(gamePrimaryId)).to.be.false;
+			const id = 'invalid_game_id';
+			expect(validations.parameters.pathParameters.id(id)).to.be.false;
 		});
 		
 		it('should reject an invalid game ID based on negative value', () => {
-			const gamePrimaryId = '-1';
-			expect(validations.parameters.pathParameters.id(gamePrimaryId)).to.be.false;
+			const id = '-1';
+			expect(validations.parameters.pathParameters.id(id)).to.be.false;
 		});
 
 		it('should reject an invalid game ID based on length (too long)', () => {
-			const gamePrimaryId = '102';
-			expect(validations.parameters.pathParameters.id(gamePrimaryId)).to.be.false;
+			const id = '102';
+			expect(validations.parameters.pathParameters.id(id)).to.be.false;
+		});
+
+		it('should reject an invalid game ID based on length (too short)', () => {
+			const id = 'G-';
+			expect(validations.parameters.pathParameters.id(id)).to.be.false;
 		});
 
 	})
 });
 
+
+/* ****************************************************************************
+ * Views
+ */
+
+describe('Test views/example.view.js', () => {
+	let sampleData;
+	let expectedData;
+
+	before(async () => {
+		try {
+			// Load input sample data
+			const sampleFilePath = path.join(__dirname, '..', 'models', 'sample-data', 'example.dao.sample.json');
+			const sampleFileContent = await readFile(sampleFilePath, 'utf8');
+			sampleData = JSON.parse(sampleFileContent);
+			
+			// Load expected output data
+			const expectedFilePath = path.join(__dirname, '..', 'models', 'test-data', 'example.view.output.json');
+			const expectedFileContent = await readFile(expectedFilePath, 'utf8');
+			expectedData = JSON.parse(expectedFileContent);
+		} catch (error) {
+			console.error('Error loading test data files:', error);
+			throw error;
+		}
+	});
+
+	describe('view function', () => {
+		it('should transform example data correctly', () => {
+			// Process the sample data through the view
+			const result = exampleView(sampleData);
+
+			// Check that the structure is maintained
+			expect(result).to.have.property('items').that.is.an('array');
+			expect(result).to.have.property('count', expectedData.count);
+			expect(result.items).to.have.lengthOf(expectedData.items.length);
+
+			// Check each example's transformed data against expected data
+			for (let i = 0; i < expectedData.items.length; i++) {
+				expect(result.items[i]).to.deep.include(expectedData.items[i]);
+			}
+		});
+
+	});
+});

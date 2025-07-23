@@ -19,7 +19,7 @@ const filter = (dataItem = null) => {
 }
 
 // For this data we want to assign an index to each item in the view, so we can track it
-let index = -1;
+let index = 0;
 
 /**
  * Generic transformer
@@ -29,8 +29,8 @@ let index = -1;
 const transform = (data) => {
 
 	const returnData = {
-		id: index++,
-		display: data
+		game_id: `G-${++index}`,
+		display_name: data
 	};
 
 	return returnData;
@@ -43,7 +43,6 @@ const transform = (data) => {
  */
 exports.view = (resultsFromSvc) => {
 	const viewTimer = new Timer(`Timer: ${logIdentifier}`, true);
-	DebugAndLog.debug(`View: ${logIdentifier}`, data);
 
 	// if data then data else empty array
 	const dataArray = Array.isArray(resultsFromSvc?.gamechoices) ? resultsFromSvc?.gamechoices : [];
@@ -53,7 +52,7 @@ exports.view = (resultsFromSvc) => {
 	// which is more efficient especially for large datasets, 
 	// But for clarity we will keep them separate here.
 
-	// filter out the data
+	// filter the data
 	const filteredArray = dataArray.filter((item) => filter(item));
 
 	// transform the data
