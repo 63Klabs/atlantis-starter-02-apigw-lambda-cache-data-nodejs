@@ -479,12 +479,12 @@ Resources:
             - HasCacheDataDynamoDbTableName
             - !Ref CacheDataDynamoDbTableName
             - Fn::ImportValue:
-                'Fn::Sub': '${Prefix}-cache-data-CacheDataDynamoDbTable' # relies on the Cache Data storage stack output
+                'Fn::Sub': '${Prefix}-CacheDataDynamoDbTable' # relies on the Cache Data storage stack output
           CACHE_DATA_S3_BUCKET: !If 
             - HasCacheDataS3BucketName
             - !Ref CacheDataS3BucketName
             - Fn::ImportValue:
-                'Fn::Sub': '${Prefix}-cache-data-CacheDataS3Bucket' # relies on the Cache Data storage stack output
+                'Fn::Sub': '${Prefix}-CacheDataS3Bucket' # relies on the Cache Data storage stack output
 
       Events:
         GetApiData:
@@ -561,7 +561,7 @@ Resources:
                   - HasCacheDataS3BucketName
                   - !Ref CacheDataS3BucketName
                   - Fn::ImportValue: 
-                      'Fn::Sub': '${Prefix}-cache-data-CacheDataS3Bucket'
+                      'Fn::Sub': '${Prefix}-CacheDataS3Bucket'
 
           # cache-data DynamoDb table (from: https://www.npmjs.com/package/@63klabs/cache-data)
           - Sid: LambdaAccessToDynamoDBTableCacheData
@@ -580,7 +580,7 @@ Resources:
                   - HasCacheDataDynamoDbTableName
                   - !Ref CacheDataDynamoDbTableName
                   - Fn::ImportValue: 
-                      'Fn::Sub': '${Prefix}-cache-data-CacheDataDynamoDbTable'
+                      'Fn::Sub': '${Prefix}-CacheDataDynamoDbTable'
 
   # -- Lambda permissions allowing API Gateway to Execute it --
 
