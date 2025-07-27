@@ -5,7 +5,7 @@
 # Atlantis for AWS SAM Deployments
 # Starter 02 - API Gateway and Lambda using Cache-Data (NodeJS)
 # Author: Chad Kluck - 63klabs.net
-# Version: v2.0.1/2025-07-06
+# Version: v2.0.2/2025-07-26
 
 # Documentation, Issues/Feature Requests, Latest Updates, and Security Reports on GitHub:
 # https://github.com/63Klabs/atlantis-starter-02-apigw-lambda-cache-data-nodejs
@@ -62,6 +62,7 @@ Metadata:
           - ApiPathBase
           - LogRetentionInDaysForPROD
           - LogRetentionInDaysForDEVTEST
+          - ApiGatewayLogging
       -
         Label:
           default: "Cache-Data Settings"
@@ -224,6 +225,12 @@ Parameters:
     Default: 7
     AllowedValues: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653]
 
+  ApiGatewayLoggingEnabled:
+    Type: String
+    Description: "An administrator must enable API Gateway logging account-wide prior to setting this to TRUE. See https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html"
+    Default: "FALSE"
+    AllowedValues: ["TRUE", "FALSE"]
+
   # ---------------------------------------------------------------------------
   # Cache-Data Parameters
   # Most of these parameters are passed to Lambda Environment Variables
@@ -325,6 +332,7 @@ Conditions:
   IsArmArch: !Equals [!Ref FunctionArchitecture, "arm64"]
   HasCacheDataDynamoDbTableName: !Not [!Equals [!Ref CacheDataDynamoDbTableName, ""]]
   HasCacheDataS3BucketName: !Not [!Equals [!Ref CacheDataS3BucketName, ""]]
+  ApiGatewayLoggingIsEnabled: !Equals [!Ref ApiGatewayLoggingEnabled, "TRUE"]
 
 # =============================================================================
 # GLOBALS
@@ -333,15 +341,17 @@ Conditions:
 #
 
 Globals:
-  # Function:
-
   Api:
     OpenApiVersion: 3.0.0 # Prevents extra stage called Stage in API Gateway https://www.internetkatta.com/how-to-prevent-aws-sam-from-creating-the-default-stage-in-api-gateway-stage
-    Cors: # Accepted methods are okay from any origin. Our lambda function will handle complex origins for GET and POST requests.
-      AllowMethods: "'GET,OPTIONS'" # Add additional methods such as POST here
-      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-      AllowOrigin: "'*'"
-      MaxAge: "'86400'" # This is just for the max age of CORS
+    PropagateTags: True
+    TracingEnabled: !If [ IsNotDevelopment, True,  False] # X-Ray
+
+  Function:
+    PropagateTags: True
+    Tracing: !If [ IsNotDevelopment, "Active", !Ref 'AWS::NoValue'] # X-Ray
+
+  # StateMachine:
+  #   PropagateTags: True
 
 # =============================================================================
 # RESOURCES
@@ -353,15 +363,20 @@ Resources:
 
   # ---------------------------------------------------------------------------
   # API Gateway
+  # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-api.html#sam-api-minimumcompressionsize
 
   # -- API Gateway --
   WebApi:
-    Type: AWS::Serverless::Api
+    Type: AWS::Serverless::Api 
     Properties: 
       Name: !Sub '${Prefix}-${ProjectId}-${StageId}-WebApi'
       StageName: !Ref ApiPathBase
-      PropagateTags: True
-      TracingEnabled: !If [ IsNotDevelopment, True,  False] # X-Ray
+
+      Cors: # Accepted methods are okay from any origin. Our lambda function will handle complex origins for GET and POST requests.
+        AllowMethods: "'GET,OPTIONS'" # Add additional methods such as POST, PUT, DELETE here
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+        MaxAge: "'86400'" # This is just for the max age of CORS
 
       DefinitionBody:
         "Fn::Transform":
@@ -369,40 +384,46 @@ Resources:
           Parameters:
             Location: ./template-swagger.yml
 
-  #     # -- The following is how to add logging to API Gateway --
-  #     # -- However, an account admin will need to add a service role to allow API Gateway to write to CloudWatch logs --
-  #     # -- See https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html --
+      # -- The following adds two levels of logging to API Gateway --
+      # -- However, an account admin will need to add a service role to allow API Gateway to write to CloudWatch logs --
+      # -- See https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html --
 
-  #     # Add API Gateway logging configuration
-  #     AccessLogSetting:
-  #       DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
-  #       Format: '{"requestId":"$context.requestId", "extendedRequestId":"$context.extendedRequestId", "ip":"$context.identity.sourceIp", "caller":"$context.identity.caller", "user":"$context.identity.user", "requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod", "path":"$context.path", "resourcePath":"$context.resourcePath", "routeKey":"$context.routeKey", "status":"$context.status", "protocol":"$context.protocol", "responseLength":"$context.responseLength", "integrationError":"$context.integrationErrorMessage", "authorizerError":"$context.authorizer.error", "authorizerStatus":"$context.authorizer.status", "authorizerLatency":"$context.authorizer.latency"}'
+      # Add API Gateway logging configuration
+      AccessLogSetting: !If
+        - ApiGatewayLoggingIsEnabled
+        - DestinationArn: !GetAtt ApiGatewayAccessLogGroup.Arn
+          Format: '{"requestId":"$context.requestId", "extendedRequestId":"$context.extendedRequestId", "ip":"$context.identity.sourceIp", "caller":"$context.identity.caller", "user":"$context.identity.user", "requestTime":"$context.requestTime", "httpMethod":"$context.httpMethod", "path":"$context.path", "resourcePath":"$context.resourcePath", "routeKey":"$context.routeKey", "status":"$context.status", "protocol":"$context.protocol", "responseLength":"$context.responseLength", "integrationError":"$context.integrationErrorMessage", "authorizerError":"$context.authorizer.error", "authorizerStatus":"$context.authorizer.status", "authorizerLatency":"$context.authorizer.latency"}'
+        - !Ref 'AWS::NoValue'
       
-  #     # Add execution logging to CloudWatch
-  #     MethodSettings:
-  #       - LoggingLevel: !If [IsProduction, ERROR, INFO]
-  #         ResourcePath: '/*'
-  #         HttpMethod: '*'
-  #         DataTraceEnabled: True #!If [IsProduction, False, True]
-  #         MetricsEnabled: True
+      # Add execution logging to CloudWatch
+      MethodSettings: !If
+        - ApiGatewayLoggingIsEnabled
+        - - LoggingLevel: !If [IsProduction, 'ERROR', 'INFO']
+            ResourcePath: '/*'
+            HttpMethod: '*'
+            DataTraceEnabled: !If [IsProduction, False, True]
+            MetricsEnabled: True
+        - !Ref 'AWS::NoValue'
   
-  # # Add CloudWatch Log Group for API Gateway Access Logs
-  # ApiGatewayAccessLogGroup:
-  #   Type: AWS::Logs::LogGroup
-  #   DeletionPolicy: Delete
-  #   UpdateReplacePolicy: Retain
-  #   Properties:
-  #     LogGroupName: !Sub '/aws/apigateway/${Prefix}-${ProjectId}-${StageId}-WebApi-access-logs'
-  #     RetentionInDays: !If [IsProduction, 90, 7]
+  # Add CloudWatch Log Group for API Gateway Access Logs
+  ApiGatewayAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    Condition: ApiGatewayLoggingIsEnabled
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub '/aws/apigateway/${Prefix}-${ProjectId}-${StageId}-WebApi-access-logs'
+      RetentionInDays: !If [IsProduction, 90, 7]
 
-  # # Add CloudWatch Log Group for API Gateway Execution Logs
-  # ApiGatewayExecutionLogGroup:
-  #   Type: AWS::Logs::LogGroup
-  #   DeletionPolicy: Delete
-  #   UpdateReplacePolicy: Retain
-  #   Properties:
-  #     LogGroupName: !Sub '/aws/apigateway/${Prefix}-${ProjectId}-${StageId}-WebApi-execution-logs'  # <-- consistent naming | aws default --> 'API-Gateway-Execution-Logs_${WebApi}/${ApiPathBase}'
-  #     RetentionInDays: !If [IsProduction, 90, 7]
+  # Add CloudWatch Log Group for API Gateway Execution Logs
+  ApiGatewayExecutionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Condition: ApiGatewayLoggingIsEnabled
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Retain
+    Properties:
+      LogGroupName: !Sub '/aws/apigateway/${Prefix}-${ProjectId}-${StageId}-WebApi-execution-logs'  # <-- consistent naming | aws default --> 'API-Gateway-Execution-Logs_${WebApi}/${ApiPathBase}'
+      RetentionInDays: !If [IsProduction, 90, 7]
 
   # ---------------------------------------------------------------------------
   # Lambda
@@ -415,7 +436,7 @@ Resources:
       Description: "Web Service to provide access to APIs"
 
       VersionDescription: "Web Service Version Notes v0 - 2025-07" # Use this To Overcome AliasLive Update Errors - Rarely need to update
-      AutoPublishCodeSha256: "20250706T150600" # Use this To Overcome AliasLive Update Errors - Rarely need to update
+      AutoPublishCodeSha256: "20250726T150600" # Use this To Overcome AliasLive Update Errors - Rarely need to update
       AutoPublishAlias: live
 
       DeploymentPreference:
@@ -436,10 +457,6 @@ Resources:
       Timeout: !Ref FunctionTimeOutInSeconds
       MemorySize: !Ref FunctionMaxMemoryInMB
       Role: !GetAtt LambdaExecutionRole.Arn
-      PropagateTags: True
-
-      # Lambda Insights and X-Ray
-      Tracing: !If [ IsNotDevelopment, "Active", !Ref 'AWS::NoValue'] # X-Ray
 
       Layers:
         # Lambda Insights and Param Secrets - ARN is Mapped in as they vary by region and architecture - Update regions and versions in Mapping section
@@ -692,12 +709,14 @@ Outputs:
   CloudWatchLambdaExecutionLogGroup:
     Description: "Cloud Watch Log Group for Lambda Execution Logs"
     Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Flambda%2F${AppFunction}"
-  # CloudWatchApiGatewayExecutionLogGroup:
-  #   Description: "Cloud Watch Log Group for API Gateway Execution Logs"
-  #   Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-execution-logs"
-  # CloudWatchApiGatewayAccessLogGroup:
-  #   Description: "Cloud Watch Log Group for API Gateway Access Logs"
-  #   Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-access-logs"
+  CloudWatchApiGatewayExecutionLogGroup:
+    Condition: ApiGatewayLoggingIsEnabled
+    Description: "Cloud Watch Log Group for API Gateway Execution Logs"
+    Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-execution-logs"
+  CloudWatchApiGatewayAccessLogGroup:
+    Condition: ApiGatewayLoggingIsEnabled
+    Description: "Cloud Watch Log Group for API Gateway Access Logs"
+    Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-access-logs"
   CloudWatchDashboard:
     Condition: CreateProdResources
     Description: "Cloud Watch Dashboard (for production environments only)"
