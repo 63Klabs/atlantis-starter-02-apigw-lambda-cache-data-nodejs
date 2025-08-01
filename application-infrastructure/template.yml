@@ -63,7 +63,7 @@ Metadata:
           - UserAgent
           - LogRetentionInDaysForPROD
           - LogRetentionInDaysForDEVTEST
-          - ApiGatewayLogging
+          - ApiGatewayLoggingEnabled
       -
         Label:
           default: "Cache-Data Settings"
