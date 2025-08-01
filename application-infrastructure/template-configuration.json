@@ -3,7 +3,7 @@
     "UserAgent": "Web Service - $STAGE_ID$",
     "ApiPathBase": "$PROJECT_ID$-$STAGE_ID$",
     "FunctionMaxMemoryInMB": "2048",
-    "FunctionTimeOutInSeconds": "30",
+    "FunctionTimeOutInSeconds": "10",
     "ApiGatewayLoggingEnabled": "FALSE",
     "CacheDataS3BucketName": "",
     "CacheDataDynamoDbTableName": ""
