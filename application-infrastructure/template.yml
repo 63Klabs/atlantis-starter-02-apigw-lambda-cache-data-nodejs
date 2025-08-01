@@ -57,9 +57,10 @@ Metadata:
           - FunctionArchitecture
       -
         Label:
-          default: "Application Parameters"
+          default: "Application Settings"
         Parameters:
           - ApiPathBase
+          - UserAgent
           - LogRetentionInDaysForPROD
           - LogRetentionInDaysForDEVTEST
           - ApiGatewayLogging
