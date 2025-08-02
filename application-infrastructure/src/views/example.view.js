@@ -36,7 +36,7 @@ const transform = (data) => {
 	const hashId = utils.hash.hashLast8(data);
 
 	const returnData = {
-		game_id: `G-${hashId}`,
+		id: `G-${hashId}`,
 		display_name: data
 	};
 

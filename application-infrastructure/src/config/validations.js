@@ -36,7 +36,7 @@ const statusCodePathParameter = (code) => {
  */
 const idPathParameter = (id) => {
 	if (!id) return false;
-	if (!char.match(/^G\-[a-f0-9]{8}$/)) return false;
+	if (!id.match(/^G\-[a-f0-9]{8}$/)) return false;
 	return true;
 };
 

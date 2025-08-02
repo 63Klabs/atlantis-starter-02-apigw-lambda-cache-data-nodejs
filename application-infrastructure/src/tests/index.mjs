@@ -73,12 +73,12 @@ describe('Test validations from config/validations.js', () => {
 			expect(uniqueCodes.size).to.equal(statusCodes.length);
 		});
 
-		it('should validate a manually submitted org code', () => {
+		it('should validate a manually submitted status code', () => {
 			const orgCode = 'hidden'
 			expect(validations.parameters.pathParameters.code(orgCode), `Status code ${orgCode} should be valid`).to.be.true;
 		});
 
-		it('should reject a manually submitted org code', () => {
+		it('should reject a manually submitted status code', () => {
 			const orgCode = 'blah_blah_not_valid'
 			expect(validations.parameters.pathParameters.code(orgCode), `Status code ${orgCode} should not be valid`).to.be.false;
 		});
@@ -86,7 +86,7 @@ describe('Test validations from config/validations.js', () => {
 
 	describe('validations.parameters.pathParameters.id', () => {
 		it('should validate a valid game ID', () => {
-			const id = 'G-6';
+			const id = 'G-92d3ace7';
 			expect(validations.parameters.pathParameters.id(id)).to.be.true;
 		});
 
@@ -95,22 +95,39 @@ describe('Test validations from config/validations.js', () => {
 			expect(validations.parameters.pathParameters.id(id)).to.be.false;
 		});
 		
-		it('should reject an invalid game ID based on negative value', () => {
-			const id = '-1';
-			expect(validations.parameters.pathParameters.id(id)).to.be.false;
-		});
-
 		it('should reject an invalid game ID based on length (too long)', () => {
-			const id = '102';
+			const id = 'G-ef89b3c08';
 			expect(validations.parameters.pathParameters.id(id)).to.be.false;
 		});
 
 		it('should reject an invalid game ID based on length (too short)', () => {
-			const id = 'G-';
+			const id = 'G-c0e6';
 			expect(validations.parameters.pathParameters.id(id)).to.be.false;
 		});
 
 	})
+
+	describe('validations.queryParameters.players', () => {
+		it('should validate a valid number of players', () => {
+			const players = '5';
+			expect(validations.parameters.queryParameters.players(players)).to.be.true;
+		});
+
+		it('should reject a number of players that is too low', () => {
+			const players = '0'; // we will not allow the computer to play itself - even if it would learn a valuable lesson
+			expect(validations.parameters.queryParameters.players(players)).to.be.false;
+		});
+
+		it('should reject a number of players that is too high', () => {
+			const players = '11';
+			expect(validations.parameters.queryParameters.players(players)).to.be.false;
+		});
+
+		it('should reject a non-numeric value', () => {
+			const players = 'invalid';
+			expect(validations.parameters.queryParameters.players(players)).to.be.false;
+		});
+	});
 });
 
 /* ****************************************************************************
