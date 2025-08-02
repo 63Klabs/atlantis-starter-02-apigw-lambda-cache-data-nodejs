@@ -135,35 +135,79 @@ describe('Test validations from config/validations.js', () => {
  */
 
 describe('Test utils', () => {
-	describe('utils.hash.hashLast8', () => {
+	describe('utils.hash.takeLast', () => {
 		it('should return a string of length 8', () => {
 			const input = 'example';
-			const result = utils.hash.hashLast8(input);
+			const result = utils.hash.takeLast(input);
 			expect(result).to.be.a('string');
 			expect(result).to.have.lengthOf(8);
+		});
+
+		it('should return a string of length 6', () => {
+			const input = 'example';
+			const result = utils.hash.takeLast(input, 6);
+			expect(result).to.be.a('string');
+			expect(result).to.have.lengthOf(6);
 		});
 
 		it('should return a different string for different inputs', () => {
 			const input1 = 'example1';
 			const input2 = 'example2';
-			const result1 = utils.hash.hashLast8(input1);
-			const result2 = utils.hash.hashLast8(input2);
+			const result1 = utils.hash.takeLast(input1);
+			const result2 = utils.hash.takeLast(input2);
 			expect(result1).to.not.equal(result2);
 		});
 
 		it('should return the same string for the same input', () => {
 			const input = 'example';
-			const result1 = utils.hash.hashLast8(input);
-			const result2 = utils.hash.hashLast8(input);
+			const result1 = utils.hash.takeLast(input);
+			const result2 = utils.hash.takeLast(input);
 			expect(result1).to.equal(result2);
 		});
 
 		it('should return a string containing only valid characters', () => {
 			const input = 'example';
-			const result = utils.hash.hashLast8(input);
+			const result = utils.hash.takeLast(input, 20);
 			expect(result).to.match(/^[a-f0-9]+$/);
 		});
 	});
+
+	describe('utils.hash.takeFirst', () => {
+		it('should return a string of length 8', () => {
+			const input = 'example';
+			const result = utils.hash.takeFirst(input);
+			expect(result).to.be.a('string');
+			expect(result).to.have.lengthOf(8);
+		});
+
+		it('should return a string of length 6', () => {
+			const input = 'example';
+			const result = utils.hash.takeFirst(input, 6);
+			expect(result).to.be.a('string');
+			expect(result).to.have.lengthOf(6);
+		});
+
+		it('should return a different string for different inputs', () => {
+			const input1 = 'example1';
+			const input2 = 'example2';
+			const result1 = utils.hash.takeFirst(input1);
+			const result2 = utils.hash.takeFirst(input2);
+			expect(result1).to.not.equal(result2);
+		});
+
+		it('should return the same string for the same input', () => {
+			const input = 'example';
+			const result1 = utils.hash.takeFirst(input);
+			const result2 = utils.hash.takeFirst(input);
+			expect(result1).to.equal(result2);
+		});
+
+		it('should return a string containing only valid characters', () => {
+			const input = 'example';
+			const result = utils.hash.takeFirst(input, 20);
+			expect(result).to.match(/^[a-f0-9]+$/);
+		});
+	})
 });
 
 /* ****************************************************************************

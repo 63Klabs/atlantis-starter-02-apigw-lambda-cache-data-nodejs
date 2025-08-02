@@ -33,7 +33,7 @@ const transform = (data) => {
 	// take data and create an 8 character hash
 	// since we only expect a list of <20 games this is okay for an example
 	// using sha256, create a hash and retain the last 8 characters
-	const hashId = utils.hash.hashLast8(data);
+	const hashId = utils.hash.takeLast(data, 8);
 
 	const returnData = {
 		id: `G-${hashId}`,
