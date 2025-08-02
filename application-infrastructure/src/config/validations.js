@@ -29,19 +29,26 @@ const statusCodePathParameter = (code) => {
 	return statusCodes.some((statusCode) => statusCode.code === code);
 };
 
+/**
+ * Ensure id is in 'G-<8-char-hex>' format
+ * @param {string} id - The id to validate
+ * @returns {boolean} - True if the id is valid, false otherwise
+ */
 const idPathParameter = (id) => {
 	if (!id) return false;
-	if (!isString(id)) return false;
-	// separate id by -
-	const [char, gid] = id.split("-");
-	if (!char || !gid) return false;
-	if (!isStringOfNumbers(gid)) return false;
-	// check if char is a letter
-	if (!char.match(/[A-Z]/)) return false;
-	// check if number is a number within range
-	const idNumber = parseInt(gid, 10);
-	if (isNaN(idNumber)) return false; // not a number
-	if (idNumber < 1 || idNumber > 15) return false;
+	if (!char.match(/^G\-[a-f0-9]{8}$/)) return false;
+	return true;
+};
+
+/**
+ * Ensure players is a number between 1 and 10
+ * @param {string} players - The players to validate
+ * @returns {boolean} - True if the players is valid, false otherwise
+ */
+const playersQueryParameter = (players) => {
+	if (!players) return false;
+	if (!isStringOfNumbers(players)) return false;
+	if (players < 1 || players > 10) return false;
 	return true;
 };
 
@@ -55,11 +62,13 @@ module.exports = {
 	parameters: {
 		pathParameters: {
 			code: statusCodePathParameter,
-			id: idPathParameter
-		}
-		//, queryParameter: {}
-		//, headerParameter: {}
-		//, cookieParameter: {}
-		//, bodyParameter: {}		
+			id: idPathParameter,
+		},
+		queryParameters: {
+			players: playersQueryParameter,
+		},
+		// headerParameters: {},
+		// cookieParameters: {},
+		// bodyParameters: {},	
 	}
 };

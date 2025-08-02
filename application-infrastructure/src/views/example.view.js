@@ -2,8 +2,13 @@
 	A view should be called from the controller, or if the view is cached, from the service.
 */
 
-const { tools: {Timer} } = require("@63klabs/cache-data");
-const { DebugAndLog } = require("@63klabs/cache-data/src/lib/tools");
+const { 
+	tools: {
+		Timer
+	}
+} = require("@63klabs/cache-data");
+
+const utils = require('../utils');
 
 const logIdentifier = "Example View";
 
@@ -18,9 +23,6 @@ const filter = (dataItem = null) => {
 	return include;
 }
 
-// For this data we want to assign an index to each item in the view, so we can track it
-let index = 0;
-
 /**
  * Generic transformer
  * @param {object} data 
@@ -28,8 +30,13 @@ let index = 0;
  */
 const transform = (data) => {
 
+	// take data and create an 8 character hash
+	// since we only expect a list of <20 games this is okay for an example
+	// using sha256, create a hash and retain the last 8 characters
+	const hashId = utils.hash.hashLast8(data);
+
 	const returnData = {
-		game_id: `G-${++index}`,
+		game_id: `G-${hashId}`,
 		display_name: data
 	};
 

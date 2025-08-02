@@ -8,6 +8,7 @@ import { readFile } from 'fs/promises';
 import { expect } from "chai";
 
 import validations from '../config/validations.js';
+import utils from '../utils/index.js';
 import { view as exampleView } from '../views/example.view.js';
 
 
@@ -53,7 +54,7 @@ describe('Test validations from config/validations.js', () => {
 			});
 		});
 
-		it('should reject invalid org codes', () => {
+		it('should reject invalid status codes', () => {
 			const invalidCodes = ['', '123', 'ABCD', 'A1', '1A', 'AAA'];
 			invalidCodes.forEach(code => {
 				expect(validations.parameters.pathParameters.code(code), `Status code ${code} should be invalid`).to.be.false;
@@ -112,6 +113,41 @@ describe('Test validations from config/validations.js', () => {
 	})
 });
 
+/* ****************************************************************************
+ * Utils
+ */
+
+describe('Test utils', () => {
+	describe('utils.hash.hashLast8', () => {
+		it('should return a string of length 8', () => {
+			const input = 'example';
+			const result = utils.hash.hashLast8(input);
+			expect(result).to.be.a('string');
+			expect(result).to.have.lengthOf(8);
+		});
+
+		it('should return a different string for different inputs', () => {
+			const input1 = 'example1';
+			const input2 = 'example2';
+			const result1 = utils.hash.hashLast8(input1);
+			const result2 = utils.hash.hashLast8(input2);
+			expect(result1).to.not.equal(result2);
+		});
+
+		it('should return the same string for the same input', () => {
+			const input = 'example';
+			const result1 = utils.hash.hashLast8(input);
+			const result2 = utils.hash.hashLast8(input);
+			expect(result1).to.equal(result2);
+		});
+
+		it('should return a string containing only valid characters', () => {
+			const input = 'example';
+			const result = utils.hash.hashLast8(input);
+			expect(result).to.match(/^[a-f0-9]+$/);
+		});
+	});
+});
 
 /* ****************************************************************************
  * Views

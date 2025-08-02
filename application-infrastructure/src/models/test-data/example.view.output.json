@@ -1,23 +1,23 @@
 {
   "count": 15,
   "items": [
-    { "game_id": "G-1", "display_name": "Falken's Maze" },
-    { "game_id": "G-2", "display_name": "Black Jack" },
-    { "game_id": "G-3", "display_name": "Gin Rummy" },
-    { "game_id": "G-4", "display_name": "Hearts" },
-    { "game_id": "G-5", "display_name": "Bridge" },
-    { "game_id": "G-6", "display_name": "Checkers" },
-    { "game_id": "G-7", "display_name": "Chess" },
-    { "game_id": "G-8", "display_name": "Poker" },
-    { "game_id": "G-9", "display_name": "Fighter Combat" },
-    { "game_id": "G-10", "display_name": "Guerrilla Engagement" },
-    { "game_id": "G-11", "display_name": "Desert Warfare" },
-    { "game_id": "G-12", "display_name": "Air-To-Ground Actions" },
-    { "game_id": "G-13", "display_name": "Theaterwide Tactical Warfare" },
+    { "id": "G-cea73c4b", "display_name": "Falken's Maze" },
+    { "id": "G-8f494e5b", "display_name": "Black Jack" },
+    { "id": "G-4a09ad1c", "display_name": "Gin Rummy" },
+    { "id": "G-73b8058c", "display_name": "Hearts" },
+    { "id": "G-f1cf6201", "display_name": "Bridge" },
+    { "id": "G-fd325ad0", "display_name": "Checkers" },
+    { "id": "G-c170b666", "display_name": "Chess" },
+    { "id": "G-0ac0647a", "display_name": "Poker" },
+    { "id": "G-c12ac225", "display_name": "Fighter Combat" },
+    { "id": "G-7fb4f254", "display_name": "Guerrilla Engagement" },
+    { "id": "G-f07993c7", "display_name": "Desert Warfare" },
+    { "id": "G-03cbb530", "display_name": "Air-To-Ground Actions" },
+    { "id": "G-603f6cd0", "display_name": "Theaterwide Tactical Warfare" },
     {
-      "game_id": "G-14",
+      "id": "G-2e22e975",
       "display_name": "Theaterwide Biotoxic and Chemical Warfare"
     },
-    { "game_id": "G-15", "display_name": "Global Thermonuclear War" }
+    { "id": "G-dd2ea1b3", "display_name": "Global Thermonuclear War" }
   ]
 }
