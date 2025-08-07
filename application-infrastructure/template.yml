@@ -217,7 +217,7 @@ Parameters:
   LogRetentionInDaysForPROD:
     Type: Number
     Description: "How long should CloudWatch logs be kept in a PRODUCTION environment?"
-    Default: 90
+    Default: 180
     AllowedValues: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653]
 
   LogRetentionInDaysForDEVTEST:
@@ -410,21 +410,21 @@ Resources:
   ApiGatewayAccessLogGroup:
     Type: AWS::Logs::LogGroup
     Condition: ApiGatewayLoggingIsEnabled
-    DeletionPolicy: Delete
+    DeletionPolicy: !If [IsProduction, Retain, Delete]
     UpdateReplacePolicy: Retain
     Properties:
       LogGroupName: !Sub '/aws/apigateway/${Prefix}-${ProjectId}-${StageId}-WebApi-access-logs'
-      RetentionInDays: !If [IsProduction, 90, 7]
+      RetentionInDays: !If [ IsProduction, !Ref LogRetentionInDaysForPROD,  !Ref LogRetentionInDaysForDEVTEST]
 
   # Add CloudWatch Log Group for API Gateway Execution Logs
   ApiGatewayExecutionLogGroup:
     Type: AWS::Logs::LogGroup
     Condition: ApiGatewayLoggingIsEnabled
-    DeletionPolicy: Delete
+    DeletionPolicy: !If [IsProduction, Retain, Delete]
     UpdateReplacePolicy: Retain
     Properties:
       LogGroupName: !Sub '/aws/apigateway/${Prefix}-${ProjectId}-${StageId}-WebApi-execution-logs'  # <-- consistent naming | aws default --> 'API-Gateway-Execution-Logs_${WebApi}/${ApiPathBase}'
-      RetentionInDays: !If [IsProduction, 90, 7]
+      RetentionInDays: !If [ IsProduction, !Ref LogRetentionInDaysForPROD,  !Ref LogRetentionInDaysForDEVTEST]
 
   # ---------------------------------------------------------------------------
   # Lambda
@@ -615,6 +615,8 @@ Resources:
 
   AppLogGroup:
     Type: AWS::Logs::LogGroup
+    DeletionPolicy: !If [IsProduction, Retain, Delete]
+    UpdateReplacePolicy: Retain
     Properties: 
       LogGroupName: !Sub '/aws/lambda/${Prefix}-${ProjectId}-${StageId}-AppFunction' # Avoid circular reference !Sub "/aws/lambda/${AppFunction}"
       RetentionInDays: !If [ IsProduction, !Ref LogRetentionInDaysForPROD,  !Ref LogRetentionInDaysForDEVTEST]
@@ -705,27 +707,37 @@ Resources:
 #
 
 Outputs:
+  # -- Endpoint examples
   APIEndpoint:
     Description: "Endpoint URL"
     Value: !Sub "https://${WebApi}.execute-api.${AWS::Region}.amazonaws.com/${ApiPathBase}/api/example/" # change to your endpoint
+
+  # -- CloudWatch Log Groups
   CloudWatchLambdaExecutionLogGroup:
     Description: "Cloud Watch Log Group for Lambda Execution Logs"
     Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Flambda%2F${AppFunction}"
+
   CloudWatchApiGatewayExecutionLogGroup:
     Condition: ApiGatewayLoggingIsEnabled
     Description: "Cloud Watch Log Group for API Gateway Execution Logs"
     Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-execution-logs"
+
   CloudWatchApiGatewayAccessLogGroup:
     Condition: ApiGatewayLoggingIsEnabled
     Description: "Cloud Watch Log Group for API Gateway Access Logs"
     Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-access-logs"
+
+  # -- CloudWatch Dashboard (cf-lint will show error for value because Dashboard comes in through an include but it is okay)
   CloudWatchDashboard:
     Condition: CreateProdResources
     Description: "Cloud Watch Dashboard (for production environments only)"
-    Value: !Sub 'https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=${Dashboard}' # cfn-lint: disable-line=E1012,E6101
+    Value: !Sub 'https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=${Dashboard}'
+
+  # -- Resource quick links
   LambdaWebConsole:
     Description: "Lambda Web Console"
     Value: !Sub "https://console.aws.amazon.com/lambda/home?region=${AWS::Region}#/functions/${AppFunction}?tab=code"
+
   ParameterStore:
     Description: "SSM Parameter Store"
     Value: !Sub "https://${AWS::Region}.console.aws.amazon.com/systems-manager/parameters/?region=${AWS::Region}&tab=Table#list_parameter_filters=Name:Contains:${ParameterStoreHierarchy}"
