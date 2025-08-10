@@ -333,6 +333,7 @@ Conditions:
   IsArmArch: !Equals [!Ref FunctionArchitecture, "arm64"]
   HasCacheDataDynamoDbTableName: !Not [!Equals [!Ref CacheDataDynamoDbTableName, ""]]
   HasCacheDataS3BucketName: !Not [!Equals [!Ref CacheDataS3BucketName, ""]]
+  HasCacheDataStorageStack: !Not [!And [!Condition HasCacheDataDynamoDbTableName, !Condition HasCacheDataS3BucketName]]
   ApiGatewayLoggingIsEnabled: !Equals [!Ref ApiGatewayLoggingEnabled, "TRUE"]
 
 # =============================================================================
@@ -520,6 +521,8 @@ Resources:
         #     RestApiId: !Ref WebApi
 
   # -- LambdaFunction Execution Role --
+  #    These are the resources your Lambda function needs access to Logs, SSM Parameters, DynamoDb, S3, etc.
+  #    Define specific actions such as get/put (read/write)
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -536,14 +539,16 @@ Resources:
             Service: [lambda.amazonaws.com]
           Action: sts:AssumeRole
 
-      # These are for application monitoring via LambdaInsights and X-Ray
+      # Lambda Insights, XRay, and Cache Data have already prepared policies
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy'
         - 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess'
+        - Fn::If:
+          - HasCacheDataStorageStack
+          - !Ref 'AWS::NoValue' # If supplying your own Bucket or Table then you will need to supply your own statements to the execution role (see below)
+          - Fn::ImportValue:
+              'Fn::Sub': '${Prefix}-CacheDataS3Bucket' # relies on the Cache Data storage stack output
 
-      # These are the resources your Lambda function needs access to
-      # Logs, SSM Parameters, DynamoDb, S3, etc.
-      # Define specific actions such as get/put (read/write)
       Policies:
       - PolicyName: LambdaResourceAccessPolicies
         PolicyDocument:
@@ -567,39 +572,10 @@ Resources:
             Resource: 
             - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ParameterStoreHierarchy}*"
 
-          # cache-data S3 bucket (from: https://www.npmjs.com/package/@63klabs/cache-data)
-          - Sid: LambdaAccessToS3BucketCacheData
-            Action:
-            - s3:PutObject
-            - s3:GetObject
-            - s3:GetObjectVersion
-            Effect: Allow
-            Resource: !Sub 
-              - 'arn:aws:s3:::${BucketName}/cache/*'
-              - BucketName: !If 
-                  - HasCacheDataS3BucketName
-                  - !Ref CacheDataS3BucketName
-                  - Fn::ImportValue: 
-                      'Fn::Sub': '${Prefix}-CacheDataS3Bucket'
-
-          # cache-data DynamoDb table (from: https://www.npmjs.com/package/@63klabs/cache-data)
-          - Sid: LambdaAccessToDynamoDBTableCacheData
-            Action:
-            - dynamodb:GetItem
-            - dynamodb:Scan
-            - dynamodb:Query
-            - dynamodb:BatchGetItem
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:BatchWriteItem
-            Effect: Allow
-            Resource: !Sub 
-              - 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableName}'
-              - TableName: !If 
-                  - HasCacheDataDynamoDbTableName
-                  - !Ref CacheDataDynamoDbTableName
-                  - Fn::ImportValue: 
-                      'Fn::Sub': '${Prefix}-CacheDataDynamoDbTable'
+          # access to cache-data is provided through the Cache-Data managed policy
+          # If you are not using the managed policy provided by a Cache-Data Stack then
+          # You would need to add the S3 and DynamoDb statements here.
+          # See: https://github.com/63Klabs/cache-data/blob/main/docs/00-example-implementation/example-template-lambda-function.yml
 
   # -- Lambda permissions allowing API Gateway to Execute it --
 
