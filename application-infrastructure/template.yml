@@ -545,9 +545,9 @@ Resources:
         - 'arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess'
         - Fn::If:
           - HasCacheDataStorageStack
-          - !Ref 'AWS::NoValue' # If supplying your own Bucket or Table then you will need to supply your own statements to the execution role (see below)
           - Fn::ImportValue:
               'Fn::Sub': '${Prefix}-CacheDataManagedLambdaExecutionRolePolicy' # relies on the Cache Data storage stack output
+          - !Ref 'AWS::NoValue' # If supplying your own Bucket or Table then you will need to supply your own statements to the execution role (see below)
 
       Policies:
       - PolicyName: LambdaResourceAccessPolicies
