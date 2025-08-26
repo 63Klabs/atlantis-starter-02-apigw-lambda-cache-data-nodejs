@@ -331,10 +331,10 @@ Conditions:
   CreateAlarms: !Equals [!Ref DeployEnvironment, "PROD"] # !Equals ["ALWAYS", "ALWAYS"] # Option if you want to ALWAYS create an alarm or only in PROD. Alarms cost money so you may only want them in Prod (or temporarily in test)
   HasPermissionsBoundaryArn: !Not [!Equals [!Ref PermissionsBoundaryArn, ""]]
   IsArmArch: !Equals [!Ref FunctionArchitecture, "arm64"]
+  ApiGatewayLoggingIsEnabled: !Equals [!Ref ApiGatewayLoggingEnabled, "TRUE"]
   HasCacheDataDynamoDbTableName: !Not [!Equals [!Ref CacheDataDynamoDbTableName, ""]]
   HasCacheDataS3BucketName: !Not [!Equals [!Ref CacheDataS3BucketName, ""]]
   HasCacheDataStorageStack: !Not [!And [!Condition HasCacheDataDynamoDbTableName, !Condition HasCacheDataS3BucketName]]
-  ApiGatewayLoggingIsEnabled: !Equals [!Ref ApiGatewayLoggingEnabled, "TRUE"]
 
 # =============================================================================
 # GLOBALS
@@ -683,8 +683,9 @@ Resources:
 #
 
 Outputs:
+
   # -- Endpoint examples
-  APIEndpoint:
+  ApiEndpoint:
     Description: "Endpoint URL"
     Value: !Sub "https://${WebApi}.execute-api.${AWS::Region}.amazonaws.com/${ApiPathBase}/api/example/" # change to your endpoint
 
