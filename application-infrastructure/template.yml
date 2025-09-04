@@ -5,7 +5,7 @@
 # Atlantis for AWS SAM Deployments
 # Starter 02 - API Gateway and Lambda using Cache-Data (NodeJS)
 # Author: Chad Kluck - 63klabs.net
-# Version: v2.0.2/2025-07-26
+# Version: v2.0.4/2025-09-03
 
 # Documentation, Issues/Feature Requests, Latest Updates, and Security Reports on GitHub:
 # https://github.com/63Klabs/atlantis-starter-02-apigw-lambda-cache-data-nodejs
@@ -57,12 +57,13 @@ Metadata:
           - FunctionArchitecture
       -
         Label:
-          default: "Application Settings"
+          default: "Application Parameters"
         Parameters:
           - ApiPathBase
           - UserAgent
           - LogRetentionInDaysForPROD
           - LogRetentionInDaysForDEVTEST
+          - ApiGatewayLoggingEnabled
           - ApiGatewayLoggingEnabled
       -
         Label:
@@ -198,7 +199,7 @@ Parameters:
     AllowedValues: ["x86_64", "arm64"]
 
   # ---------------------------------------------------------------------------
-  # Application Settings
+  # Application Parameters
 
   ApiPathBase:
     Type: String
@@ -384,7 +385,7 @@ Resources:
         "Fn::Transform":
           Name: "AWS::Include"
           Parameters:
-            Location: ./template-swagger.yml
+            Location: ./template-openapi-spec.yml
 
       # -- The following adds two levels of logging to API Gateway --
       # -- However, an account admin will need to add a service role to allow API Gateway to write to CloudWatch logs --
@@ -424,7 +425,7 @@ Resources:
     DeletionPolicy: !If [IsProduction, Retain, Delete]
     UpdateReplacePolicy: Retain
     Properties:
-      LogGroupName: !Sub '/aws/apigateway/${Prefix}-${ProjectId}-${StageId}-WebApi-execution-logs'  # <-- consistent naming | aws default --> 'API-Gateway-Execution-Logs_${WebApi}/${ApiPathBase}'
+      LogGroupName: !Sub 'API-Gateway-Execution-Logs_${WebApi}/${ApiPathBase}' # AWS default
       RetentionInDays: !If [ IsProduction, !Ref LogRetentionInDaysForPROD,  !Ref LogRetentionInDaysForDEVTEST]
 
   # ---------------------------------------------------------------------------
@@ -697,7 +698,7 @@ Outputs:
   CloudWatchApiGatewayExecutionLogGroup:
     Condition: ApiGatewayLoggingIsEnabled
     Description: "Cloud Watch Log Group for API Gateway Execution Logs"
-    Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-execution-logs"
+    Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2FAPI-Gateway-Execution-Logs_${WebApi}/${ApiPathBase}"
 
   CloudWatchApiGatewayAccessLogGroup:
     Condition: ApiGatewayLoggingIsEnabled
