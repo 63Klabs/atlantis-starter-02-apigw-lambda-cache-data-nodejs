@@ -480,11 +480,11 @@ Resources:
 
           NODE_ENV: "production" # We treat everything that is not local development as production
           DEPLOY_ENVIRONMENT: !Ref DeployEnvironment # PROD, TEST, DEV - a different category of environment
-          LOG_LEVEL: !If [ IsProduction, "0", "5"] # 0 for prod, 2-5 for non-prod
+          LOG_LEVEL: !If [ IsProduction, "2", "5"] # 0-2 for prod, 3-5 for non-prod
           PARAM_STORE_PATH: !Ref ParameterStoreHierarchy # SSM Parameter store can use a hierarchy to organize your apps parameters
 
-          PARAMETERS_SECRETS_EXTENSION_LOG_LEVEL: 'INFO'
-          AWS_LAMBDA_LOG_LEVEL: !If [ IsProduction, "INFO", "DEBUG"]
+          PARAMETERS_SECRETS_EXTENSION_LOG_LEVEL: !If [ IsProduction, "INFO", "DEBUG"] # 'DEBUG', 'WARN', 'ERROR', 'NONE', 'INFO'
+          AWS_LAMBDA_LOG_LEVEL: !If [ IsProduction, "INFO", "DEBUG"] # 'DEBUG', 'WARN', 'ERROR', 'INFO' - 'CRITICAL' and 'SILENT' are not currently recognized by Cache Data logging
           AWS_LAMBDA_LOG_FORMAT: 'text'
 
           # Cache-Data Settings
