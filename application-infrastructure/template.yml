@@ -480,7 +480,7 @@ Resources:
 
           NODE_ENV: "production" # We treat everything that is not local development as production
           DEPLOY_ENVIRONMENT: !Ref DeployEnvironment # PROD, TEST, DEV - a different category of environment
-          LOG_LEVEL: !If [ IsProduction, "2", "5"] # 0-2 for prod, 3-5 for non-prod
+          LOG_LEVEL: !If [ IsProduction, "INFO", "DEBUG"] # 0-2 (ERROR, WARN, INFO) for prod, 3-5 (MSG, DIAG, DEBUG) for non-prod
           PARAM_STORE_PATH: !Ref ParameterStoreHierarchy # SSM Parameter store can use a hierarchy to organize your apps parameters
 
           PARAMETERS_SECRETS_EXTENSION_LOG_LEVEL: !If [ IsProduction, "INFO", "DEBUG"] # 'DEBUG', 'WARN', 'ERROR', 'NONE', 'INFO'
