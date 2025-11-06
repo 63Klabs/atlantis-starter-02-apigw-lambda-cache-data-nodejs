@@ -64,7 +64,6 @@ Metadata:
           - LogRetentionInDaysForPROD
           - LogRetentionInDaysForDEVTEST
           - ApiGatewayLoggingEnabled
-          - ApiGatewayLoggingEnabled
       -
         Label:
           default: "Cache-Data Settings"
@@ -272,46 +271,46 @@ Mappings:
   # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-extension-versions.html
   LambdaInsightsX86:
     us-east-1:
-      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension:56"
+      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension:60"
     us-east-2:
-      ExtArn: "arn:aws:lambda:us-east-2:580247275435:layer:LambdaInsightsExtension:56"
+      ExtArn: "arn:aws:lambda:us-east-2:580247275435:layer:LambdaInsightsExtension:60"
     us-west-1:
-      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension:56"
+      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension:60"
     us-west-2:
-      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension:56"
+      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension:60"
 
   LambdaInsightsArm:
     us-east-1:
-      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension-Arm64:23"
+      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension-Arm64:25"
     us-east-2:
       ExtArn: "arn:aws:lambda:us-east-2:580247275435:layer:LambdaInsightsExtension-Arm64:25"
     us-west-1:
-      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension-Arm64:21"
+      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension-Arm64:25"
     us-west-2:
-      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension-Arm64:23"
+      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension-Arm64:25"
 
   # Add/Change to your regions as needed
   # These accounts and layers are AWS Managed so you can trust them - They are not some random accounts
   # https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html#ps-integration-lambda-extensions-add
   LambdaParamSecretsX86:
     us-east-1:
-      ExtArn: "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:18"
+      ExtArn: "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:21"
     us-east-2:
-      ExtArn: "arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension:22"
+      ExtArn: "arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension:25"
     us-west-1:
-      ExtArn: "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension:18"
+      ExtArn: "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension:21"
     us-west-2:
-      ExtArn: "arn:aws:lambda:us-west-2:345057560386:layer:AWS-Parameters-and-Secrets-Lambda-Extension:18"
+      ExtArn: "arn:aws:lambda:us-west-2:345057560386:layer:AWS-Parameters-and-Secrets-Lambda-Extension:21"
 
   LambdaParamSecretsArm:
     us-east-1:
-      ExtArn: "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:18"
+      ExtArn: "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:21"
     us-east-2:
-      ExtArn: "arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:22"
+      ExtArn: "arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:25"
     us-west-1:
-      ExtArn: "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:15"
+      ExtArn: "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:21"
     us-west-2:
-      ExtArn: "arn:aws:lambda:us-west-2:345057560386:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:18"
+      ExtArn: "arn:aws:lambda:us-west-2:345057560386:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:21"
 
 # =============================================================================
 # CONDITIONS
