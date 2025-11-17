@@ -587,7 +587,6 @@ Resources:
   # This is used in all environments and during gradual deployments for new code
   ConfigLambdaPermission:
     Type: "AWS::Lambda::Permission"
-    DependsOn: AppFunction
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !Sub "${AppFunction}"  # References $LATEST by default
@@ -600,10 +599,9 @@ Resources:
   ConfigLambdaPermissionLive:
     Type: "AWS::Lambda::Permission"
     Condition: IsProduction  # Only needed in production for gradual deployments
-    DependsOn: AppFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Sub "${AppFunction}:live"  # Explicitly references the :live alias
+      FunctionName: !Ref AppFunction.Alias # live
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${WebApi}/*"
 
