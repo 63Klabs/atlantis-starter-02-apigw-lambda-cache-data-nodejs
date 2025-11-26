@@ -29,3 +29,9 @@ If this isn't your first rodeo and you know what you are doing with Atlantis, th
 ### Application Code Structure Documentation
 
 The [Application Structure README](./application-infrastructure/README-Application-Structure.md) in the `application-infrastructure` directory is a valuable resource to understanding how this application written and structured.
+
+## AI Context
+
+See [AI_CONTEXT.md](AI_CONTEXT.md) for important context and guidelines for AI-generated code in this repository.
+
+The context file is also helpful (and perhaps essential) for HUMANS developing within the application's structured platform as well.
