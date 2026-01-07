@@ -5,7 +5,7 @@
 # Atlantis for AWS SAM Deployments
 # Starter 02 - API Gateway and Lambda using Cache-Data (NodeJS)
 # Author: Chad Kluck - 63klabs.net
-# Version: v2.0.4/2025-09-03
+# Version: v2.0.5/2026-01-07
 
 # Documentation, Issues/Feature Requests, Latest Updates, and Security Reports on GitHub:
 # https://github.com/63Klabs/atlantis-starter-02-apigw-lambda-cache-data-nodejs
@@ -271,23 +271,23 @@ Mappings:
   # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-extension-versions.html
   LambdaInsightsX86:
     us-east-1:
-      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension:60"
+      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension:64"
     us-east-2:
-      ExtArn: "arn:aws:lambda:us-east-2:580247275435:layer:LambdaInsightsExtension:60"
+      ExtArn: "arn:aws:lambda:us-east-2:580247275435:layer:LambdaInsightsExtension:64"
     us-west-1:
-      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension:60"
+      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension:64"
     us-west-2:
-      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension:60"
+      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension:64"
 
   LambdaInsightsArm:
     us-east-1:
-      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension-Arm64:25"
+      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension-Arm64:31"
     us-east-2:
-      ExtArn: "arn:aws:lambda:us-east-2:580247275435:layer:LambdaInsightsExtension-Arm64:25"
+      ExtArn: "arn:aws:lambda:us-east-2:580247275435:layer:LambdaInsightsExtension-Arm64:33"
     us-west-1:
-      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension-Arm64:25"
+      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension-Arm64:29"
     us-west-2:
-      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension-Arm64:25"
+      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension-Arm64:31"
 
   # Add/Change to your regions as needed
   # These accounts and layers are AWS Managed so you can trust them - They are not some random accounts
@@ -438,8 +438,8 @@ Resources:
       FunctionName: !Sub '${Prefix}-${ProjectId}-${StageId}-AppFunction'
       Description: "Web Service to provide access to APIs"
 
-      VersionDescription: "Web Service Version Notes v0 - 2025-07" # Use this To Overcome AliasLive Update Errors - Rarely need to update
-      AutoPublishCodeSha256: "20250726T150600" # Use this To Overcome AliasLive Update Errors - Rarely need to update
+      VersionDescription: "Web Service Version Notes" # Use this To Overcome AliasLive Update Errors - Rarely need to update
+      AutoPublishCodeSha256: "20260107T150600" # Use this To Overcome AliasLive Update Errors - Rarely need to update
       AutoPublishAlias: live
 
       DeploymentPreference:
@@ -722,11 +722,10 @@ Outputs:
     Description: "Cloud Watch Log Group for API Gateway Access Logs"
     Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Fapigateway%2F${Prefix}-${ProjectId}-${StageId}-WebApi-access-logs"
 
-  # -- CloudWatch Dashboard (cf-lint will show error for value because Dashboard comes in through an include but it is okay)
   CloudWatchDashboard:
     Condition: CreateProdResources
     Description: "Cloud Watch Dashboard (for production environments only)"
-    Value: !Sub 'https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=${Dashboard}'
+    Value: !Sub 'https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=${Prefix}-${ProjectId}-${StageId}-Dashboard'
 
   # -- Resource quick links
   LambdaWebConsole:
