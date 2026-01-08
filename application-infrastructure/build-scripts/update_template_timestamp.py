@@ -1,4 +1,25 @@
 #!/usr/bin/env python3
+
+# Chad Kluck
+# 2026-01-08
+
+# This script updates the AutoPublishCodeSha256 and VersionDescription fields
+#  in a SAM template file with the current timestamp. This is useful for 
+#  triggering new deployments of Lambda functions when the code changes.
+
+# It overcomes a (bug?) in which a new alias cannot be replaced during deployment.
+
+# The downside is that even if the Lambda code did not change (maybe only the 
+#  template did) this forces a new Lambda deployment.
+
+# BUT that may be desired and more than likely, 99% of your deployments are due
+#  to Lambda function updates anyways.
+
+# You can always choose to comment out execution of this script in your 
+#  buildspec if you find it unnecessary, but keep it around if you ever 
+#  experience CloudFormation deployment issues related to Lambda versions and 
+#  aliases.
+
 import re
 import datetime
 import sys

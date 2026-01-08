@@ -1,12 +1,39 @@
+#!/usr/bin/env python3
+
+# Chad Kluck
+# 2026-01-08
+
+# The template-configuration.json file includes parameter and tag values to 
+#  use during application stack deployment. Many of the values are dynamically 
+#  generated using environment variables.
+
+# This is more flexible and maintainable than the traditional `sed` command 
+#  as you only need to set an environment variable and use it within the file
+#  without having to update a complex `sed` one-liner command.
+
+# Placeholders in the file are in the format of $PLACE_HOLDER$ which are used 
+#  to replace with the corresponding environment variable. For example, 
+#  $STAGE_ID$ is replaced with the environment variable STAGE_ID.
+
+# You can always add your own environment variables in buildspec to then use 
+#  within the template-configuration.json file. You might do this instead of 
+#  hard-coding in case you want to set values conditionally based upon other
+#  factors.
+
+# 1. Read in the template-configuration.json file and find all the placeholders.
+# 2. Do a search/replace of the placeholders by using to corresponding 
+#    environment variable. For example, if the environment variable STAGE_ID=dev 
+#    is set, then the placeholder $STAGE_ID$ is replaced with the value dev.
+# 3. Overwrite template-configuration.json with the modified file (this will
+#    not affect any files in the repository).
+
+# The template-configuration.json file is used by the 
+#  `aws cloudformation package` command to provide the application stack 
+#  parameters and tags.
+
 import re
 import os
 import sys
-# The template-configuration.json file includes parameter and tag values to use during the application stack deployment. Many of the values are dynamically generated using environment variables. Placeholders in the file are in the format of $PLACE_HOLDER$ which are used to replace with the corresponding environment variable. For example $STAGE_ID$ is replaced with the environment variable STAGE_ID.
-# First, read in the template-configuration.json file and find all the placeholders.
-# Second, do a search/replace of the placeholders by using to corresponding environment variable. For example, if the environment variable STAGE_ID=dev is set, then the placeholder $STAGE_ID$ is replaced with the value dev.
-# Third, write the modified file to the current directory as template-configuration.json.
-# The template-configuration.json file is used by the build-scripts to generate the application stack deployment parameters and tags.
-# read in template-configuration.json from current directory or parent directory
 def replace_placeholders(template_config_path):
 
     try:
