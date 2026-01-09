@@ -670,7 +670,7 @@ Resources:
         - Name: ApiName
           Value: !Ref WebApi
       AlarmActions:
-        - Ref: AppFunctionErrorAlarmNotification
+        - Ref: ApiGatewayErrorAlarmNotification
 
   # -- ApiGateway Notification for Error Alarm --
 
