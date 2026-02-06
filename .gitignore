@@ -1,22 +1,25 @@
-# Ignore the git and zip files we use
+# Ignore All dot directories and files: .vscode .ve .git .whatever
 .*
+
+# Ignore ZIP files
 *.zip
 
 # Ignore program and OS files
-.vscode
 *.DS_Store
 *desktop.ini
-package-lock.json
 
 # If you need to remove .DS_Store
 # find . -name .DS_Store -print0 | xargs -0 git rm -f --ignore-unmatch
 
-# Ignore 
+# Ignore Generated
 node_modules/
+package-lock.json
 __pycache__/
 *.py[cod]
 
+# Exceptions
 !.gitignore
 !.github
 !.nvmrc
+!.kiro
 !.mocharc.json
