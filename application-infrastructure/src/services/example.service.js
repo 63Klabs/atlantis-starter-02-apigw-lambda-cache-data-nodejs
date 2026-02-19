@@ -5,65 +5,83 @@ const {
 	tools: {
 		DebugAndLog,
 		Timer
-	}
+	},
+	// endpoint, // uncomment if using endpoint method
 } = require("@63klabs/cache-data");
 
 const { Config } = require("../config");
+
+// Instead of endpoint.get you can wrap it in a DAO to perform advanced API access
 const { ExampleDao } = require("../models");
 
 const logIdentifier = "Example Service GET";
 
 exports.fetch = async (query) => {
 
-	return new Promise(async (resolve, reject) => {
+	return new Promise(async (resolve) => {
 
-		let results = {};
+		let data = {};
 		const timer = new Timer(logIdentifier, true);
 		DebugAndLog.debug(`${logIdentifier}: Query Received`, query);
 
 		try {
-			// we are going to modify the connection by adding a path
-			let connection = Config.getConnection("games");
-			let conn = connection.toObject();
-			conn.options ??= {};
-			conn.options.timeout ??= query?.calcMsToDeadline(query?.deadline) ?? Config.getSettings()?.externalRequestDefaultTimeoutInMs ?? 8000;
 
-			let cacheCfg = connection.getCacheProfile("default");
+			/* -- EXAMPLE 1: ------------------------------------------------------
+			Simple GET request using endpoint.get() with complete URI (no caching) */
 
-			/* We can add pre-filters and some logic here, maybe transformations or cross walks as needed.
-			We pass only the values needed by the DAO in the query object. 
-			If it is date specific, we could calculate today's date or a date range */
+			// const data = await endpoint.get({ 
+			// 	uri: "https://api.chadkluck.net/games" 
+			// });
 
-			const daoQuery = {
-				organizationCode: query?.organizationCode,
-				gamePrimaryId: query?.gamePrimaryId
-			};
+			/* -- EXAMPLE 2: ------------------------------------------------------
+			Simple GET request with connection from config using endpoint.get() (no caching) */
 
-			DebugAndLog.debug(`${logIdentifier}: Query to DAO`, daoQuery);
+			// const conn = Config.getConn('myConnection');
+			// const data = await endpoint.get(conn);
 
-			/* Send the request through CacheData to see if we have a cached response.
-			If we do, we will return it. If not, we will call the function passed as the
-			second parameter with the conn and query as parameters to that function and
-			use the response to get the data. */
+			/* -- EXAMPLE 3: ------------------------------------------------------
+			GET request using connection from config using endpoint.get() with caching */
+
+			// const { conn, cacheProfile } = Config.getConnCacheProfile('games', 'default');
+
+			// /* We could add query parameters directly to conn or save them to be passed to DAO for handling */
+			// conn.parameters = {
+			// 	code: query?.code,
+			// };
+
+			// /* Send request through CacheableDataAccess to utilize caching */
+			// const cacheObj = await CacheableDataAccess.getData(
+			// 	cacheProfile, 
+			// 	endpoint.get, // NOTE: do not use () we are passing the function, not executing it! CachableDataAccess will execute on MISS
+			// 	conn, 
+			// 	null
+			// );
+			// data = cacheObj.getBody(true);
+
+			/* -- EXAMPLE 4: ------------------------------------------------------
+			GET request using connection from config using CacheableDataAccess with 
+			caching and ExampleDAO for advanced api handling */
+			
+			const { conn, cacheProfile } = Config.getConnCacheProfile('games', 'default');
+
+			/* Send request through CacheableDataAccess to utilize caching */
 			const cacheObj = await CacheableDataAccess.getData(
-				cacheCfg, 
-				ExampleDao.get,
-				conn, 
-				daoQuery
+				cacheProfile, 
+				ExampleDao.get, // use endpoint.get if not using a DAO - NOTE: do not use () we are passing the function, not executing it!
+				conn,
+				query // set to null if you are not passing any extra data to the DAO
 			);
 
-			results = cacheObj.getBody(true);
-
-			DebugAndLog.debug(`${logIdentifier}: Retrieved games by organizationCode: ${query?.organizationCode}`, results);
+			data = cacheObj.getBody(true);
 
 		} catch (error) {
 			DebugAndLog.error(`${logIdentifier}: Error: ${error.message}`, error.stack);
 			// we could return an Error object in the data, but for now we will just log it and leave data as null
 		} finally {
 			timer.stop();
+			resolve(data);
 		}
 
-		resolve(results);
 
 	});
 

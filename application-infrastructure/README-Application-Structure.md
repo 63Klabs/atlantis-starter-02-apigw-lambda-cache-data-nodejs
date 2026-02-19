@@ -262,7 +262,7 @@ For example, you could create a unit test that passes the data from a sample dat
 
 `src/tests/`
 
-The `tests` directory can be used to store your tests written using Mocha or other testing framework.
+The `tests` directory can be used to store your tests written using Jest or other testing framework.
 
 You can utilize sample and test data from the models directory for mocking and comparing results.
 

@@ -62,6 +62,8 @@ phases:
       - npm test
 
       # Clean up test artifacts and reinstall only production dependencies to reduce Lambda package size
+      - rm -rf __tests__
+      - rm -rf coverage
       - rm -rf node_modules
       - npm ci --omit=dev
 

@@ -1,8 +1,0 @@
-{
-  "node-option": [
-    "experimental-modules",
-    "experimental-specifier-resolution=node"
-  ],
-  "require": "node:test",
-  "recursive": true
-}
