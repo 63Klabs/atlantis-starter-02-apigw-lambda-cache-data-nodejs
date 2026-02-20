@@ -1,5 +1,15 @@
-/* A view filters, transforms, and maps data from the model, or models, to a response 
-	A view should be called from the controller, or if the view is cached, from the service.
+/* 
+A VIEW filters, transforms, and maps data from the SERVICE to a response 
+	
+The VIEW is the only place that should format data for the client. 
+The SERVICE should return data in the format it is stored.
+The VIEW should never call the DATABASE or make API calls. 
+It should only transform the data from the SERVICE.
+
+The CONTROLLER calls the SERVICE and passes the data returned by the SERVICE to the VIEW:
+controller.js
+	return view(await service());
+
 */
 
 const { 

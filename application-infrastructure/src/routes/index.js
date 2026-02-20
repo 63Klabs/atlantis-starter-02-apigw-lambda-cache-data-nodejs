@@ -13,7 +13,7 @@ const Controllers = require("../controllers");
  * 
  * @param {object} event The event passed to the lambda function
  * @param {object} context The context passed to the lambda function
- * @returns {Response} The response to the request as a Response class object
+ * @returns {Promise<Response>} The response to the request as a Response class object
  */
 const process = async function(event, context) {
 
@@ -42,33 +42,27 @@ const process = async function(event, context) {
 			REQ.addPathLog(); // we can do this here because we are using simple routing
 
 			// Use any number of evaluations for routing, but keep it simple and organized
-			if (props.method === "GET") {
+			if (props.method !== "GET") {
+				return RESP.reset({statusCode: 405}); // we only allow GET (for now)
+			}
 
-				// route based upon 2 deep path
-				let route = REQ.getResource(2);
+			const route = `${props.method}:${props.resource}`
+			DebugAndLog.debug(`Routing to: ${route}`);
 
-				switch (route) {
-					case "api/example":
-						RESP.setBody( await Controllers.ExampleCtrl.get(props));
-						break;
-					default:
-						RESP.reset({statusCode: 404});
-						break;
-				}			
-			// } else if (props.method === "OPTIONS") {
-			// 	RESP.setHeaders({
-			// 		//"Access-Control-Allow-Origin": "*", // This is taken care of automatically by the whitelist and referer/origin of the request
-			// 		"Access-Control-Allow-Methods": "GET, OPTIONS",
-			// 		"Access-Control-Allow-Headers": "Content-Type, Authorization",
-			// 		"Access-Control-Max-Age": "86400"
-			// 	});
-			} else {
-				// We only allow GET requests, so anything else is a 405
-				RESP.reset({statusCode: 405});
+			switch (route) {
+				case "GET:api/example":
+					RESP.setBody( await Controllers.ExampleCtrl.get(props));
+					break;
+				case"GET:api/example/{id}":
+					RESP.setBody( await Controllers.ExampleCtrl.get(props));
+					break;
+				default:
+					RESP.reset({statusCode: 404});
+					break;
 			}
 
 		} else {
-			RESP.reset({statusCode: 403});
+			RESP.reset({statusCode: 400});
 		}
 
 	} catch (error) {

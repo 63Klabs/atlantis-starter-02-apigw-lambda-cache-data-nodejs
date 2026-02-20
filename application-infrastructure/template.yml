@@ -513,12 +513,12 @@ Resources:
             Path: /api/example
             Method: get
             RestApiId: !Ref WebApi
-        # GetById:
-        #   Type: Api
-        #   Properties:
-        #     Path: /api/example/{id}
-        #     Method: get
-        #     RestApiId: !Ref WebApi
+        GetById:
+          Type: Api
+          Properties:
+            Path: /api/example/{id}
+            Method: get
+            RestApiId: !Ref WebApi
 
   # -- LambdaFunction Execution Role --
   #    These are the resources your Lambda function needs access to Logs, SSM Parameters, DynamoDb, S3, etc.

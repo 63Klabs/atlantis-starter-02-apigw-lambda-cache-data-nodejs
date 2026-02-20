@@ -1,12 +1,13 @@
 
 /*
-A service calls the endpoint
+SERVICE to call the endpoint
+
 It does this one of three ways:
 	1. Directly (endpoint.get, static data, or other data source)
 	2. Through a DAO (Data Access Object wraps an endpoint.get or other data source)
 	3. Through a CacheableDataAccess object (which uses a DAO or endpoint internally)
 
-The Controller calls the Service and passes the data returned by the Service to the View:
+The CONTROLLER calls the SERVICE and passes the data returned by the SERVICE to the VIEW:
 controller.js
 	return view(await service());
 
@@ -19,6 +20,11 @@ hardcoding vs Config.getConn() vs Config.getConnCacheProfile()
 	- hardcoding - Directly define the connection object properties in the call
 	- Config.getConn() - Use a central configuration to define the connection object properties
 	- Config.getConnCacheProfile() - Use a central configuration to define the connection object properties and cache profile
+
+You can have multiple services in this script.
+	For example, user.service.js may have methods for:
+		user.fetch(), user.create(), user.update(), user.delete()
+
 */
 
 const { // uncomment cache{ ... } to use caching
@@ -62,9 +68,11 @@ exports.fetch = async (query) => {
 			Simple GET request using endpoint.get() with complete URI (no caching)
 			*/
 
-			data = await endpoint.get({ 
+			const response = await endpoint.get({ 
 				uri: "https://api.chadkluck.net/games" 
 			});
+
+			data = response.body;
 
 			/* 
 			-- EXAMPLE 2: ------------------------------------------------------
@@ -72,7 +80,9 @@ exports.fetch = async (query) => {
 			*/
 
 			// const conn = Config.getConn('myConnection');
-			// data = await endpoint.get(conn);
+			// const response = await endpoint.get(conn);
+			
+			// data = response.body;
 
 			/* 
 			-- EXAMPLE 3: ------------------------------------------------------

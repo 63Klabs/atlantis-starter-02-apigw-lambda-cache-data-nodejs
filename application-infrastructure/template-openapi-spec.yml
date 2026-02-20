@@ -28,6 +28,24 @@ paths:
         uri:
           Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AppFunction.Arn}/invocations
 
+  /api/example/{id}:
+    get:
+      description: "GET API Example by ID"
+      parameters:
+        - name: id
+          in: path
+          description: "Example Resource ID"
+          required: false
+          schema:
+            type: string
+      responses:
+        $ref: '#/components/schemas/DataResponses'
+      x-amazon-apigateway-integration: # This is always the same
+        httpMethod: post
+        type: aws_proxy
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AppFunction.Arn}/invocations
+
 
 # =============================================================================
 
