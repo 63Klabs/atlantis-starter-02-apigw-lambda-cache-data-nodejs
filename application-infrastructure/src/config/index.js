@@ -30,38 +30,36 @@ class Config extends AppConfig {
 
 	/**
 	 * This is custom initialization code for the application. Depending 
-	 * upon needs, the _init functions from the super class may be used
-	 * as needed. Init is async, and a promise is stored, allowing the 
+	 * upon needs, the init function from the AppConfig and Cache classes
+	 * may be used as needed. Init is async, and a promise is stored, allowing the 
 	 * lambda function to wait until the promise is finished.
 	 */
 	static async init() {
 		
-		AppConfig._promise = new Promise(async (resolve) => {
+		AppConfig.add(
+			new Promise(async (resolve) => {
 
-			const timerConfigInit = new Timer("timerConfigInit", true);
+				const timerConfigInit = new Timer("timerConfigInit", true);
+						
+				try {
+
+					AppConfig.init( { settings, validations, connections, responses, debug: true } );
+
+					// Cache settings
+					Cache.init({
+						secureDataKey: new CachedSSMParameter(process.env.PARAM_STORE_PATH+'CacheData_SecureDataKey', {refreshAfter: 43200}), // 12 hours
+					});
+
+					DebugAndLog.debug("Cache: ", Cache.info());
+				} catch (error) {
+					DebugAndLog.error(`Could not initialize Config ${error.message}`, error.stack);
+				} finally {
+					timerConfigInit.stop();
+					resolve(true);
+				};
 				
-			try {
-
-				AppConfig.init( { settings, validations, connections, responses, debug: true } );
-				// ClientRequest.init( { validations } );
-				// Response.init( { settings } );
-				// _ConfigSuperClass._connections = new Connections(connections);
-
-				// Cache settings
-				Cache.init({
-					secureDataKey: new CachedSSMParameter(process.env.PARAM_STORE_PATH+'CacheData_SecureDataKey', {refreshAfter: 43200}), // 12 hours
-				});
-
-				DebugAndLog.debug("Cache: ", Cache.info());
-			} catch (error) {
-				DebugAndLog.error(`Could not initialize Config ${error.message}`, error.stack);
-			} finally {
-				timerConfigInit.stop();
-				resolve(true);
-			};
-			
-		});
-
+			})
+		);
 	};
 
 	static async prime() {
