@@ -51,6 +51,7 @@ class Config extends AppConfig {
 					});
 
 					DebugAndLog.debug("Cache: ", Cache.info());
+
 				} catch (error) {
 					DebugAndLog.error(`Could not initialize Config ${error.message}`, error.stack);
 				} finally {
