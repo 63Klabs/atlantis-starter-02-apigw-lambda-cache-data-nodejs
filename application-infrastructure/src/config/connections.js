@@ -19,7 +19,7 @@ const connections = [
 				overrideOriginHeaderExpiration: true,
 				defaultExpirationInSeconds: (DebugAndLog.isProduction() ? (24 * 60 * 60) : (5 * 60)),// , // 5 minutes for non-prod
 				expirationIsOnInterval: true,
-				headersToRetain: "",
+				headersToRetain: [],
 				hostId: "chadkluck", // log entry label - only used for logging
 				pathId: "games", // log entry label - only used for logging
 				encrypt: true, // encrypt the data in the cache

@@ -9,22 +9,24 @@ const {
 		Timer,
 		CachedParameterSecrets,
 		CachedSSMParameter,
-		_ConfigSuperClass,
-		ClientRequest,
-		Response,
-		Connections
+		//_ConfigSuperClass,
+		AppConfig,
+		// ClientRequest,
+		// Response,
+		// Connections
 	} 
 } = require("@63klabs/cache-data");
 
 const settings = require("./settings.js");
 const validations = require("./validations.js");
 const connections = require("./connections.js");
+const responses = require("./responses.js");
 
 /**
- * Extends tools._ConfigSuperClass
+ * Extends tools.AppConfig
  * Used to create a custom Config interface
  */
-class Config extends _ConfigSuperClass {
+class Config extends AppConfig {
 
 	/**
 	 * This is custom initialization code for the application. Depending 
@@ -34,15 +36,16 @@ class Config extends _ConfigSuperClass {
 	 */
 	static async init() {
 		
-		_ConfigSuperClass._promise = new Promise(async (resolve, reject) => {
+		AppConfig._promise = new Promise(async (resolve) => {
 
 			const timerConfigInit = new Timer("timerConfigInit", true);
 				
 			try {
 
-				ClientRequest.init( { validations } );
-				Response.init( { settings } );
-				_ConfigSuperClass._connections = new Connections(connections);
+				AppConfig.init( { settings, validations, connections, responses, debug: true } );
+				// ClientRequest.init( { validations } );
+				// Response.init( { settings } );
+				// _ConfigSuperClass._connections = new Connections(connections);
 
 				// Cache settings
 				Cache.init({
@@ -50,13 +53,11 @@ class Config extends _ConfigSuperClass {
 				});
 
 				DebugAndLog.debug("Cache: ", Cache.info());
-				
-				resolve(true);
 			} catch (error) {
 				DebugAndLog.error(`Could not initialize Config ${error.message}`, error.stack);
-				reject(false);
 			} finally {
 				timerConfigInit.stop();
+				resolve(true);
 			};
 			
 		});
