@@ -68,21 +68,21 @@ exports.fetch = async (query) => {
 			Simple GET request using endpoint.get() with complete URI (no caching)
 			*/
 
-			const response = await endpoint.get({ 
-				uri: "https://api.chadkluck.net/games" 
-			});
+			// const response = await endpoint.get({ 
+			// 	uri: "https://api.chadkluck.net/games" 
+			// });
 
-			data = response.body;
+			// data = response.body;
 
 			/* 
 			-- EXAMPLE 2: ------------------------------------------------------
 		    Simple GET request with connection from config using endpoint.get() (no caching) 
 			*/
 
-			// const conn = Config.getConn('myConnection');
-			// const response = await endpoint.get(conn);
+			const conn = Config.getConn('myConnection');
+			const response = await endpoint.get(conn);
 			
-			// data = response.body;
+			data = response.body;
 
 			/* 
 			-- EXAMPLE 3: ------------------------------------------------------
