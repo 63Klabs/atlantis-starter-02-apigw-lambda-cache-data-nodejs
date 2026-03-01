@@ -27,13 +27,17 @@ You can have multiple services in this script.
 
 */
 
-const { // uncomment cache{ ... } to use caching
-	// cache: { 
-	// 	CacheableDataAccess 
-	// },
+/* Import modules for the examples in the fetch method.
+    You will want to comment out or remove imported classes you do not use
+*/
+const {
+	cache: { 
+		CacheableDataAccess 
+	},
 	tools: {
 		DebugAndLog,
-		Timer
+		Timer,
+		Config
 	},
 	endpoint // simple connections without using DAO
 } = require("@63klabs/cache-data");
