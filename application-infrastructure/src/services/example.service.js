@@ -36,11 +36,12 @@ const {
 	},
 	tools: {
 		DebugAndLog,
-		Timer,
-		Config
+		Timer
 	},
 	endpoint // simple connections without using DAO
 } = require("@63klabs/cache-data");
+
+const {Config} = require("../config");
 
 /* Instead of hardcoding the connection object properties used by endpoint.get you can use a central configuration */
 // const { Config } = require("../config");
