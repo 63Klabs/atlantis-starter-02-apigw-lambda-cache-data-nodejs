@@ -38,6 +38,8 @@ exports.get = async (props) => {
 
 		try {
 
+			const query = props; // we can pass the entire props to query, or just the pieces we need
+
 			data = ExampleView.view( await ExampleSvc.fetch(query) );
 
 		} catch (error) {
