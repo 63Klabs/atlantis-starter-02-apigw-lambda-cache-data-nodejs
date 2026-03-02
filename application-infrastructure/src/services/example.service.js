@@ -68,10 +68,10 @@ exports.fetch = async (query) => {
 
 		try {
 
-			/*
-			-- EXAMPLE 1: ------------------------------------------------------
-			Simple GET request using endpoint.get() with complete URI (no caching)
-			*/
+			/* =================== EXAMPLE 1: =================================
+				Simple GET request using endpoint.get() with complete URI 
+				(no caching)
+			================================================================ */
 
 			// const response = await endpoint.get({ 
 			// 	uri: "https://api.chadkluck.net/games" 
@@ -79,58 +79,57 @@ exports.fetch = async (query) => {
 
 			// data = response.body;
 
-			/* 
-			-- EXAMPLE 2: ------------------------------------------------------
-		    Simple GET request with connection from config using endpoint.get() (no caching) 
-			*/
+			/* =================== EXAMPLE 2: =================================
+				GET request with connection from Config using endpoint.get() 
+				(no caching) 
+			================================================================ */
 
 			// const conn = Config.getConn('games');
-			// console.log(conn);
+
+			// /* The conn object is a base object, therefore:
+			//    You can modify conn.parameters to add any additional querystring parameters you wish to submit
+			//    conn.parameters.id = query.id;
+			//    You can also modify conn.headers to add any additional headers you wish to submit
+			//    conn.headers['x-id'] = query.id;
+			// */
+			
 			// const response = await endpoint.get(conn);
 			
 			// data = response.body;
+			 
+			/* =================== EXAMPLE 3: =================================
+				GET request using connection from Config using endpoint.get() 
+				(with caching)
+			================================================================ */
 
-			/* 
-			-- EXAMPLE 3: ------------------------------------------------------
-			GET request using connection from config using endpoint.get() with caching
-			*/
-
-			const { conn, cacheProfile } = Config.getConnCacheProfile('games', 'default');
-
-			/* The conn object is a base object, therefore:
-			   You can modify conn.parameters to add any additional querystring parameters you wish to submit
-			   conn.parameters.id = query.id;
-			   You can also modify conn.headers to add any additional headers you wish to submit
-			   conn.headers['x-id'] = query.id;
-			*/
-
-			/* Send request through CacheableDataAccess to utilize caching */
-			const cacheObj = await CacheableDataAccess.getData(
-				cacheProfile, 
-				endpoint.get, // NOTE: do not use () we are passing the function, not executing it! CacheableDataAccess will execute on MISS
-				conn, 
-				null
-			);
-
-			data = cacheObj.getBody(true); // data is returned in a wrapper from CacheableDataAccess
-
-			/* 
-			-- EXAMPLE 4: ------------------------------------------------------
-			GET request using connection from config using CacheableDataAccess with 
-			caching and ExampleDAO for advanced api handling 
-			*/
-			
 			// const { conn, cacheProfile } = Config.getConnCacheProfile('games', 'default');
 
 			// /* Send request through CacheableDataAccess to utilize caching */
 			// const cacheObj = await CacheableDataAccess.getData(
 			// 	cacheProfile, 
-			// 	ExampleDao.get, // use endpoint.get if not using a DAO - NOTE: do not use () we are passing the function, not executing it!
-			// 	conn,
-			// 	query // set to null if you are not passing any extra data to the DAO
+			// 	endpoint.get, // NOTE: do not use () we are passing the function, not executing it! CacheableDataAccess will execute on MISS
+			// 	conn, 
+			// 	null
 			// );
 
-			// data = cacheObj.getBody(true);
+			// data = cacheObj.getBody(true); // data is returned in a wrapper from CacheableDataAccess
+
+			/* =================== EXAMPLE 4: =================================
+				GET request using connection from Config using DAO for avanced API handling
+				(with caching) 
+			================================================================ */
+			
+			const { conn, cacheProfile } = Config.getConnCacheProfile('games', 'default');
+
+			/* Send request through CacheableDataAccess to utilize caching */
+			const cacheObj = await CacheableDataAccess.getData(
+				cacheProfile, 
+				ExampleDao.get, // use endpoint.get if not using a DAO - NOTE: do not use () we are passing the function, not executing it!
+				conn,
+				query // set to null if you are not passing any extra data to the DAO
+			);
+
+			data = cacheObj.getBody(true);
 
 		} catch (error) {
 			DebugAndLog.error(`${logIdentifier}: Error: ${error.message}`, error.stack);
