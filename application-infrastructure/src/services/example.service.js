@@ -74,11 +74,11 @@ exports.fetch = async (query) => {
 				(no caching)
 			================================================================ */
 
-			// const response = await endpoint.get({ 
-			// 	uri: "https://api.chadkluck.net/games" 
-			// });
+			const response = await endpoint.get({ 
+				uri: "https://api.chadkluck.net/games" 
+			});
 
-			// data = response.body;
+			data = response.body;
 
 			/* =================== EXAMPLE 2: =================================
 				GET request with connection from Config using endpoint.get() 
@@ -120,17 +120,17 @@ exports.fetch = async (query) => {
 				(with caching) 
 			================================================================ */
 			
-			const { conn, cacheProfile } = Config.getConnCacheProfile('games', 'default');
+			// const { conn, cacheProfile } = Config.getConnCacheProfile('games', 'default');
 
-			/* Send request through CacheableDataAccess to utilize caching */
-			const cacheObj = await CacheableDataAccess.getData(
-				cacheProfile, 
-				ExampleDao.get, // use endpoint.get if not using a DAO - NOTE: do not use () we are passing the function, not executing it!
-				conn,
-				query // set to null if you are not passing any extra data to the DAO
-			);
+			// /* Send request through CacheableDataAccess to utilize caching */
+			// const cacheObj = await CacheableDataAccess.getData(
+			// 	cacheProfile, 
+			// 	ExampleDao.get, // use endpoint.get if not using a DAO - NOTE: do not use () we are passing the function, not executing it!
+			// 	conn,
+			// 	query // set to null if you are not passing any extra data to the DAO
+			// );
 
-			data = cacheObj.getBody(true);
+			// data = cacheObj.getBody(true);
 
 		} catch (error) {
 			DebugAndLog.error(`${logIdentifier}: Error: ${error.message}`, error.stack);

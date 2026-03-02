@@ -18,8 +18,8 @@
 
 const settings =  {
 	"answer": 42,
-	"baseUrl": process.env.BASE_URL || ""
-	// "someNumSetting": process.env.SOME_SETTING ?? "all" // load environment variables - you should also implement validation
+	"baseUrl": process.env.BASE_URL || "",
+	// "someNumSetting": process.env.SOME_SETTING || "all" // load environment variables - you should also implement validation
 }
 
 module.exports = settings;
