@@ -69,6 +69,9 @@ phases:
 
       # FAIL the build if npm audit has vulnerabilities it can't fix
       # Perform a fix to move us forward, then check to make sure there were no unresolved high fixes
+      # We are making an intentional choice here: 
+      #     Make breaking changes on in hopes to bring vulnerabilities to 0 
+      #      vs deploying packages with vulnerabilities
       - npm audit fix --force --omit=dev
       - npm audit --audit-level=high
       

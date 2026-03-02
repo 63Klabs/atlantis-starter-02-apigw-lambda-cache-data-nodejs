@@ -83,7 +83,7 @@ exports.fetch = async (query) => {
 		    Simple GET request with connection from config using endpoint.get() (no caching) 
 			*/
 
-			const conn = Config.getConn('myConnection');
+			const conn = Config.getConn('games');
 			const response = await endpoint.get(conn);
 			
 			data = response.body;
