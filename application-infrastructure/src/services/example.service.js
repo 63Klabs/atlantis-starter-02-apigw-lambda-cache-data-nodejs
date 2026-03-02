@@ -84,6 +84,7 @@ exports.fetch = async (query) => {
 			*/
 
 			const conn = Config.getConn('games');
+			console.log(conn);
 			const response = await endpoint.get(conn);
 			
 			data = response.body;

@@ -37,20 +37,8 @@ exports.get = async (props) => {
 	return new Promise(async (resolve) => {
 
 		try {
-			
-			let id = props?.pathParameters?.id;
-
-			DebugAndLog.debug(`${logIdentifier}: id: ${id}`);
-
-			const query = {
-				id: id,
-				calcMsToDeadline: props?.calcMsToDeadline,
-				deadline: props?.deadline
-			};
 
 			data = ExampleView.view( await ExampleSvc.fetch(query) );
-
-			DebugAndLog.debug(`${logIdentifier}: Example by Id: ${query?.id}`, data);
 
 		} catch (error) {
 			DebugAndLog.error(`${logIdentifier}: Error: ${error.message}`, error.stack);
