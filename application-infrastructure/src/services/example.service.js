@@ -32,11 +32,11 @@ You can have multiple services in this script.
 */
 const {
 	cache: { 
-		CacheableDataAccess 
+		CacheableDataAccess // used only if caching
 	},
 	tools: {
 		DebugAndLog,
-		Timer
+		Timer,
 	},
 	endpoint // simple connections without using DAO
 } = require("@63klabs/cache-data");
@@ -84,33 +84,35 @@ exports.fetch = async (query) => {
 		    Simple GET request with connection from config using endpoint.get() (no caching) 
 			*/
 
-			const conn = Config.getConn('games');
-			console.log(conn);
-			const response = await endpoint.get(conn);
+			// const conn = Config.getConn('games');
+			// console.log(conn);
+			// const response = await endpoint.get(conn);
 			
-			data = response.body;
+			// data = response.body;
 
 			/* 
 			-- EXAMPLE 3: ------------------------------------------------------
 			GET request using connection from config using endpoint.get() with caching
 			*/
 
-			// const { conn, cacheProfile } = Config.getConnCacheProfile('games', 'default');
+			const { conn, cacheProfile } = Config.getConnCacheProfile('games', 'default');
 
-			// /* We could add query parameters directly to conn or save them to be passed to DAO for handling */
-			// conn.parameters = {
-			// 	code: query?.code,
-			// };
+			/* The conn object is a base object, therefore:
+			   You can modify conn.parameters to add any additional querystring parameters you wish to submit
+			   conn.parameters.id = query.id;
+			   You can also modify conn.headers to add any additional headers you wish to submit
+			   conn.headers['x-id'] = query.id;
+			*/
 
-			// /* Send request through CacheableDataAccess to utilize caching */
-			// const cacheObj = await CacheableDataAccess.getData(
-			// 	cacheProfile, 
-			// 	endpoint.get, // NOTE: do not use () we are passing the function, not executing it! CacheableDataAccess will execute on MISS
-			// 	conn, 
-			// 	null
-			// );
+			/* Send request through CacheableDataAccess to utilize caching */
+			const cacheObj = await CacheableDataAccess.getData(
+				cacheProfile, 
+				endpoint.get, // NOTE: do not use () we are passing the function, not executing it! CacheableDataAccess will execute on MISS
+				conn, 
+				null
+			);
 
-			// data = cacheObj.getBody(true); // data is returned in a wrapper from CacheableDataAccess
+			data = cacheObj.getBody(true); // data is returned in a wrapper from CacheableDataAccess
 
 			/* 
 			-- EXAMPLE 4: ------------------------------------------------------
