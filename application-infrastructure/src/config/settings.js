@@ -16,12 +16,9 @@
 * must export a single, top level object called `settings`
 */
 
-// const { tools: {DebugAndLog} } = require("@63klabs/cache-data");
-
 const settings =  {
-	"errorExpirationInSeconds": 300,
-	"routeExpirationInSeconds": 3600,
-	"externalRequestHeadroomInMs": 8000,
+	"answer": 42,
+	"baseUrl": process.env.BASE_URL || ""
 	// "someNumSetting": process.env.SOME_SETTING ?? "all" // load environment variables - you should also implement validation
 }
 

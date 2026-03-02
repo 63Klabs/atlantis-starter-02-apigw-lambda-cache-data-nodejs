@@ -32,16 +32,17 @@ You can have multiple services in this script.
 */
 const {
 	cache: { 
-		CacheableDataAccess // used only if caching
+		CacheableDataAccess // used only if caching - comment out if not using
 	},
 	tools: {
 		DebugAndLog,
 		Timer,
 	},
-	endpoint // simple connections without using DAO
+	endpoint // simple connections without using DAO - comment out if not using
 } = require("@63klabs/cache-data");
 
 const {Config} = require("../config");
+const { ExampleDao } = require("../models"); // comment out if not using ExampleDao
 
 /* Instead of hardcoding the connection object properties used by endpoint.get you can use a central configuration */
 // const { Config } = require("../config");
