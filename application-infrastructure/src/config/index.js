@@ -35,32 +35,27 @@ class Config extends AppConfig {
 	 * lambda function to wait until the promise is finished.
 	 */
 	static async init() {
-		
-		AppConfig.add(
-			new Promise(async (resolve) => {
 
-				const timerConfigInit = new Timer("timerConfigInit", true);
-						
-				try {
-
-					AppConfig.init( { settings, validations, connections, responses, debug: true } );
-
-					// Cache settings
-					Cache.init({
-						secureDataKey: new CachedSSMParameter(process.env.PARAM_STORE_PATH+'CacheData_SecureDataKey', {refreshAfter: 43200}), // 12 hours
-					});
-
-					DebugAndLog.debug("Cache: ", Cache.info());
-
-				} catch (error) {
-					DebugAndLog.error(`Could not initialize Config ${error.message}`, error.stack);
-				} finally {
-					timerConfigInit.stop();
-					resolve(true);
-				};
+		const timerConfigInit = new Timer("timerConfigInit", true);
 				
-			})
-		);
+		try {
+
+			AppConfig.init( { settings, validations, connections, responses, debug: true } );
+
+			// Cache settings
+			Cache.init({
+				secureDataKey: new CachedSSMParameter(process.env.PARAM_STORE_PATH+'CacheData_SecureDataKey', {refreshAfter: 43200}), // 12 hours
+			});
+
+			DebugAndLog.debug("Cache: ", Cache.info());
+
+		} catch (error) {
+			DebugAndLog.error(`Could not initialize Config ${error.message}`, error.stack);
+		} finally {
+			timerConfigInit.stop();
+		};
+
+		return AppConfig.promise();
 	};
 
 	static async prime() {
