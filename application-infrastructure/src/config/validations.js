@@ -59,7 +59,7 @@ const playersQueryParameter = (players) => {
  */
 module.exports = {
 	referrers,
-	excludeParamsWithNoValidationMatch: true,
+	excludeParamsWithNoValidationMatch: false, // rely on API Gateway OpenAPI spec to be first line validation
 	parameters: {
 		pathParameters: {
 			code: statusCodePathParameter,
