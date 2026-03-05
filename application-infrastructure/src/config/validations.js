@@ -59,6 +59,7 @@ const playersQueryParameter = (players) => {
  */
 module.exports = {
 	referrers,
+	excludeParamsWithNoValidationMatch: true,
 	parameters: {
 		pathParameters: {
 			code: statusCodePathParameter,
