@@ -1,3 +1,17 @@
+/**
+ * Configuration initialization module for Lambda Function
+ *
+ * This module handles async initialization of:
+ * - AppConfig.init() (Response, ClientRequest, Connections, Settings)
+ * - Cache-data Cache.init()
+ *
+ * The Config.init() function should be called once during Lambda cold start
+ * before processing any requests. (Place it outside the handler)
+ * 
+ * Within the handler be sure to await Config.promise() and Config.prime()
+ *
+ * @module config
+ */
 
 const { 
 	cache: {
@@ -19,16 +33,54 @@ const connections = require("./connections.js");
 const responses = require("./responses.js");
 
 /**
- * Extends tools.AppConfig
- * Used to create a custom Config interface
+ * Configuration class for Lambda Function.
+ * 
+ * Extends tools.AppConfig from @63klabs/cache-data to provide:
+ * - Config.settings() - Getter for accessing application settings
+ * - Config.getConnCacheProfile() - Method for retrieving connection cache profiles
+ * 
+ * Note: Config.settings() and Config.getConnCacheProfile() are inherited from
+ * AppConfig and do not need separate documentation in this module.
+ * 
+ * @extends AppConfig
  */
 class Config extends AppConfig {
 
 	/**
-	 * This is custom initialization code for the application. Depending 
-	 * upon needs, the init function from the AppConfig and Cache classes
-	 * may be used as needed. Init is async, and a promise is stored, allowing the 
-	 * lambda function to wait until the promise is finished.
+	 * Initialize configuration for Lambda cold start.
+	 * 
+	 * This method performs async initialization that should be called once during
+	 * Lambda cold start before processing any requests. 
+	 * Using AppConfig.init(), it initializes:
+	 * - ClientRequest validation framework
+	 * - Response formatting utilities
+	 * - Connections configuration for S3, GitHub API, and documentation index
+	 * Using Cache.init() it initializes:
+	 * - Cache system with secure data key from SSM Parameter Store
+	 * 
+	 * The initialization is stored as a promise that can be awaited in the Lambda
+	 * handler to ensure all setup is complete before processing requests.
+	 * 
+	 * Cold Start Behavior:
+	 * - First invocation: Performs full initialization (typically 200-500ms)
+	 * - Subsequent invocations: Promise already resolved, returns immediately
+	 * 
+	 * @async
+	 * @returns {Promise<boolean>} Resolves to true when initialization completes
+	 * @example
+	 * // In Lambda handler (outside handler function for cold start optimization)
+	 * const { Config } = require('./config');
+	 * Config.init(); // Start initialization
+	 * 
+	 * // In handler function
+	 * exports.handler = async (event, context) => {
+	 *   await Config.promise(); // Wait for init to complete
+	 *   await Config.prime();   // Prime caches
+	 *   
+	 *   // Now safe to use Config.settings() and Config.getConnCacheProfile()
+	 *   const settings = Config.settings();
+	 *   const profile = Config.getConnCacheProfile('s3-templates', 'templates-list');
+	 * };
 	 */
 	static async init() {
 
@@ -54,6 +106,19 @@ class Config extends AppConfig {
 		return AppConfig.promise();
 	};
 
+	/**
+	 * Some configurations may need to run after Config.init() is complete.
+	 *
+	 * @async
+	 * @returns {Promise<array>}
+	 * @example
+	 * Config.init()
+	 * handler() {
+	 * 	 await Config.promise();
+	 *   await Config.prime();
+	 *   // ... rest of handler
+	 * }
+	 */
 	static async prime() {
 		return Promise.all([
 			CacheableDataAccess.prime(),
