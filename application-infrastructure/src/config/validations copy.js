@@ -67,7 +67,6 @@ module.exports = {
 		},
 		queryParameters: {
 			players: playersQueryParameter,
-			BY_ROUTE: [{route: "GET:api/games?players", validate: playersQueryParameter}]
 		},
 		// headerParameters: {},
 		// cookieParameters: {},
