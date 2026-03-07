@@ -1,32 +1,10 @@
-const { statusCodes } = require("../models/static-data/index.js");
 const { tools: {DebugAndLog} } = require("@63klabs/cache-data");
 
-const referrers = [
-	"63klabs.net",
-	"chadkluck.net",
-];
-
-const isString = (value) => {
-	return typeof value === "string";
-};
+const referrers = ["*"];
 
 const isStringOfNumbers = (value) => {
 	// using regex, check if all the characters are digits
 	return /^\d+$/.test(value);
-};
-
-// validate organizationCode based on Config.getSettings('orgCodes') which has an array of organization_code and name pairs
-// returns true if organizationCode is found in the array, false otherwise
-// used in the organizationCode route handler to validate the organizationCode parameter
-const statusCodePathParameter = (code) => {
-	if (!Array.isArray(statusCodes) || statusCodes.length < 1) {
-		DebugAndLog.error("No status codes found in the application's static data folder '/models/static-data'!");
-		return false;
-	}
-	if (!code) return false;
-	if (!isString(code)) return false;
-	if (code.length === 0) return false;
-	return statusCodes.some((statusCode) => statusCode.code === code);
 };
 
 /**
@@ -62,7 +40,6 @@ module.exports = {
 	excludeParamsWithNoValidationMatch: false, // rely on API Gateway OpenAPI spec to be first line validation
 	parameters: {
 		pathParameters: {
-			code: statusCodePathParameter,
 			id: idPathParameter,
 		},
 		queryParameters: {

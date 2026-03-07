@@ -20,52 +20,6 @@ console.log(`tools.AWS.INFO`, tools.AWS.INFO);
 
 describe('Test validations from config/validations.js', () => {
 
-	describe('validations.parameters.pathParameters.statusCode', () => {
-
-		let statusCodes;
-
-		beforeAll(() => {
-			const filePath = path.join(__dirname, '..', 'models', 'static-data', 'statusCodes.json');
-			const fileContent = readFileSync(filePath, 'utf8');
-			statusCodes = JSON.parse(fileContent);
-		});
-
-		test('should validate all entries in statusCodes.json', () => {
-			statusCodes.forEach(code => {
-				expect(validations.parameters.pathParameters.code(code.code)).toBe(true);
-			});
-		});
-
-		test('should reject invalid status codes', () => {
-			const invalidCodes = ['', '123', 'ABCD', 'A1', '1A', 'AAA'];
-			invalidCodes.forEach(code => {
-				expect(validations.parameters.pathParameters.code(code)).toBe(false);
-			});
-		});
-
-		test('should validate status code format', () => {
-			statusCodes.forEach(code => {
-				expect(code.code).toMatch(/^[a-z]*$/);
-			});
-		});
-
-		test('should ensure all status codes are unique', () => {
-			const statusCodeValues = statusCodes.map(code => code.code);
-			const uniqueCodes = new Set(statusCodeValues);
-			expect(uniqueCodes.size).toBe(statusCodes.length);
-		});
-
-		test('should validate a manually submitted status code', () => {
-			const orgCode = 'hidden';
-			expect(validations.parameters.pathParameters.code(orgCode)).toBe(true);
-		});
-
-		test('should reject a manually submitted status code', () => {
-			const orgCode = 'blah_blah_not_valid';
-			expect(validations.parameters.pathParameters.code(orgCode)).toBe(false);
-		});
-	});
-
 	describe('validations.parameters.pathParameters.id', () => {
 		test('should validate a valid game ID', () => {
 			const id = 'G-92d3ace7';
