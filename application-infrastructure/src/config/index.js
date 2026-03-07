@@ -82,7 +82,7 @@ class Config extends AppConfig {
 	 *   const profile = Config.getConnCacheProfile('s3-templates', 'templates-list');
 	 * };
 	 */
-	static async init() {
+	static init() {
 
 		const timerConfigInit = new Timer("timerConfigInit", true);
 				
