@@ -2,8 +2,7 @@ const { statusCodes } = require("../models/static-data/index.js");
 const { tools: {DebugAndLog} } = require("@63klabs/cache-data");
 
 const referrers = [
-	"63klabs.net",
-	"chadkluck.net",
+	"*",
 ];
 
 const isString = (value) => {
