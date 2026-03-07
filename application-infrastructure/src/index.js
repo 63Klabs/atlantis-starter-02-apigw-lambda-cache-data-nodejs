@@ -55,7 +55,8 @@ exports.handler = async (event, context) => {
 		// >! Ensure Cold Start init is done and primed (all async complete) before continuing.
 		// >! If this is a cold start, we may need to wait
 		// >! If this is not a cold start then all promises will have already been resolved previously and we will move on
-		await Config.promise(); // >! makes sure general config init is complete
+		const t = await Config.promise(); // >! makes sure general config init is complete
+		console.log(t);
 		await Config.prime(); // >! makes sure all prime tasks (tasks that need to be completed AFTER init but BEFORE handler) are completed
 		// >! If the cold start init timer is running, stop it and log. This won't run again until next cold start
 		if (coldStartInitTimer.isRunning()) { DebugAndLog.log(coldStartInitTimer.stop(),"COLDSTART"); }
