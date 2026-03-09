@@ -65,7 +65,6 @@ module.exports = {
 	excludeParamsWithNoValidationMatch: false,
 	parameters: {
 		pathParameters: {
-			code: statusCodePathParameter,
 			id: idPathParameter,
 		},
 		queryParameters: {

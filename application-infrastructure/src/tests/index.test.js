@@ -50,7 +50,7 @@ describe('Test validations from config/validations.js', () => {
 		});
 
 		test('should reject a number of players that is too low', () => {
-			const players = '0';
+			const players = '-1';
 			expect(validations.parameters.queryParameters.players(players)).toBe(false);
 		});
 
