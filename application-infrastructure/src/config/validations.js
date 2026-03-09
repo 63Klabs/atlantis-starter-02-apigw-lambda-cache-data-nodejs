@@ -2,10 +2,6 @@ const { tools: {DebugAndLog} } = require("@63klabs/cache-data");
 
 const referrers = ['*'];
 
-const isString = (value) => {
-	return typeof value === "string";
-};
-
 const isStringOfNumbers = (value) => {
 	// using regex, check if all the characters are digits
 	return /^\d+$/.test(value);
@@ -17,7 +13,6 @@ const isStringOfNumbers = (value) => {
  * @returns {boolean} - True if the id is valid, false otherwise
  */
 const idPathParameter = (id) => {
-	if (!id) return false;
 	if (!id.match(/^G\-[a-f0-9]{8}$/)) return false;
 	return true;
 };
@@ -28,9 +23,9 @@ const idPathParameter = (id) => {
  * @returns {boolean} - True if the players is valid, false otherwise
  */
 const playersQueryParameter = (players) => {
-	if (!players) return false;
 	if (!isStringOfNumbers(players)) return false;
-	if (players < 1 || players > 10) return false;
+	const plyrs = parseInt(players, 10); // convert to Int
+	if (plyrs < 1 || plyrs > 10) return false;
 	return true;
 };
 
