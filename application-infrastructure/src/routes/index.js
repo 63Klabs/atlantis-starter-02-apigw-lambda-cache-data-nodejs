@@ -30,7 +30,6 @@ const process = async function(event, context) {
 		
 
 		if (REQ.isValid()) {
-			console.log("is valid");
 			/*
 			Logic for routing to appropriate controller goes here
 			Try to keep it to just the method, path, and path variables (or a common query string parameter)
@@ -64,7 +63,6 @@ const process = async function(event, context) {
 			}
 
 		} else {
-			console.log("Not valid");
 			RESP.reset({statusCode: 400});
 		}
 
