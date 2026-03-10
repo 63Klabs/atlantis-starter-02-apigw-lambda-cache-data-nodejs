@@ -1,4 +1,4 @@
-const { tools: {DebugAndLog, APIRequest} } = require("@63klabs/cache-data");
+const { tools: {DebugAndLog, ApiRequest} } = require("@63klabs/cache-data");
 
 class ApiExampleDao {
 
@@ -118,12 +118,12 @@ class ApiExampleDao {
 		let response = null;
 
 		try {
-			const apiRequest = new APIRequest(this.request);
+			const apiRequest = new ApiRequest(this.request);
 			response = await apiRequest.send();
 
 		} catch (error) {
 			DebugAndLog.error(`Error in ApiSample call: Error: ${error.message}`, error.stack);
-			response = APIRequest.responseFormat(false, 500, "Error in call()");
+			response = ApiRequest.responseFormat(false, 500, "Error in call()");
 		} finally {
 			return response;
 		}

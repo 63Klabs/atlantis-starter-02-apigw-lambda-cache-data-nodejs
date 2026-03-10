@@ -22,7 +22,7 @@ const {
 		DebugAndLog,
 		Timer,
 		CachedParameterSecrets,
-		CachedSSMParameter,
+		CachedSsmParameter,
 		AppConfig,
 	} 
 } = require("@63klabs/cache-data");
@@ -54,7 +54,8 @@ class Config extends AppConfig {
 	 * Using AppConfig.init(), it initializes:
 	 * - ClientRequest validation framework
 	 * - Response formatting utilities
-	 * - Connections configuration for S3, GitHub API, and documentation index
+	 * - Connections
+	 * - Application Settings
 	 * Using Cache.init() it initializes:
 	 * - Cache system with secure data key from SSM Parameter Store
 	 * 
@@ -65,7 +66,6 @@ class Config extends AppConfig {
 	 * - First invocation: Performs full initialization (typically 200-500ms)
 	 * - Subsequent invocations: Promise already resolved, returns immediately
 	 * 
-	 * @async
 	 * @returns {Promise<boolean>} Resolves to true when initialization completes
 	 * @example
 	 * // In Lambda handler (outside handler function for cold start optimization)
@@ -92,7 +92,7 @@ class Config extends AppConfig {
 
 			// Cache settings
 			Cache.init({
-				secureDataKey: new CachedSSMParameter(process.env.PARAM_STORE_PATH+'CacheData_SecureDataKey', {refreshAfter: 43200}), // 12 hours
+				secureDataKey: new CachedSsmParameter(process.env.PARAM_STORE_PATH+'CacheData_SecureDataKey', {refreshAfter: 43200}), // 12 hours
 			});
 
 			DebugAndLog.debug("Cache: ", Cache.info());

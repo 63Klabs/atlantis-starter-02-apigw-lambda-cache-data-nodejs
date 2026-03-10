@@ -1,4 +1,4 @@
-const { tools: {DebugAndLog, APIRequest} } = require("@63klabs/cache-data");
+const { tools: {DebugAndLog, ApiRequest} } = require("@63klabs/cache-data");
 
 const { ApiExampleDao } = require("./ApiExample.dao");
 
@@ -32,7 +32,7 @@ class ExampleDao extends ApiExampleDao {
 			response = await super.get();
 		} catch (error) {
 			DebugAndLog.error(`Error in ExampleDao get: Error: ${error.message}`, error.stack);
-			response = APIRequest.responseFormat(false, 500, "Request failed");
+			response = ApiRequest.responseFormat(false, 500, "Request failed");
 		} finally {
 			return response;
 		}
@@ -50,7 +50,7 @@ class ExampleDao extends ApiExampleDao {
 		} catch (error) {
 			// something went wrong
 			DebugAndLog.error(`Error in ExampleDao call: Error: ${error.message}`, error.stack);
-			response = APIRequest.responseFormat(false, 500, "Request failed");
+			response = ApiRequest.responseFormat(false, 500, "Request failed");
 		} finally {
 			return response;
 		}
