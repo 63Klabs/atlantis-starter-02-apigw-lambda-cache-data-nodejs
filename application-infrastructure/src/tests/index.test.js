@@ -43,25 +43,25 @@ describe('Test validations from config/validations.js', () => {
 
 	});
 
-	describe('validations.queryParameters.players', () => {
+	describe('validations.queryStringParameters.players', () => {
 		test('should validate a valid number of players', () => {
 			const players = '5';
-			expect(validations.parameters.queryParameters.players(players)).toBe(true);
+			expect(validations.parameters.queryStringParameters.players(players)).toBe(true);
 		});
 
 		test('should reject a number of players that is too low', () => {
 			const players = '-1';
-			expect(validations.parameters.queryParameters.players(players)).toBe(false);
+			expect(validations.parameters.queryStringParameters.players(players)).toBe(false);
 		});
 
 		test('should reject a number of players that is too high', () => {
 			const players = '11';
-			expect(validations.parameters.queryParameters.players(players)).toBe(false);
+			expect(validations.parameters.queryStringParameters.players(players)).toBe(false);
 		});
 
 		test('should reject a non-numeric value', () => {
 			const players = 'invalid';
-			expect(validations.parameters.queryParameters.players(players)).toBe(false);
+			expect(validations.parameters.queryStringParameters.players(players)).toBe(false);
 		});
 	});
 });
