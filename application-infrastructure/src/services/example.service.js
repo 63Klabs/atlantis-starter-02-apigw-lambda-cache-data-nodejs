@@ -116,7 +116,7 @@ exports.fetch = async (query) => {
 			// data = cacheObj.getBody(true); // data is returned in a wrapper from CacheableDataAccess
 
 			/* =================== EXAMPLE 4: =================================
-				GET request using connection from Config using DAO for avanced API handling
+				GET request using connection from Config using DAO for advanced API handling
 				(with caching) 
 			================================================================ */
 			
