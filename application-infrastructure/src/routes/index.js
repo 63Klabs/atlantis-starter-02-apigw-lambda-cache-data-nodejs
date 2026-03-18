@@ -7,7 +7,6 @@ const {
 } = require("@63klabs/cache-data");
 
 const Controllers = require("../controllers");
-const { ContinuousBackupsUnavailableException } = require("@aws-sdk/client-dynamodb");
 
 /**
  * Process the request
