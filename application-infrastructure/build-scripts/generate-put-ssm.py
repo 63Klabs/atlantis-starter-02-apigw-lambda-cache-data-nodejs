@@ -3,17 +3,19 @@
 # Chad Kluck
 # 2026-01-08
 
-# Create a secure SSM Parameter in AWS Parameter Store.
+"""
+Create a secure SSM Parameter in AWS Parameter Store.
 
-# This script can be used to generate random keys, use provided values, 
-#   or create an SSM Parameter with value of BLANK to be filled in later.
+This script can be used to generate random keys, use provided values, 
+  or create an SSM Parameter with value of BLANK to be filled in later.
 
-# Include this script in your CI/CD pipeline to automate the process of 
-#  creating secure parameters independent of CloudFormation templates.
+Include this script in your CI/CD pipeline to automate the process of 
+ creating secure parameters independent of CloudFormation templates.
 
-# It also reads tags from the template-configuration.json file, which is 
-#  common for SAM deployments, and applies them to the parameters upon initial 
-#  creation.
+It also reads tags from the template-configuration.json file, which is 
+ common for SAM deployments, and applies them to the parameters upon initial 
+ creation.
+"""
 
 import sys
 import secrets

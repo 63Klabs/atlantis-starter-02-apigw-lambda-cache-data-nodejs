@@ -1,11 +1,7 @@
 # Change Log
 
-## v0.0.1 (2026-xx-xx)
+All notable changes to this project will be documented in this file.
 
-### Enhancements
-
-- TODO
-
-### Fixes
+## v0.0.1 (unreleased)
 
 - TODO
