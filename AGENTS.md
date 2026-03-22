@@ -265,7 +265,19 @@ It must:
 * Include appropriate IAM scoping
 * Be consistent across test/beta/prod
 
-## 9. Summary for AI (TL;DR)
+## 9. Documentation and Tests
+
+Documentation and Tests must be kept up to date.
+
+At the end of a spec-driven workflow, or after major chanegs are complete, ensure the following are updated:
+
+- ARCHITECTURE.md
+- DEPLOYMENT.md
+- docs/admin-ops (for Admins, Ops, Cloud Engineers, Cloud Architects)
+- docs/developer (for Developers and Maintainers of the application who add features, fix bugs, and provide enhancements)
+- docs/end-user (for Consumers of any API, web pages, or other products this application or service produces)
+
+## 10. Summary for AI (TL;DR)
 
 * Use **serverless**, **event-driven**, **modular** architectures.
 * Follow strict naming: `Prefix-ProjectId-StageId-*`.
@@ -275,3 +287,4 @@ It must:
 * Keep dependencies small; use AWS-native services.
 * Include unit tests for new functions.
 * Keep shared infrastructure out of this repo.
+* Keep documentation and tests up to date.
