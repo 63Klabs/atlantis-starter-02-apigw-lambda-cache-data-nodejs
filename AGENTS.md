@@ -269,13 +269,14 @@ It must:
 
 Documentation and Tests must be kept up to date.
 
-At the end of a spec-driven workflow, or after major chanegs are complete, ensure the following are updated:
+At the end of a spec-driven workflow, or after major changes are complete, ensure the following are updated:
 
-- ARCHITECTURE.md
-- DEPLOYMENT.md
-- docs/admin-ops (for Admins, Ops, Cloud Engineers, Cloud Architects)
-- docs/developer (for Developers and Maintainers of the application who add features, fix bugs, and provide enhancements)
-- docs/end-user (for Consumers of any API, web pages, or other products this application or service produces)
+* ARCHITECTURE.md
+* DEPLOYMENT.md
+* CHANGELOG.md
+* docs/admin-ops (for Admins, Ops, Cloud Engineers, Cloud Architects)
+* docs/developer (for Developers and Maintainers of the application who add features, fix bugs, and provide enhancements)
+* docs/end-user (for Consumers of any API, web pages, or other products this application or service produces)
 
 ## 10. Summary for AI (TL;DR)
 

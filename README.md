@@ -1,6 +1,6 @@
 # API Gateway with Lambda utilizing 63klabs/cache-data Written in Node.js
 
-An application starter template to demonstrate Atlantis Template for AWS CodePipeline to provision a web service that utilizes API Gateway and a simple Lambda function written in Node.js that implements various features of the [@63klabs/cache-data](https://www.npmjs.com/package/@63klabs/cache-data) NPM package.
+An application starter template to demonstrate Atlantis Template for AWS CodePipeline to provision a web service that utilizes API Gateway and an advanced Lambda function written in Node.js that implements various features of the [@63klabs/cache-data](https://www.npmjs.com/package/@63klabs/cache-data) NPM package.
 
 | | Build/Deploy | Application Stack |
 |---|---|---|
