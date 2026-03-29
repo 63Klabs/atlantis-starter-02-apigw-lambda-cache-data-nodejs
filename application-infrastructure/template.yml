@@ -479,8 +479,8 @@ Resources:
         # IF it IS NOT available for your region then you will have to keep the LambdaParamSecrets* maps and make periodic updates
         # IF it IS available, you can delete the LambdaParamSecrets* maps and the LambdaParamSecrets* '!If' statement above and uncomment one of the lines below depending upon your architecture
         # >! Note: this is only for the Param Secrets extension. Lambda Insights does NOT have a public parameter so you will still need to map and update the insights layer versions
-        # - {{resolve:ssm:/aws/service/aws-parameters-and-secrets-lambda-extension/x86/latest}} #x86
-        # - {{resolve:ssm:/aws/service/aws-parameters-and-secrets-lambda-extension/arm64/latest}} #arm64
+        # - '{{resolve:ssm:/aws/service/aws-parameters-and-secrets-lambda-extension/x86/latest}}' #x86
+        # - '{{resolve:ssm:/aws/service/aws-parameters-and-secrets-lambda-extension/arm64/latest}}' #arm64
 
 
       Environment:
