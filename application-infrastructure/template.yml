@@ -505,6 +505,7 @@ Resources:
           CACHE_DATA_TIME_ZONE_FOR_INTERVAL: !Ref CacheDataTimeZoneForInterval # Cache-Data may expire using an interval such as every four, six, twelve, ... hours on the hour starting at midnight. What timezone holds the midnight to calculate from?
           CACHE_DATA_AWS_X_RAY_ON: true # (default is false) Enable X-Ray tracing for Cache-Data 
           CACHE_DATA_USE_TOOLS_HASH_METHOD: true # (default is false) Use the tools.hash method for generating the URI ID to identify cached requests
+          CACHE_USE_IN_MEMORY: false # (default is false) Enable to reduce calls and latency to DynamoDB/S3 for cached data already in Lambda memory
           # -- Required --
           CACHE_DATA_DYNAMO_DB_TABLE: !If 
             - HasCacheDataDynamoDbTableName
