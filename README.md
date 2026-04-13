@@ -28,6 +28,7 @@ An application starter template to demonstrate Atlantis Template for AWS CodePip
 
 1. Read the [Atlantis Tutorials introductory page](https://github.com/63Klabs/atlantis-tutorials)
 2. Then perform the steps outlined in [Tutorial #2: API Gateway and Lambda using Cache-Data (Node)](https://github.com/63Klabs/atlantis-tutorials/blob/main/tutorials/02-advanced-api-gateway-lambda-cache-data-node/README.md).
+
 ## Architecture
 
 See [Architecture](./ARCHITECTURE.md)
