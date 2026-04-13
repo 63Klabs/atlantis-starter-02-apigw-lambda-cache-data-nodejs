@@ -10,7 +10,7 @@ It demonstrates and encourages:
 - Retaining logs for a limited time and purging after expiration
 
 It is the responsibility of the developer/maintainer of any repository that was cloned, forked, copied, or otherwise, to:
-- Maintain practices described above
+- Maintain and improve upon practices described above
 - Update all external Python libraries and Node packages to secure versions
 - Update Lambda layers regularly to latest versions
 - Practice safe coding and scripting
