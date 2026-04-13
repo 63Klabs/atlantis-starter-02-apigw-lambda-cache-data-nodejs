@@ -47,6 +47,10 @@ See [AGENTS.md](./AGENTS.md) for important context and guidelines for AI-generat
 
 The agents file is also helpful (and perhaps essential) for HUMANS developing within the application's structured platform as well.
 
+## Security
+
+See [Security](./SECURITY.md)
+
 ## Changelog
 
 See [Change Log](./CHANGELOG.md)
