@@ -268,17 +268,18 @@ Mappings:
 
   # Add/Change to your regions as needed
   # These accounts and layers are AWS Managed so you can trust them - They are not some random accounts
-  # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-extension-versions.html
+  # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-extension-versionsx86-64.html
   LambdaInsightsX86:
     us-east-1:
-      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension:64"
+      ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension:66"
     us-east-2:
-      ExtArn: "arn:aws:lambda:us-east-2:580247275435:layer:LambdaInsightsExtension:64"
+      ExtArn: "arn:aws:lambda:us-east-2:580247275435:layer:LambdaInsightsExtension:71"
     us-west-1:
-      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension:64"
+      ExtArn: "arn:aws:lambda:us-west-1:580247275435:layer:LambdaInsightsExtension:66"
     us-west-2:
-      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension:64"
+      ExtArn: "arn:aws:lambda:us-west-2:580247275435:layer:LambdaInsightsExtension:66"
 
+  # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights-extension-versionsARM.html
   LambdaInsightsArm:
     us-east-1:
       ExtArn: "arn:aws:lambda:us-east-1:580247275435:layer:LambdaInsightsExtension-Arm64:31"
@@ -295,23 +296,23 @@ Mappings:
   # However, instead of managing the extension versions, you can use a resolve:ssm as described in the comments of the Lambda layer definition below
   LambdaParamSecretsX86:
     us-east-1:
-      ExtArn: "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:61"
+      ExtArn: "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension:88"
     us-east-2:
-      ExtArn: "arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension:67"
+      ExtArn: "arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension:94"
     us-west-1:
-      ExtArn: "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension:59"
+      ExtArn: "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension:84"
     us-west-2:
-      ExtArn: "arn:aws:lambda:us-west-2:345057560386:layer:AWS-Parameters-and-Secrets-Lambda-Extension:61"
+      ExtArn: "arn:aws:lambda:us-west-2:345057560386:layer:AWS-Parameters-and-Secrets-Lambda-Extension:88"
 
   LambdaParamSecretsArm:
     us-east-1:
-      ExtArn: "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:61"
+      ExtArn: "arn:aws:lambda:us-east-1:177933569100:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:88"
     us-east-2:
-      ExtArn: "arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:67"
+      ExtArn: "arn:aws:lambda:us-east-2:590474943231:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:94"
     us-west-1:
-      ExtArn: "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:56"
+      ExtArn: "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:81"
     us-west-2:
-      ExtArn: "arn:aws:lambda:us-west-2:345057560386:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:61"
+      ExtArn: "arn:aws:lambda:us-west-2:345057560386:layer:AWS-Parameters-and-Secrets-Lambda-Extension-Arm64:88"
 
 # =============================================================================
 # CONDITIONS
