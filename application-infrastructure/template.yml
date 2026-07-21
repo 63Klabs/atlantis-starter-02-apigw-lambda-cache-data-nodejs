@@ -461,7 +461,7 @@ Resources:
         - !Ref FunctionArchitecture # arm64 has better processing than default x86_64 - but layers and binaries must support
       Timeout: !Ref FunctionTimeOutInSeconds
       MemorySize: !Ref FunctionMaxMemoryInMB
-      Role: !GetAtt LambdaExecutionRole.Arn
+      Role: !GetAtt WebServiceLambdaExecutionRole.Arn
 
       Layers:
         # Lambda Insights Layer - ARN is Mapped in as they vary by region and architecture - Update regions and versions in Mapping section
@@ -537,10 +537,10 @@ Resources:
   #    These are the resources your Lambda function needs access to Logs, SSM Parameters, DynamoDb, S3, etc.
   #    Define specific actions such as get/put (read/write)
 
-  LambdaExecutionRole:
+  WebServiceLambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "${Prefix}-${ProjectId}-${StageId}-ExecutionRole"
+      RoleName: !Sub "${Prefix}-${ProjectId}-${StageId}-WebServiceExecutionRole"
       Description: "IAM Role that allows the Lambda permission to execute and access resources"
       Path: !Ref RolePath
       PermissionsBoundary: !If [HasPermissionsBoundaryArn, !Ref PermissionsBoundaryArn, !Ref 'AWS::NoValue' ]
@@ -563,7 +563,7 @@ Resources:
           - !Ref 'AWS::NoValue' # If supplying your own Bucket or Table then you will need to supply your own statements to the execution role (see below)
 
       Policies:
-      - PolicyName: LambdaResourceAccessPolicies
+      - PolicyName: WebServiceLambdaResourceAccessPolicies
         PolicyDocument:
           Statement:
 
@@ -598,7 +598,7 @@ Resources:
 
   # Permission for API Gateway to invoke the $LATEST version of the Lambda function
   # This is used in all environments and during gradual deployments for new code
-  ConfigLambdaPermission:
+  ConfigWebServiceLambdaPermission:
     Type: "AWS::Lambda::Permission"
     Properties:
       Action: lambda:InvokeFunction
@@ -609,7 +609,7 @@ Resources:
   # Permission for API Gateway to invoke the :live alias of the Lambda function
   # Only created in production where gradual deployments are enabled
   # During gradual deployment, traffic shifts from :live alias to $LATEST version
-  ConfigLambdaPermissionLive:
+  ConfigWebServiceLambdaPermissionLive:
     Type: "AWS::Lambda::Permission"
     Condition: IsProduction  # Only needed in production for gradual deployments
     Properties:
@@ -721,7 +721,7 @@ Outputs:
     Value: !Sub "https://${WebApi}.execute-api.${AWS::Region}.amazonaws.com/${ApiPathBase}/api/example/" # change to your endpoint
 
   # -- CloudWatch Log Groups
-  CloudWatchLambdaExecutionLogGroup:
+  CloudWatchWebServiceLambdaExecutionLogGroup:
     Description: "Cloud Watch Log Group for Lambda Execution Logs"
     Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Flambda%2F${WebService}"
 
@@ -741,7 +741,7 @@ Outputs:
     Value: !Sub 'https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=${Prefix}-${ProjectId}-${StageId}-Dashboard'
 
   # -- Resource quick links
-  LambdaWebConsole:
+  LambdaWebConsoleWebService:
     Description: "Lambda Web Console"
     Value: !Sub "https://console.aws.amazon.com/lambda/home?region=${AWS::Region}#/functions/${WebService}?tab=code"
 

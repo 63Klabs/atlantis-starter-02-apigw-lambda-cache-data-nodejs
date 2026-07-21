@@ -42,7 +42,7 @@ application-infrastructure/src/
 │           ├── package.json      # or requirements.txt
 │           └── ...
 └── static/                       # static site (if applicable)
-    ├── package.json              # or equivalent build tool config
+    │   ├── package.json          # or equivalent build tool config
     └── ...
 ```
 
@@ -98,32 +98,45 @@ Replace the single-function `pre_build` commands with a loop over function direc
   pre_build:
     commands:
 
+
+      # Application Environment: Build and test each Lambda function independently.
+      # src/lambda/ holds one directory per function (multi-src layout). Each function
+      # is fully self-contained with its own package.json, .nvmrc, and node_modules.
+      # The loop picks up new functions automatically - no buildspec changes needed
+      # when a function is added. The layers/ subdirectory is handled separately below.
       - echo "--- Building Lambda Functions ---"
       - |
         for func_dir in application-infrastructure/src/lambda/*/; do
-          # Skip the layers directory
+          # Skip the layers directory (built separately)
           if [ "$(basename "$func_dir")" = "layers" ]; then
             continue
           fi
 
-          echo "Processing: $func_dir"
+          echo "Processing function: $func_dir"
           cd "$CODEBUILD_SRC_DIR/$func_dir"
 
-          # Install all deps (including dev) for testing
+          # Install dev so we can run tests, but we will remove dev dependencies later
           npm install --include=dev
+          # Run Test under test environment
+          NODE_ENV=test npm test
           npm test
 
-          # Clean up test artifacts, reinstall production-only
-          rm -rf tests __tests__ coverage node_modules
+          # Clean up test artifacts and reinstall only production dependencies to reduce Lambda package size
+          rm -rf __tests__ tests coverage node_modules
           npm ci --omit=dev
 
-          # Audit production dependencies
+          # FAIL the build if npm audit has vulnerabilities it can't fix
+          # Perform a fix to move us forward, then check to make sure there were no unresolved high fixes
+          # We are making an intentional choice here:
+          #     Make breaking changes in hopes to bring vulnerabilities to 0
+          #      vs deploying packages with vulnerabilities
           npm audit fix --force --omit=dev
           npm audit --audit-level=high
 
           cd "$CODEBUILD_SRC_DIR"
         done
 
+      # Build Lambda Layers (production dependencies only) if any exist
       - echo "--- Building Lambda Layers ---"
       - |
         if [ -d "application-infrastructure/src/lambda/layers" ]; then
@@ -132,21 +145,28 @@ Replace the single-function `pre_build` commands with a loop over function direc
               echo "Processing layer: $layer_dir"
               cd "$CODEBUILD_SRC_DIR/$layer_dir"
 
-              # Layers typically only need production deps
+              # Install dev so we can run tests, but we will remove dev dependencies later
+              npm install --include=dev
+              # Run Test under test environment
+              NODE_ENV=test npm test
+              npm test
+
+              # Clean up test artifacts and reinstall only production dependencies to reduce Lambda package size
+              rm -rf __tests__ tests coverage node_modules
               npm ci --omit=dev
 
+              # FAIL the build if npm audit has vulnerabilities it can't fix
+              # Perform a fix to move us forward, then check to make sure there were no unresolved high fixes
+              # We are making an intentional choice here:
+              #     Make breaking changes in hopes to bring vulnerabilities to 0
+              #      vs deploying packages with vulnerabilities
+              npm audit fix --force --omit=dev
+              npm audit --audit-level=high
+
               cd "$CODEBUILD_SRC_DIR"
+
             fi
           done
-        fi
-
-      - echo "--- Building Static Site ---"
-      - |
-        if [ -d "application-infrastructure/src/static" ]; then
-          cd "$CODEBUILD_SRC_DIR/application-infrastructure/src/static"
-          npm ci
-          npm run build
-          cd "$CODEBUILD_SRC_DIR"
         fi
 
       # Continue with existing build-scripts (SSM, etc.)
@@ -157,7 +177,7 @@ Replace the single-function `pre_build` commands with a loop over function direc
 **Key points:**
 - Use `$CODEBUILD_SRC_DIR` for absolute paths — avoids issues with nested `cd` commands.
 - Skip the `layers/` subdirectory when iterating over function directories.
-- Each function is tested and audited independently.
+- Each function and layer is tested and audited independently.
 - The `build` phase remains unchanged — `aws cloudformation package` resolves each function's `CodeUri`.
 
 ### Python Functions in the Loop
@@ -194,6 +214,8 @@ For Python Lambda functions, replace the npm commands:
         done
 ```
 
+Perform a similar update for any Python Lambda layers.
+
 ## CloudFormation Template Adjustments
 
 When a project moves to multi-function:
@@ -205,12 +227,16 @@ When a project moves to multi-function:
 | FunctionName | `${Prefix}-${ProjectId}-${StageId}-AppFunction` | `${Prefix}-${ProjectId}-${StageId}-<ResourceName>` |
 | Log Group | `/aws/lambda/...-AppFunction` | `/aws/lambda/...-<ResourceName>` |
 | Layers | `ContentUri` not applicable | `ContentUri: src/lambda/layers/<layer-name>/` for `AWS::Serverless::LayerVersion` |
+| ExecutionRole | `LambdaExecutionRole` | `<ResourceName>LambdaExecutionRole` |
+| ApiGateway Permission to Invoke | `ConfigLambdaPermission`, `ConfigLambdaPermissionLive` | `Config<ResourceName>LambdaPermission`, `Config<ResourceName>LambdaPermissionLive` |
 
 Each function requires its own:
 - `AWS::Serverless::Function` resource
 - `AWS::Logs::LogGroup`
 - `AWS::Lambda::Permission` (if API Gateway-triggered)
 - `AWS::CloudWatch::Alarm` (in production)
+- `AWS::Lambda::Permission` (one for `PROD` (Live) and one for `DEV`/`TEST`)
+- `AWS::IAM::Role` Lambda execution role scoped to the function needs (functions should not share execution roles but instead use managed policies for any common permissions)
 - Corresponding IAM policy statements scoped to that function's resources
 
 ## Maintenance Rules
@@ -219,7 +245,7 @@ Once multi-src is established:
 
 - **Adding a function:** Create `src/lambda/<function-name>/` with its own `package.json`, `.nvmrc`, and entry point. Add corresponding CloudFormation resources. The buildspec loop picks it up automatically.
 - **Adding a layer:** Create `src/lambda/layers/<layer-name>/` with its own dependency file. Define `AWS::Serverless::LayerVersion` in the template.
-- **Adding a static site:** Create `src/static/` with its own `package.json` and build config.
+- **Adding a static site:** Create `src/static/` with its own `package.json` and build config. Follow same buildspec pattern for install, build, test, and audit.
 - **Removing a function:** Delete the directory, remove all corresponding CloudFormation resources, and verify the buildspec has no function-specific logic to clean up.
 - **Never** place application code at `src/` root or `src/lambda/` root.
 - **Never** create shared source directories (e.g., `src/shared/`, `src/common/`). Use a Layer or package.
