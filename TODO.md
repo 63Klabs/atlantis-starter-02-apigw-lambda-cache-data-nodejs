@@ -2,13 +2,13 @@
 
 This is a bare-bones rundown of what needs to be done to deploy this application starter.
 
-> For use with template-pipeline.yml which can be deployed using [Atlantis Configuration Repository for Serverless Deployments using AWS SAM](https://github.com/63Klabs/atlantis-cfn-configuration-repo-for-serverless-deployments)
+> For use with template-pipeline.yml which can be deployed using [Atlantis Configuration Repository for Serverless Deployments using AWS SAM](https://github.com/63Klabs/atlantis-sam-config-scripts)
 
 For a tutorial on how to use this application starter template and 63klabs/cache data, see [API Gateway and Lambda using Cache-Data (Node)](https://github.com/63Klabs/atlantis-tutorials/blob/main/tutorials/02-advanced-api-gateway-lambda-cache-data-node/README.md)
 
 If you are not confident working within the Atlantis framework (or AWS Api Gateway, Lambda, and CloudFormation in general), please refer back to the various [tutorials provided by 63Klabs](https://github.com/63Klabs/atlantis-tutorials) as they assist in placing your application in a maintainable CI/CD pipeline using AWS SAM and CloudFormation.
 
-> On first deploy it is recommened you deploy the starter as-is to ensure you have the repository and CI/CD set up properly!
+> On first deploy it is recommended you deploy the starter as-is to ensure you have the repository and CI/CD set up properly!
 
 ## Prerequisites
 
@@ -27,7 +27,8 @@ If you are not confident working within the Atlantis framework (or AWS Api Gatew
 
 - [ ] Update `package.json` with your application `name`, `version`, `description`, and `author`
 - [ ] Update the `template.yml` description
-- [ ] Update `template-configuration.json`
+- [ ] Update `template-configuration.json` with your preferences
+
 
 ## Code your application
 

@@ -21,6 +21,7 @@ An application starter template to demonstrate Atlantis Template for AWS CodePip
   - Logging: DebugAndLog, Timer
   - Caching of data from remote endpoints using S3 and DynamoDb (provision separately or with application)
   - Request handling: Router, Validation, response formatting and logging
+- AI steering documents for patterns, best practices, and package updates (Geared towards Kiro, but can be adapted for other agents)
 
 ## Tutorial
 
@@ -28,6 +29,10 @@ An application starter template to demonstrate Atlantis Template for AWS CodePip
 
 1. Read the [Atlantis Tutorials introductory page](https://github.com/63Klabs/atlantis-tutorials)
 2. Then perform the steps outlined in [Tutorial #2: API Gateway and Lambda using Cache-Data (Node)](https://github.com/63Klabs/atlantis-tutorials/blob/main/tutorials/02-advanced-api-gateway-lambda-cache-data-node/README.md).
+
+## Atlantis MCP Server
+
+Add the [Atlantis MCP Server](https://mcp.atlantis.63klabs.net/) to your coding assistant to reference documentation, patterns, and more from the prompt or during planning stages.
 
 ## Architecture
 
