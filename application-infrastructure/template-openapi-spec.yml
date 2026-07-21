@@ -26,7 +26,7 @@ paths:
         httpMethod: post
         type: aws_proxy
         uri:
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AppFunction.Arn}/invocations
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WebService.Arn}/invocations
 
   /api/example/{id}:
     get:
@@ -44,7 +44,7 @@ paths:
         httpMethod: post
         type: aws_proxy
         uri:
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AppFunction.Arn}/invocations
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${WebService.Arn}/invocations
 
 
 # =============================================================================

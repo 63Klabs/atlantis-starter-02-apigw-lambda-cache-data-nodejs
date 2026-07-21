@@ -434,10 +434,10 @@ Resources:
   # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
   #
 
-  AppFunction:
+  WebService:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${Prefix}-${ProjectId}-${StageId}-AppFunction'
+      FunctionName: !Sub '${Prefix}-${ProjectId}-${StageId}-WebService'
       Description: "Web Service to provide access to APIs"
 
       VersionDescription: "Web Service Version Notes" # Use this To Overcome AliasLive Update Errors - Rarely need to update
@@ -451,10 +451,10 @@ Resources:
         Alarms:
           Fn::If:
             - CreateAlarms
-            - - !Ref AppFunctionErrorsAlarm
+            - - !Ref WebServiceErrorsAlarm
             - - !Ref 'AWS::NoValue'
 
-      CodeUri: src/
+      CodeUri: src/lambda/web-service/
       Handler: index.handler
       Runtime: nodejs24.x # https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html
       Architectures:
@@ -573,7 +573,7 @@ Resources:
             - logs:CreateLogStream
             - logs:PutLogEvents
             Effect: Allow
-            Resource: !GetAtt AppLogGroup.Arn
+            Resource: !GetAtt WebServiceLogGroup.Arn
 
           - Sid: LambdaAccessToSSMParameters
             Action:
@@ -602,7 +602,7 @@ Resources:
     Type: "AWS::Lambda::Permission"
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Sub "${AppFunction}"  # References $LATEST by default
+      FunctionName: !Sub "${WebService}"  # References $LATEST by default
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${WebApi}/*"
 
@@ -614,18 +614,18 @@ Resources:
     Condition: IsProduction  # Only needed in production for gradual deployments
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref AppFunction.Alias # live
+      FunctionName: !Ref WebService.Alias # live
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${WebApi}/*"
 
   # -- Log Group with a retention policy --
 
-  AppLogGroup:
+  WebServiceLogGroup:
     Type: AWS::Logs::LogGroup
     DeletionPolicy: !If [IsProduction, Retain, Delete]
     UpdateReplacePolicy: Retain
     Properties: 
-      LogGroupName: !Sub '/aws/lambda/${Prefix}-${ProjectId}-${StageId}-AppFunction' # Avoid circular reference !Sub "/aws/lambda/${AppFunction}"
+      LogGroupName: !Sub '/aws/lambda/${Prefix}-${ProjectId}-${StageId}-WebService' # Avoid circular reference !Sub "/aws/lambda/${WebService}"
       RetentionInDays: !If [ IsProduction, !Ref LogRetentionInDaysForPROD,  !Ref LogRetentionInDaysForDEVTEST]
 
   # ---------------------------------------------------------------------------
@@ -633,7 +633,7 @@ Resources:
 
   # -- Lambda Function Error Alarm --
 
-  AppFunctionErrorsAlarm:
+  WebServiceErrorsAlarm:
     Type: "AWS::CloudWatch::Alarm"
     Condition: CreateAlarms # Either PROD or ALWAYS - Check Conditions
     Properties:
@@ -648,13 +648,13 @@ Resources:
       Namespace: AWS/Lambda
       Dimensions:
         - Name: FunctionName
-          Value: !Ref AppFunction
+          Value: !Ref WebService
       AlarmActions:
-        - Ref: AppFunctionErrorAlarmNotification
+        - Ref: WebServiceErrorAlarmNotification
 
   # -- Lambda Function Notification for Error Alarm --
 
-  AppFunctionErrorAlarmNotification:
+  WebServiceErrorAlarmNotification:
       Type: AWS::SNS::Topic
       Condition: CreateAlarms # Either PROD or ALWAYS - Check Conditions
       Properties: 
@@ -723,7 +723,7 @@ Outputs:
   # -- CloudWatch Log Groups
   CloudWatchLambdaExecutionLogGroup:
     Description: "Cloud Watch Log Group for Lambda Execution Logs"
-    Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Flambda%2F${AppFunction}"
+    Value: !Sub "https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#logStream:group=%2Faws%2Flambda%2F${WebService}"
 
   CloudWatchApiGatewayExecutionLogGroup:
     Condition: ApiGatewayLoggingIsEnabled
@@ -743,7 +743,7 @@ Outputs:
   # -- Resource quick links
   LambdaWebConsole:
     Description: "Lambda Web Console"
-    Value: !Sub "https://console.aws.amazon.com/lambda/home?region=${AWS::Region}#/functions/${AppFunction}?tab=code"
+    Value: !Sub "https://console.aws.amazon.com/lambda/home?region=${AWS::Region}#/functions/${WebService}?tab=code"
 
   ParameterStore:
     Description: "SSM Parameter Store"

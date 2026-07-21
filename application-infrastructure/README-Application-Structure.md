@@ -75,7 +75,13 @@ If you have static files to host in S3 you can place them in the public director
 
 `src/`
 
-This directory stores the code for one or more Lambda functions and/or layers. The following documentation goes over a possible structure utilizing the Model, View, Controller (MVC) design pattern. MVC is used to organize code and provide a Separation of Concerns.
+This directory stores the code for one or more Lambda functions and/or layers.
+
+To support multiple deployable resources, `src/` uses a **multi-src layout**: it contains no application code directly, only a `lambda/` directory (and optionally a `static/` directory for static sites). Each Lambda function lives in its own fully self-contained directory under `src/lambda/<function-name>/` (its own `package.json`, `.nvmrc`, and `node_modules`). Lambda Layers, when present, live under `src/lambda/layers/<layer-name>/`.
+
+This starter ships with a single function, `web-service`, so its code lives at `src/lambda/web-service/`. The path references in the sections below are relative to that function directory (for example, `src/lambda/web-service/config/`). When you add another function, create a sibling directory (e.g. `src/lambda/<new-function>/`) and the `buildspec.yml` loop will build and test it automatically. See the `multi-resource-src` steering document for the full organization and naming rules.
+
+The following documentation goes over a possible structure utilizing the Model, View, Controller (MVC) design pattern. MVC is used to organize code and provide a Separation of Concerns.
 
 ### Model-View-Controller Pattern
 
@@ -115,7 +121,7 @@ To supplement MVC, a Repository Pattern and Service Layer is included.
 
 ### Index (Handler) JavaScript File
 
-`src/index.js`
+`src/lambda/web-service/index.js`
 
 This is the entry point to your Lambda function and contains the function initialization (during Cold Starts) and any handlers.
 
@@ -131,19 +137,19 @@ The handler should have a basic `try`/`catch`/`finally` block. The `try` block s
 
 ### Config directory
 
-`src/config/`
+`src/lambda/web-service/config/`
 
 All (non secret) configuration files and methods safe for repositories and used across your application's deployments can be stored in the `config` directory. The Config object defined in this file is static and exists across invocations of the same instance. It should be initialized during a cold start.
 
 ### Utils directory
 
-`src/utils/`
+`src/lambda/web-service/utils/`
 
 Shared methods that serve as tools, helpers, and utilities can be stored in the `utils` directory. These methods should be independent of Configurations, controllers, views, and models here. As your organization develops methods that are constantly re-used, they should probably be deployed as a Lambda Layer.
 
 ### Package JSON file
 
-`src/package.json`
+`src/lambda/web-service/package.json`
 
 The `package.json` file contains information about the Node application including version number, dependencies, and script information such as for testing.
 
@@ -157,7 +163,7 @@ You are encouraged to update your version information using the `npm version` co
 
 ### Routes directory
 
-`src/routes/`
+`src/lambda/web-service/routes/`
 
 The `routes` directory receives the context and event information from the handler and then determines where to route the request. 
 
@@ -169,7 +175,7 @@ There should only be ONE route and subsequently, ONE view. Much like a web page 
 
 ### Views directory
 
-`src/views/`
+`src/lambda/web-service/views/`
 
 A view assembles and formats the end result (response code, headers, and body) that will be returned as a response to API Gateway (and client). This may be the final HTML document, JSON, XML/RSS feed, or file to place in an S3 bucket. 
 
@@ -181,7 +187,7 @@ Views may also include information beyond the body of the document such as respo
 
 ### Controllers directory
 
-`src/controllers/`
+`src/lambda/web-service/controllers/`
 
 Controllers contain the business logic that takes the request, analyzes its properties such as query string and path parameters, determines what services should be called, and after the services return data, sends the data to a view for final formatting.
 
@@ -204,7 +210,7 @@ If a controller requires data from one service before it can make a query of ano
 
 ### Services directory
 
-`src/services/`
+`src/lambda/web-service/services/`
 
 Caching is implemented at the service level.
 
@@ -212,7 +218,7 @@ Services should not worry about the endpoint they access, retries, pagination, e
 
 ### Models and Data Access directory
 
-`src/models/`
+`src/lambda/web-service/models/`
 
 The `models` directory contain Data Access Objects (DAO) and fetch methods. "Data Access Objects" understand the connections (and authentication) that need to be made and any data transformations that need to take place before returning data back to the service.
 
@@ -232,7 +238,7 @@ Why you might do this:
 
 #### Static Data Directory
 
-`src/models/static-data/`
+`src/lambda/web-service/models/static-data/`
 
 The `models/static-data` directory contains supplemental static data that can be used for mapping and enhancing data returned by your application.
 
@@ -244,7 +250,7 @@ Another example is validating passed parameters. Suppose your application accept
 
 #### Sample Data Directory
 
-`src/models/sample-data`
+`src/lambda/web-service/models/sample-data`
 
 The `models/sample-data` directory contains sample data that represents data is returned from Endpoints and Data Access Objects. They can be used during testing and early prototyping. 
 
@@ -252,7 +258,7 @@ For example, you could create a unit test that passes the data from a sample dat
 
 #### Test Data Directory
 
-`src/models/test-data`
+`src/lambda/web-service/models/test-data`
 
 The `models/test-data` directory contains test data that represents data used for testing.
 
@@ -260,7 +266,7 @@ For example, you could create a unit test that passes the data from a sample dat
 
 ### Tests directory
 
-`src/tests/`
+`src/lambda/web-service/tests/`
 
 The `tests` directory can be used to store your tests written using Jest or other testing framework.
 

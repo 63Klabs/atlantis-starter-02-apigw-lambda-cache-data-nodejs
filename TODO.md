@@ -40,10 +40,10 @@ You may want to:
 
 - [ ] Create a new route in `template.yml` Lambda Events
 - [ ] Add route and data schema to `template-swagger.yml`
-- [ ] Add route to `src/routes/index.js`
+- [ ] Add route to `src/lambda/web-service/routes/index.js`
 - [ ] Add Controller
 - [ ] Add View
-- [ ] Add Connection to `src/config/connections.js`
+- [ ] Add Connection to `src/lambda/web-service/config/connections.js`
 - [ ] If your connection will require auth such as an API key, update the buildscript to create a new BLANK SSM parameter. After next deploy, add the value to the parameter. 
 - [ ] Add Service
 - [ ] Add Data Access Object

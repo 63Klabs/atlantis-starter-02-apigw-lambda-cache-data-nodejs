@@ -16,10 +16,13 @@ It is the responsibility of the developer/maintainer of any repository that was 
 - Practice safe coding and scripting
 - Utilize industry best practices and standards for security
 
-If using Kiro, there are 2 hooks provided to assist in keeping NPM packages and Lambda Layers current:
-- `.kiro/hooks/`
+If using Kiro, there are manual steering files provided to assist in keeping dependencies and Lambda Layers current:
+- `.kiro/steering/`
   - `audit-update-npm-packages`
+  - `audit-update-python-packages`
   - `update-lambda-layers`
+
+These are manual steering files (`inclusion: manual`), so they stay dormant until you invoke them. To run one, reference it in the Kiro chat with the `#` context key (for example, `#update-lambda-layers`) and send the message. Kiro will then follow the steps described in that file.
 
 ## Reporting a Vulnerability
 

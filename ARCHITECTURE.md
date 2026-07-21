@@ -8,9 +8,11 @@
 │   │   ├── generate-put-ssm.py
 │   │   ├── update_template_configuration.py
 │   │   └── update_template_timestamp.py
-│   ├── src/                       # Lambda function source code (Node.js)
-│   │   ├── index.js               # Lambda handler entry point
-│   │   └── package.json           # Node.js dependencies
+│   ├── src/                       # Lambda source (multi-src layout: one dir per resource)
+│   │   └── lambda/
+│   │       └── web-service/       # WebService Lambda function (Node.js)
+│   │           ├── index.js       # Lambda handler entry point
+│   │           └── package.json   # Node.js dependencies
 │   ├── buildspec.yml              # AWS CodeBuild build specification
 │   ├── template.yml               # AWS SAM/CloudFormation template
 │   ├── template-dashboard.yml      # AWS CloudWatch Dashboard (included as module in template.yml)
