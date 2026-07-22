@@ -46,6 +46,8 @@ application-infrastructure/src/
     └── ...
 ```
 
+"Static" may be web site files, packaged scripts exported to S3, or artifacts meant to be sent to an external source. If there are multiple static resources (two web sites, or a web site and package repository), they should each get their own directory within `static/`.
+
 ### Naming Conventions
 
 - **Function directories:** lowercase-kebab derived from the CloudFormation Resource suffix. Example: a function named `GetPerson` in CloudFormation lives at `src/lambda/get-person/`.
@@ -84,7 +86,7 @@ Follow these steps in order when converting:
    - Lambda permissions (`FunctionName` references)
    - Outputs
 
-7. **Update `buildspec.yml`** to use the multi-src loop pattern (see below).
+7. **Update `buildspec.yml`** to use the multi-src loop pattern (see below). (Static sites may be deployed in a post-deploy stage using a similar `buildspec-postdeploy.yml` if present.)
 
 8. **Add the new resource** in its own directory.
 
