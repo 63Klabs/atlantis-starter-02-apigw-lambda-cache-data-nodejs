@@ -1,8 +1,8 @@
 # Deployment Guide
 
-This application is **Ready-to-Deploy-and-Run** with the [63Klabs Atlantis Templates and Scripts Platform for Serverless Deployments on AWS](https://github.com/63Klabs/atlantis)
+This application is **Ready-to-Deploy-and-Run** with the [63Klabs Atlantis DevOps Platform for Serverless Deployments on AWS](https://atlantis.63klabs.net)
 
-- Use the Atlantis scripts from your organizations central SAM Config infrastructure repository to manage your application's repository and deployment.
+- Use the Atlantis scripts from your organization's central SAM Config infrastructure repository to manage your application's repository and deployment.
 - Add a pipeline to each branch in your repository you want to deploy from (`test`, `beta`, `main`)
 - Make all code changes in the `dev` branch (or configure the approval/promotion option in the pipeline).
 - To initiate a deployment, just merge your code from the `dev` branch to the `test` branch and push. This will kick-off the test deployment pipeline.
@@ -10,13 +10,11 @@ This application is **Ready-to-Deploy-and-Run** with the [63Klabs Atlantis Templ
 
 Follow your organization's guidelines for repository and pipeline management.
 
-## Why Use Atlantis?
+## Why Use Atlantis for Deployment?
 
 Like any other project, you can skip the Atlantis platform and go at it on your own using `sam deploy` from the CLI within the application-infrastructure directory.
 
-However, if you are managing many projects manually (especially on your own or part of a small team), the Atlantis platform is highly recommended as it implements Platform Engineering and AWS best practices. Plus it utilizes AWS native resources including SAM deployments and CloudFormation without the need of proprietary DevOps tools. Everything is API, CloudFormation template, and SAM CLI based.
-
-If this is your first time deploying to AWS, or deployments have been difficult to manage in the past and you are looking into automating some of your tasks, please look at the 63Klabs Atlantis DevOps Platform. (If you traditionally deploy applications through the Web Console, **PLEASE** look into Atlantis! Atlantis has many, many tutorials to get you started deploying production-ready applications!) using Platform Engineering and CI/CD best practices with scripts as easy as `create_repo.py`, `config.py`, and `deploy.py` that all use `samconfig` files written in `TOML` and the AWS API as the backbone.
+However, the [Atlantis DevOps Platform](https://atlantis.63klabs.net) is highly recommended for individual developers and small teams as it implements Platform Engineering, AWS best practices, and deployment automation. It utilizes AWS native resources including SAM deployments and CloudFormation without the need of proprietary DevOps tools. Everything is API, CloudFormation template, and SAM CLI based as well as AI-ready.
 
 ## Create Repository and Initialize with this Code
 
@@ -24,10 +22,11 @@ Using the Atlantis SAM Config scripts in your organization's central infrastruct
 
 ```bash
 ./cli/create_repo.py YOUR_REPO_NAME
-# Choose 00-basic-apigw-lambda-nodejs.zip
+# Choose 02-apigw-lambda-cache-data-nodejs.zip
 
 # Create a pipeline for the test branch
 ./cli/config.py pipeline PREFIX YOUR_PROJECT_ID test --profile default
+# Choose template-pipeline.yml (CodeCommit source) or template-pipeline-github.yml
 
 # Deploy the pipeline (if you didn't choose to deploy right away from the config script)
 ./cli/deploy.py pipeline PREFIX YOUR_PROJECT_ID test --profile default
@@ -81,12 +80,43 @@ For each branch/stage you wish to deploy from, set up a pipeline using your orga
 
 There are several pipeline configurations to choose from. If you prefer to not use the branch merge strategy (`dev` -> `test` -> `beta` -> `main`) you can configure the pipeline to use an approval and promotion strategy instead. Cross account configuration is also available.
 
-All Atlantis pipeline templates support approval with promotion and cross-account.
+All Atlantis pipeline templates support approval with promotion and cross-account deployment.
+
+#### Standard Branch-Merge-Based
+
+This will set up deployments for each branch and you will merge changes between them to deploy (`dev` -> `test` -> `beta` -> `main`).
+
+- This is the least complex as it is all Git-based (no logging into the console for approvals.)
+- **HOWEVER**: It requires discipline, only forward merges, and squash merges may produce unpredictable results.
+
+Choose template-pipeline.yml (CodeCommit source) or template-pipeline-github.yml and do not enable the approval and promotion configuration. 
 
 ```bash
-# Create a pipeline for the test branch
+# Create a pipeline for the beta branch
 ./cli/config.py pipeline PREFIX YOUR_PROJECT_ID beta --profile default
+# Choose template-pipeline.yml (CodeCommit source) or template-pipeline-github.yml
 
 # Deploy the pipeline (if you didn't choose to deploy right away from the config script)
 ./cli/deploy.py pipeline PREFIX YOUR_PROJECT_ID beta --profile default
 ```
+
+#### Approve/Promote and/or Cross-Account
+
+> Cross-account deployments must use the approve/promote configuration.
+
+This will set up an automatic Git-based deployment for the `test` branch but to deploy your application to subsequent stages you will need to:
+
+1. Configure the `test` pipeline to promote to the next stage
+2. All subsequent deployment stages use `template-pipeline-s3-source.yml`
+
+Automated deployment process using approve/promote:
+
+1. The test pipeline will still run automatically when changes are merged to the `test` branch.
+2. Then, to promote to the next stage, go into the console for the test pipeline and choose approve promotion.
+3. The pipeline will then drop the deployment artifact in an S3 bucket, triggering the next pipeline (which can either be in the same account, or in a separate PROD account depending on your organization's policies).
+4. The receiving pipeline will then pick up the new artifact from S3 and await an approval to deploy.
+5. The end of this pipeline can also have an approval/promote option. (In case you deploy from test to beta to prod).
+
+You will still need to create one pipeline per stage and only the test branch will have a corresponding stage. (However, you _can_ set up the main branch, or any branch, to deploy to the initial "test" pipeline, it doesn't need to be the `test` branch. Just be sure to set the `StageId` to `test`). You can always create temporary pipelines using `template-pipeline.yml`/`template-pipeline-github.yml` for feature and bug fix test branches.
+
+> By default approval is required to promote and deploy both at the end of the pipeline (promote) and at the start of the next stage (approve). This provides optimal protection against run-away deployments. If you want to disable either the promote or deploy approval, it is recommended you disable the deploy approval at the start of the receiving stage to avoid creating too many deploy artifact versions.
