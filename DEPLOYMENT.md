@@ -21,7 +21,7 @@ However, the [Atlantis DevOps Platform](https://atlantis.63klabs.net) is highly 
 Using the Atlantis SAM Config scripts in your organization's central infrastructure repository:
 
 ```bash
-./cli/create_repo.py YOUR_REPO_NAME
+./cli/create_repo.py YOUR_REPO_NAME --profile default
 # Choose 02-apigw-lambda-cache-data-nodejs.zip
 
 # Create a pipeline for the test branch
