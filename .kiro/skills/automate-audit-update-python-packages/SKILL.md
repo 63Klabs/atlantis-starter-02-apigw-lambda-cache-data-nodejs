@@ -1,7 +1,12 @@
 ---
-inclusion: manual
-description: "Scans all requirements*.txt files in the repository (requirements.txt, requirements-dev.txt, requirements-test.txt), audits packages for known vulnerabilities using pip-audit, and updates packages to remediate them. Production dependencies (requirements.txt) are prioritized. Respects existing version pinning strategies (exact pins, compatible release, ranges). Reports what was changed and why."
+name: automate-audit-update-python-packages
+description: Scans all requirements*.txt files in the repository (requirements.txt, requirements-dev.txt, requirements-test.txt), audits packages for known vulnerabilities using pip-audit, and updates packages to remediate them. Production dependencies (requirements.txt) are prioritized. Respects existing version pinning strategies (exact pins, compatible release, ranges). Reports what was changed and why. Use when asked to audit, patch, or update Python or pip dependencies, fix pip-audit findings, remediate CVEs or security advisories in requirements files, or bring packages up to date.
+metadata:
+  convertedFrom: steering/automate-audit-update-python-packages.md
+  sourceSha256: 345bd8712bc38a023db0fd3eab2660ec2f153149b1d5affcb335f99a69bcb634
 ---
+
+# Audit and update Python packages
 
 Audit and update Python packages across all requirements files in this repository to remediate vulnerabilities.
 
