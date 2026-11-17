@@ -414,6 +414,11 @@
         "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
         "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
         "timestamp": 1794881354075
+      },
+      {
+        "executionId": "4f009448-d1f0-4229-8d2a-81ad223052d2",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794887071971
       }
     ],
     "8.3 Confirm nothing sensitive or deploying was added": [
@@ -540,6 +545,18 @@
         "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
         "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
         "timestamp": 1794886090589
+      }
+    ],
+    "8. Final checks": [
+      {
+        "executionId": "37fce82e-a23c-415b-bcc1-67710af1c467",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794886930369
+      },
+      {
+        "executionId": "4f009448-d1f0-4229-8d2a-81ad223052d2",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794887072268
       }
     ]
   }

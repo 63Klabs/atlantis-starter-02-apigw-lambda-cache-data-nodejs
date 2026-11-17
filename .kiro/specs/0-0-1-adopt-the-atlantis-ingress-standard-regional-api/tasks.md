@@ -125,18 +125,19 @@
     - Search the files edited in tasks 7.1 to 7.4 for `.kiro/specs`, `0-0-1`, `PLAN`, `ISSUE`, `requirements.md`, and `spec-local`. There must be no match.
     - _Requirements: 12.14_
 
-- [ ] 8. Final checks
-  - [ ] 8.1 Run the whole local test set one last time
+- [x] 8. Final checks
+  - [x] 8.1 Run the whole local test set one last time
     - Run `npm test` in `SPEC/tests/` and in `FN`. Both must pass.
     - _Requirements: 13.9_
-  - [ ] 8.2 Check the release boundary
+  - [x] 8.2 Check the release boundary
     - Run `git status --short` and `git diff --stat`. List every changed or new path outside `.kiro/specs/0-0-1-*`.
     - The only paths allowed outside the spec directory are those listed in design section 2. Confirm none is a test file, test configuration, test dependency, or test note, that `CHANGELOG.md`, `buildspec.yml`, `.gitignore`, `FN/index.js`, `FN/utils/index.js`, `FN/tests/index.test.js`, and `FN/tests/README.md` are unchanged, and that `FN/package.json` differs from `HEAD` only by the cache-data version (task 1.1). Report any exception.
+    - Result: one exception, left open on purpose. `CHANGELOG.md` differs from the parent commit `4ef32e0` in commit `55adf78` (the intro prose only: heading `Change Log` to `Changelog`, an intro sentence naming "the Atlantis with Kiro AI assets", and a Keep a Changelog paragraph; no entry was added). Requirements 12.11 and 14.2 say this change must not modify it. Maintainer decision: restore it with `git checkout 4ef32e0 -- CHANGELOG.md` or accept the edit. Every other check passed.
     - _Requirements: 11.3, 14.1 to 14.5_
-  - [ ] 8.3 Confirm nothing sensitive or deploying was added
+  - [x] 8.3 Confirm nothing sensitive or deploying was added
     - Search the diff for a hard-coded secret value, an account ID, or a real ARN. Confirm `template.yml` has no `Outputs` or `Export` for `OriginSecret` and that no `*` appears in the new IAM statement.
     - _Requirements: 4.4, 5.5, 15.1 to 15.3_
-  - [ ] 8.4 Write the task summary
+  - [x] 8.4 Write the task summary
     - State what changed, which checks were run and their results, which tools were not available, and that the post-deploy checks V1 to V6 and V8 (requirements document) are still to be run by the maintainer.
     - _Requirements: all_
 
