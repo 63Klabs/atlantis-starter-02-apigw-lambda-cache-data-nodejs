@@ -15,22 +15,21 @@ If you are not confident working within the Atlantis framework (or AWS Api Gatew
 - [ ] Make sure you or your organization has a SAM Config Repository
 - [ ] Make sure you or your organization has a Cache-Data storage stack
 - [ ] Obtain necessary config settings for your org such as Prefix, permission boundary ARN, Cache-Proxy S3 and table names, tag values, etc.
-- [ ] If you will put the API behind CloudFront: make sure the pipeline's CloudFormation service role can create the `OriginSecret` secret, and that your network stack supports `ApiOriginProtection`. See [CloudFront ingress and origin protection](./DEPLOYMENT.md#cloudfront-ingress-and-origin-protection)
+- [ ] If you will put the API behind CloudFront and wish to require all traffic to use CloudFront (and prevent use of the execute-api domain): make sure the pipeline's CloudFormation service role can create the `OriginSecret` secret, and that your network stack supports `ApiOriginProtection`. (Atlantis CloudFront stacks already supports reading the secret, and Atlantis provides the <Prefix>-ManagedPolicyForPipeline-SecretsReadDeployment to add to your pipeline's `PostDeploySvcRoleIncludeManagedPolicyArns` parameter). See [CloudFront ingress and origin protection](./DEPLOYMENT.md#cloudfront-ingress-and-origin-protection)
 
 ## First deploy
 
-- [ ] Place this code in a repository and create a test deploy branch
+- [ ] Place this code in a repository and create a test deploy branch (Do not make any changes to the code yet. Obtain a clean first deploy first!)
 - [ ] Create pipeline for deploying test branch
 - [ ] After first deploy, visit endpoint to ensure success
 - [ ] Resolve any issues before moving on
-- [ ] Once `ApiIsBehindCloudFront` is `"true"` in `template-configuration.json` for a stage, confirm a request to the raw `execute-api` URL without the secret returns `401`, and a request through the distribution succeeds
+- [ ] If you will put the API behind CloudFront and wish to require all traffic to use CloudFront (and and prevent use of the execute-api domain): Once `ApiIsBehindCloudFront` is `"true"` in `template-configuration.json` for a stage, confirm a request to the raw `execute-api` URL without the secret returns `401`, and a request through the distribution succeeds
 
 ## Housekeeping
 
 - [ ] Update `package.json` with your application `name`, `version`, `description`, and `author`
 - [ ] Update the `template.yml` description
-- [ ] Update `template-configuration.json` with your preferences
-
+- [ ] Update `template-configuration.json` with your parameters and tags
 
 ## Code your application
 
