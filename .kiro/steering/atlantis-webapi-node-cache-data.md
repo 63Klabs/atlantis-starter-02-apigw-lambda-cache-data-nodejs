@@ -19,6 +19,15 @@ Every API Gateway-triggered Lambda in this project MUST:
 - Use `@63klabs/cache-data` for routing, validation, logging, response generation, configuration, and AWS SDK access
 - Include the Lambda SSM Parameters and Secrets Extension Layer for use by Cache-Data
 
+### CloudFront topology
+
+The API Gateway REST API (`WebApi`) is always Regional. An edge-optimized API is not supported by this starter. A stage may sit behind a CloudFront distribution that is deployed by the network stack, not by this application stack. The distribution adds the `X-Atlantis-Origin-Secret` header to every request it forwards.
+
+- `ApiIsBehindCloudFront` (`"true"` or `"false"`, default `"false"`) turns origin enforcement on for a stage. Set it as the literal value in `application-infrastructure/template-configuration.json` on the branch being deployed.
+- The `OriginSecret` secret exists in every stage. Only when the flag is `"true"` does the function receive the secret's ARN in `CACHE_DATA_INGRESS_SECRET_NAME` and permission to read that one secret.
+- `@63klabs/cache-data` compares the header with the secret. The function code never reads `X-Forwarded-For`, `Forwarded`, `X-Real-Ip`, `CloudFront-Viewer-Address`, `X-Atlantis-Origin-Secret`, or `requestContext.identity.sourceIp`. Get the client address and the ingress result only from `ClientRequest`.
+- A request that is not verified receives `401` with `Cache-Control: no-store`. Use `401`, not `403` or `404`, because the distribution can rewrite those two to a landing page.
+
 ## Package Overview
 
 The `@63klabs/cache-data` package provides three main modules:
@@ -48,9 +57,9 @@ Cache-data follows a Model-View-Controller pattern. The request lifecycle is:
 API Gateway Event
   → index.js (Handler)
     → Config.init() / Config.promise() / Config.prime()
-    → new ClientRequest(event, context)   // parse + validate
-    → new Response(clientRequest)
-    → Routes.process(clientRequest, response)
+    → Routes.process(event, context)
+      → new ClientRequest(event, context) // parse + validate
+      → new Response(clientRequest)
       → Controller.method(props)
         → Service (business logic)
           → Model/DAO (data access, caching)
@@ -93,21 +102,18 @@ src/lambda/{function-name}/
 
 ## Handler Pattern (index.js)
 
-The handler is the Lambda entry point. Keep it thin. It initializes config on cold start, creates the request/response pair, and delegates to routing.
+The handler is the Lambda entry point. Keep it thin. It initializes config on cold start and delegates to `Routes.process(event, context)`. `Routes.process` creates the `ClientRequest` and `Response`, runs the ingress guard, routes the request, and returns the `Response`. The handler then finalizes it.
 
 ```javascript
-const { tools: { DebugAndLog, ClientRequest, Response, Timer } } = require("@63klabs/cache-data");
+const { tools: { DebugAndLog, Response, Timer } } = require("@63klabs/cache-data");
 const { Config } = require("./config");
-const Routes = require('./routes');
+const Routes = require("./routes");
 
 // Cold start: init outside handler, runs once per container
 const coldStartInitTimer = new Timer("coldStartTimer", true);
 Config.init();
 
 exports.handler = async (event, context) => {
-  DebugAndLog.debug("EVENT RECEIVED:", event);
-
-  let clientRequest = null;
   let response = null;
 
   try {
@@ -118,29 +124,19 @@ exports.handler = async (event, context) => {
       DebugAndLog.log(coldStartInitTimer.stop(), "COLDSTART");
     }
 
-    // Parse and validate the incoming request
-    clientRequest = new ClientRequest(event, context);
-    response = new Response(clientRequest);
-
-    // Delegate to routing layer (populates response)
-    await Routes.process(clientRequest, response);
-
-    // Finalize: sets CORS, cache-control, execution time, logs response
-    return response.finalize();
+    // Routes.process creates ClientRequest and Response, and returns the Response
+    response = await Routes.process(event, context);
 
   } catch (error) {
-    DebugAndLog.error(`Unhandled error: ${error.message}`, error.stack);
+    DebugAndLog.error(`Unhandled Execution Error in Handler  Error: ${error.message}`, error.stack);
 
-    if (!response) {
-      response = new Response({ statusCode: 500 });
-    } else {
-      response.setStatusCode(500);
-    }
-    // >! Return sanitized error to client, no internal details
-    response.setBody({
-      message: 'Internal server error',
-      requestId: event.requestContext?.requestId || context?.awsRequestId || 'unknown'
-    });
+    // Failed before the request was parsed, so there is no ClientRequest to link
+    // >! Return a sanitized error to the client, no internal details
+    response = new Response({ statusCode: 500 });
+    response.setBody({ message: "Error initializing request" });
+
+  } finally {
+    // Finalize: sets CORS, cache-control, execution time, logs response
     return response.finalize();
   }
 };
@@ -150,6 +146,7 @@ Key rules:
 - `Config.init()` is called outside the handler so it only runs on cold start
 - `await Config.promise()` and `await Config.prime()` are called inside the handler to ensure initialization completed
 - `Timer` tracks cold start duration and only logs once
+- `ClientRequest` and `Response` are created in `Routes.process(event, context)`, not in the handler
 - `response.finalize()` MUST be called exactly once to produce the API Gateway response with proper CORS, cache-control, and logging
 
 ## Configuration (config/index.js)
@@ -296,25 +293,44 @@ module.exports = responses;
 
 ## Routing (routes/index.js)
 
-The router reads `clientRequest.getProps()` and dispatches to the appropriate controller based on method, path, headers, or parameters.
+`Routes.process(event, context)` creates the `ClientRequest` and `Response`, refuses unverified requests first, then reads `clientRequest.getProps()` and dispatches to the appropriate controller based on method, path, headers, or parameters. It returns the `Response`. The handler calls `finalize()`.
 
 ```javascript
-const { tools: { DebugAndLog } } = require('@63klabs/cache-data');
+const { tools: { DebugAndLog, ClientRequest, Response } } = require('@63klabs/cache-data');
+const IngressGuard = require('../utils/ingress-guard');
 
-const process = async (clientRequest, response) => {
-  const props = clientRequest.getProps();
-  const method = (props.method || '').toUpperCase();
-  const pathArray = props.pathArray || [];
+const process = async (event, context) => {
+  const clientRequest = new ClientRequest(event, context);
+  const response = new Response(clientRequest);
 
-  // Route based on path and method
-  if (pathArray[0] === 'users' && method === 'GET') {
-    const UsersController = require('../controllers/users');
-    await UsersController.get(props, response);
-  } else {
-    DebugAndLog.warn('No matching route', { method, path: props.path });
-    response.setStatusCode(404);
-    response.setBody({ error: 'Not found' });
+  try {
+    // >! The guard runs first, before validation, routing, or any data access
+    if (IngressGuard.shouldRefuse(clientRequest)) {
+      return IngressGuard.buildRefusal(response);
+    }
+
+    if (!clientRequest.isValid()) {
+      return response.reset({ statusCode: 400 });
+    }
+
+    const props = clientRequest.getProps();
+    const method = (props.method || '').toUpperCase();
+    const pathArray = props.pathArray || [];
+
+    // Route based on path and method
+    if (pathArray[0] === 'users' && method === 'GET') {
+      const UsersController = require('../controllers/users');
+      await UsersController.get(props, response);
+    } else {
+      DebugAndLog.warn('No matching route', { method, path: props.path });
+      response.reset({ statusCode: 404 });
+    }
+  } catch (error) {
+    DebugAndLog.error(`Fatal error: ${error.message}`, error.stack);
+    response.reset({ statusCode: 500 });
   }
+
+  return response;
 };
 
 module.exports = { process };
@@ -518,6 +534,8 @@ Common environment variables used by cache-data:
 | `PARAM_STORE_PATH` | SSM Parameter Store path prefix |
 | `CACHE_TABLE` | DynamoDB table name for cache storage |
 | `CACHE_BUCKET` | S3 bucket name for large cached objects |
+| `CACHE_DATA_TRUSTED_PROXY_HOPS` | Number of trusted proxies in front of the function. Always `"0"` in this project, so the client address is API Gateway's `requestContext.identity.sourceIp`, which is the viewer on a Regional API. Do not raise it. |
+| `CACHE_DATA_INGRESS_SECRET_NAME` | Name or ARN of the secret that cache-data compares with the `X-Atlantis-Origin-Secret` header. The template sets it to the `OriginSecret` ARN only when `ApiIsBehindCloudFront` is `"true"`. When it is unset, the ingress guard is off. |
 
 ## Lambda Layers
 
@@ -545,6 +563,8 @@ When generating or modifying code in this project for Lambda functions behind AP
 
 8. **Use `Timer`** to measure performance of operations. Stop timers in `finally` blocks.
 
-9. **Keep the handler thin**. The handler should only initialize, create request/response, delegate to routes, and finalize. All logic belongs in controllers and services.
+9. **Keep the handler thin**. The handler should only initialize, delegate to `Routes.process(event, context)` (which creates the request and response), and finalize. All logic belongs in controllers and services.
 
 10. **Update `template-openapi-spec.yml`** when adding or modifying API endpoints. The OpenAPI spec is the primary validation and documentation layer.
+
+11. **Run the ingress guard first in `Routes.process`**. Call `IngressGuard.shouldRefuse(clientRequest)` immediately after creating `ClientRequest` and `Response`, and before `isValid()`, routing, controllers, or cache access. Return `IngressGuard.buildRefusal(response)` when it is true. Do not read forwarding headers, the origin header, or `identity.sourceIp` in application code, and do not compare the origin secret yourself.

@@ -1,0 +1,546 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Confirm the `@63klabs/cache-data` `^1.4.1` bump is committed": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881347819
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881362245
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881387781
+      }
+    ],
+    "1.2 Record the baseline": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881348116
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881390228
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881404784
+      }
+    ],
+    "2.1 Create the tooling files under `SPEC/tests/`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881348366
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881407317
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881443554
+      }
+    ],
+    "2.2 Create the helpers under `SPEC/tests/helpers/`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881348642
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881445965
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881569907
+      }
+    ],
+    "3.1 Write `SPEC/tests/ingress-guard.test.js`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881348884
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881573065
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881660714
+      }
+    ],
+    "3.2 Write `SPEC/tests/routes-ingress.test.js`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881349117
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881663246
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881742245
+      }
+    ],
+    "3.3 Write `SPEC/tests/no-forwarding-header-parsing.test.js`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881349420
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881746148
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881826833
+      }
+    ],
+    "3.4 Write `SPEC/tests/template.test.js`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881349667
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881829240
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881983091
+      }
+    ],
+    "3.5 Run the new tests and confirm they fail for the right reasons": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881349931
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881987955
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882030812
+      }
+    ],
+    "4.1 Create `FN/utils/ingress-guard.js`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881350174
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882033391
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882060605
+      }
+    ],
+    "4.2 Edit `FN/routes/index.js`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881350460
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882063031
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882112368
+      }
+    ],
+    "4.3 Run the guard, routes, and source-scan tests": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881350693
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882114752
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882133372
+      }
+    ],
+    "5.1 Edit `application-infrastructure/template.yml`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881350950
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882136309
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882185765
+      }
+    ],
+    "5.2 Edit `application-infrastructure/template-openapi-spec.yml`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881351253
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882188760
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882216850
+      }
+    ],
+    "5.3 Edit `application-infrastructure/template-dashboard.yml`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881351524
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882220092
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882243415
+      }
+    ],
+    "5.4 Run all spec-local tests": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881351752
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882246739
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882266516
+      }
+    ],
+    "5.5 Validate the template syntax with read-only tools": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881352038
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882269840
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882298270
+      }
+    ],
+    "6.1 Confirm how a stage's parameter override is set": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881352288
+      },
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882301740
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885659980
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885749152
+      }
+    ],
+    "7.1 Edit `DEPLOYMENT.md`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881352524
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885753110
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885847076
+      }
+    ],
+    "7.2 Edit `README.md`, `ARCHITECTURE.md`, and `TODO.md`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881352809
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885850070
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885902645
+      }
+    ],
+    "7.3 Edit the three `docs/` pages": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881353064
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885905404
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885990971
+      }
+    ],
+    "7.4 Edit `.kiro/steering/atlantis-webapi-node-cache-data.md`": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881353293
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885994085
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794886045405
+      }
+    ],
+    "7.5 Check the shipped documents for forbidden references": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881353635
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794886047843
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794886090189
+      }
+    ],
+    "8.1 Run the whole local test set one last time": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881353900
+      },
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794886092910
+      }
+    ],
+    "8.2 Check the release boundary": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881354075
+      }
+    ],
+    "8.3 Confirm nothing sensitive or deploying was added": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881354322
+      }
+    ],
+    "8.4 Write the task summary": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881354576
+      }
+    ],
+    "V1 The API is Regional and a request through the stage succeeds (TEST, then each stage).": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881354814
+      }
+    ],
+    "V2 `sourceIp` is the true sender on both paths, with a forged `X-Forwarded-For` (TEST, flag `true`).": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881355127
+      }
+    ],
+    "V3 The raw URL without the secret returns `401` with `Cache-Control: no-store`, and a request through the distribution succeeds (each stage, after the flag is set).": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881355376
+      }
+    ],
+    "V4 An `OPTIONS` request to the raw URL carries no data (TEST).": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881355694
+      }
+    ],
+    "V5 The `API-Gateway-Execution-Logs_*` group holds no header values (TEST, logging enabled, flag `true`).": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881355950
+      }
+    ],
+    "V6 `[INGRESS_UNVERIFIED]` lines appear in the dashboard widget (PROD dashboard; TEST reads the Lambda log group).": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881356232
+      }
+    ],
+    "V7 The spec-local tests pass against the final code on the maintainer's machine, before merging toward `test`.": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881356490
+      }
+    ],
+    "V8 The per-stage flag value reaches the stack through the SAM configuration repository (confirmed in task 6.1 and written in `DEPLOYMENT.md`).": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881356780
+      }
+    ],
+    "Create the three spin-off issues confirmed in PLAN.md Decision 5: PostDeploy `401` check, starter-00 and starter-01 equivalents, and the #13 top-IP widget after this change.": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881356994
+      }
+    ],
+    "1. Confirm the starting point": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881405084
+      }
+    ],
+    "2. Set up the spec-local test package": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794881570131
+      }
+    ],
+    "3. Write the tests first (they fail until tasks 4 to 7 are done)": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882031019
+      }
+    ],
+    "4. Implement the function code": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882133629
+      }
+    ],
+    "5. Edit the templates": [
+      {
+        "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794882298590
+      }
+    ],
+    "6. Read the SAM configuration documentation for the per-stage flag": [
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794885749500
+      }
+    ],
+    "7. Write the shipped documentation": [
+      {
+        "executionId": "0d93f7f8-4f7e-4e13-b74c-76e428f5a703",
+        "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
+        "timestamp": 1794886090589
+      }
+    ]
+  }
+}

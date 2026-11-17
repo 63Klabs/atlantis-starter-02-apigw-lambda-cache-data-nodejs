@@ -79,6 +79,8 @@ components:
               $ref: '#/components/schemas/ResponseObject'
       '304':
         $ref: '#/components/schemas/304'
+      '401':
+        $ref: '#/components/schemas/401'
       '403':
         $ref: '#/components/schemas/403'
 
@@ -91,6 +93,16 @@ components:
           schema:
             title: Not Modified
             type: string
+    '401':
+      description: "Request did not come through the service endpoint"
+      content:
+        application/json:
+          schema:
+            title: Unauthorized
+            type: object
+            properties:
+              message:
+                type: string
     '403':
       description: Not Authorized.
       content:

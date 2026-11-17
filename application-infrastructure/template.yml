@@ -5,7 +5,7 @@
 # Atlantis for AWS SAM Deployments
 # Starter 02 - API Gateway and Lambda using Cache-Data (NodeJS)
 # Author: Chad Kluck - 63klabs.net
-# Version: v2.0.6/2026-03-26
+# Version: v2.0.7/2026-11-16
 
 # Documentation, Issues/Feature Requests, Latest Updates, and Security Reports on GitHub:
 # https://github.com/63Klabs/atlantis-starter-02-apigw-lambda-cache-data-nodejs
@@ -64,6 +64,7 @@ Metadata:
           - LogRetentionInDaysForPROD
           - LogRetentionInDaysForDEVTEST
           - ApiGatewayLoggingEnabled
+          - ApiIsBehindCloudFront
       -
         Label:
           default: "Cache-Data Settings"
@@ -232,6 +233,13 @@ Parameters:
     Default: "FALSE"
     AllowedValues: ["TRUE", "FALSE"]
 
+  ApiIsBehindCloudFront:
+    Type: String
+    Description: "Origin enforcement. Set to true ONLY after this stage's CloudFront distribution (network stack, ApiOriginProtection=true) sends the X-Atlantis-Origin-Secret header. When true, the function answers 401 to any request that did not come through the distribution, and API Gateway execution data tracing is turned off. This does not change the API endpoint type: the API is always Regional and an edge-optimized API is not supported by this starter. Leave false for a stage that is not behind CloudFront."
+    Default: "false"
+    AllowedValues: ["true", "false"]
+    ConstraintDescription: "Must be true or false."
+
   # ---------------------------------------------------------------------------
   # Cache-Data Parameters
   # Most of these parameters are passed to Lambda Environment Variables
@@ -318,6 +326,8 @@ Conditions:
   HasPermissionsBoundaryArn: !Not [!Equals [!Ref PermissionsBoundaryArn, ""]]
   IsArmArch: !Equals [!Ref FunctionArchitecture, "arm64"]
   ApiGatewayLoggingIsEnabled: !Equals [!Ref ApiGatewayLoggingEnabled, "TRUE"]
+  IsApiBehindCloudFront: !Equals [!Ref ApiIsBehindCloudFront, "true"]
+  UseApiDataTrace: !And [!Not [!Condition IsProduction], !Not [!Condition IsApiBehindCloudFront]] # Execution data tracing only in non-PROD stages that are not enforcing the origin secret
   HasCacheDataDynamoDbTableName: !Not [!Equals [!Ref CacheDataDynamoDbTableName, ""]]
   HasCacheDataS3BucketName: !Not [!Equals [!Ref CacheDataS3BucketName, ""]]
   HasCacheDataStorageStack: !Not [!And [!Condition HasCacheDataDynamoDbTableName, !Condition HasCacheDataS3BucketName]]
@@ -360,6 +370,9 @@ Resources:
       Name: !Sub '${Prefix}-${ProjectId}-${StageId}-WebApi'
       StageName: !Ref ApiPathBase
 
+      EndpointConfiguration: # Always Regional (with or without CloudFront) so sourceIp is the true viewer address
+        Type: REGIONAL
+
       Cors: # Accepted methods are okay from any origin. Our lambda function will handle complex origins for GET and POST requests.
         AllowMethods: "'GET,OPTIONS'" # Add additional methods such as POST, PUT, DELETE here
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
@@ -389,7 +402,7 @@ Resources:
         - - LoggingLevel: !If [IsProduction, 'ERROR', 'INFO']
             ResourcePath: '/*'
             HttpMethod: '*'
-            DataTraceEnabled: !If [IsProduction, False, True]
+            DataTraceEnabled: !If [UseApiDataTrace, True, False] # Off in PROD and whenever the origin secret header is enforced (data trace would log header values)
             MetricsEnabled: True
         - !Ref 'AWS::NoValue'
   
@@ -412,6 +425,20 @@ Resources:
     Properties:
       LogGroupName: !Sub 'API-Gateway-Execution-Logs_${WebApi}/${ApiPathBase}' # AWS default
       RetentionInDays: !If [ IsProduction, !Ref LogRetentionInDaysForPROD,  !Ref LogRetentionInDaysForDEVTEST]
+
+  # ---------------------------------------------------------------------------
+  # Secrets
+
+  # Generated in every stage so the network stack can reference it by name before enforcement is turned on.
+  # Never output or exported. The function receives its ARN only when ApiIsBehindCloudFront is true.
+  OriginSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub '${Prefix}-${ProjectId}-${StageId}-OriginSecret'
+      Description: "Shared secret the stage's CloudFront distribution sends in X-Atlantis-Origin-Secret. Generated, never output, never exported."
+      GenerateSecretString:
+        PasswordLength: 48
+        ExcludePunctuation: true
 
   # ---------------------------------------------------------------------------
   # Lambda
@@ -487,6 +514,12 @@ Resources:
           CACHE_DATA_TIME_ZONE_FOR_INTERVAL: !Ref CacheDataTimeZoneForInterval # Cache-Data may expire using an interval such as every four, six, twelve, ... hours on the hour starting at midnight. What timezone holds the midnight to calculate from?
           CACHE_DATA_AWS_X_RAY_ON: true # (default is false) Enable X-Ray tracing for Cache-Data 
           CACHE_USE_IN_MEMORY: false # (default is false) Enable to reduce calls and latency to DynamoDB/S3 for cached data already in Lambda memory
+          # -- Client address and ingress --
+          CACHE_DATA_TRUSTED_PROXY_HOPS: "0" # The client address is API Gateway's sourceIp. Correct for a Regional API directly or behind CloudFront. Do not raise it.
+          CACHE_DATA_INGRESS_SECRET_NAME: !If # Only when enforcing. cache-data compares the X-Atlantis-Origin-Secret header with this secret (current and previous value)
+            - IsApiBehindCloudFront
+            - !Ref OriginSecret # the secret ARN
+            - !Ref 'AWS::NoValue'
           # -- Required --
           CACHE_DATA_DYNAMO_DB_TABLE: !If 
             - HasCacheDataDynamoDbTableName
@@ -564,6 +597,16 @@ Resources:
             Effect: Allow
             Resource: 
             - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ParameterStoreHierarchy}*"
+
+          # Read access to the origin secret only, and only while the origin header is enforced
+          - !If
+            - IsApiBehindCloudFront
+            - Sid: LambdaAccessToOriginSecret
+              Action:
+              - secretsmanager:GetSecretValue
+              Effect: Allow
+              Resource: !Ref OriginSecret # the secret ARN
+            - !Ref 'AWS::NoValue'
 
           # access to cache-data is provided through the Cache-Data managed policy
           # If you are not using the managed policy provided by a Cache-Data Stack then

@@ -5,6 +5,7 @@
     "FunctionMaxMemoryInMB": "2048",
     "FunctionTimeOutInSeconds": "10",
     "ApiGatewayLoggingEnabled": "FALSE",
+    "ApiIsBehindCloudFront": "false",
     "CacheDataS3BucketName": "",
     "CacheDataDynamoDbTableName": ""
   },

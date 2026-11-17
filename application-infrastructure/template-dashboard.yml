@@ -235,10 +235,10 @@ Dashboard:
                     "width": 24,
                     "height": 6,
                     "properties": {
-                        "query": "SOURCE '/aws/lambda/${WebService}' | fields @timestamp as ts, @requestId, @message, @logStream as logStream\n| sort ts desc\n| limit 500\n| PARSE @message \"[*] *\" as loggingType, loggingMessage\n| FILTER (loggingType = \"ERROR\" or loggingType = \"WARN\" or @message like \"Task timed out\")\n| DISPLAY ts, logStream, loggingType, loggingMessage",
+                        "query": "SOURCE '/aws/lambda/${WebService}' | fields @timestamp as ts, @requestId, @message, @logStream as logStream\n| sort ts desc\n| limit 500\n| PARSE @message \"[*] *\" as loggingType, loggingMessage\n| FILTER (loggingType = \"ERROR\" or loggingType = \"WARN\" or loggingType = \"INGRESS_UNVERIFIED\" or @message like \"Task timed out\")\n| DISPLAY ts, logStream, loggingType, loggingMessage",
                         "region": "${AWS::Region}",
                         "stacked": false,
-                        "title": "Error and Warning Log",
+                        "title": "Error, Warning, and Unverified Request Log",
                         "view": "table"
                     }
                 },

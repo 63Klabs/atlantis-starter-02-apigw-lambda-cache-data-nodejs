@@ -15,6 +15,7 @@ If you are not confident working within the Atlantis framework (or AWS Api Gatew
 - [ ] Make sure you or your organization has a SAM Config Repository
 - [ ] Make sure you or your organization has a Cache-Data storage stack
 - [ ] Obtain necessary config settings for your org such as Prefix, permission boundary ARN, Cache-Proxy S3 and table names, tag values, etc.
+- [ ] If you will put the API behind CloudFront: make sure the pipeline's CloudFormation service role can create the `OriginSecret` secret, and that your network stack supports `ApiOriginProtection`. See [CloudFront ingress and origin protection](./DEPLOYMENT.md#cloudfront-ingress-and-origin-protection)
 
 ## First deploy
 
@@ -22,6 +23,7 @@ If you are not confident working within the Atlantis framework (or AWS Api Gatew
 - [ ] Create pipeline for deploying test branch
 - [ ] After first deploy, visit endpoint to ensure success
 - [ ] Resolve any issues before moving on
+- [ ] Once `ApiIsBehindCloudFront` is `"true"` in `template-configuration.json` for a stage, confirm a request to the raw `execute-api` URL without the secret returns `401`, and a request through the distribution succeeds
 
 ## Housekeeping
 

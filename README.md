@@ -6,13 +6,15 @@ An application starter template to demonstrate Atlantis Template for AWS CodePip
 |---|---|---|
 | **Languages** | Python, Shell | Node.js |
 | **Frameworks** | Atlantis, Jest | Atlantis, @63klabs/cache-data |
-| **Features** | SSM Parameters | API Gateway, Lambda, CloudWatch Logs, CloudWatch Alarms, CloudWatch Dashboard, X-Ray Tracing, Lambda Insights, Open API Spec, @63klabs/cache-data |
+| **Features** | SSM Parameters | API Gateway (Regional), Lambda, Secrets Manager (origin secret), CloudWatch Logs, CloudWatch Alarms, CloudWatch Dashboard, X-Ray Tracing, Lambda Insights, Open API Spec, @63klabs/cache-data |
 
 > **Ready-to-Deploy-and-Run** with the [63Klabs Atlantis Templates and Scripts Platform for Serverless Deployments on AWS](https://github.com/63Klabs/atlantis)
 
 ## Features
 
 - API Gateway implementation (with additional logging if enabled)
+- Regional API Gateway REST API, built to sit behind the CloudFront distribution from the Atlantis network stack. The client address in the logs is the address API Gateway recorded, not one supplied by the caller.
+- Verified ingress: a generated origin secret (Secrets Manager) is created in every stage. When `ApiIsBehindCloudFront` is `"true"` in `application-infrastructure/template-configuration.json`, the function answers `401` to any request that did not come through the distribution. It is off by default. See [CloudFront ingress and origin protection](./DEPLOYMENT.md#cloudfront-ingress-and-origin-protection).
 - Lambda Function with gradual deployment and rollback in production environments
 - AWS X-Ray Tracing between API Gateway, Lambda, S3, DynamoDb, and remote endpoints
 - Lambda Insights, CloudWatch logs, and a CloudWatch Dashboard for monitoring performance

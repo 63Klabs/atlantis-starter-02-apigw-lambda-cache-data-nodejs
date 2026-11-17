@@ -7,6 +7,7 @@ const {
 } = require("@63klabs/cache-data");
 
 const Controllers = require("../controllers");
+const IngressGuard = require("../utils/ingress-guard");
 
 /**
  * Process the request
@@ -27,6 +28,10 @@ const process = async function(event, context) {
 
 	try {
 		
+		// >! Refuse a request that did not come through the stage's CloudFront distribution (only when enforcing)
+		if (IngressGuard.shouldRefuse(REQ)) {
+			return IngressGuard.buildRefusal(RESP);
+		}
 
 		if (REQ.isValid()) {
 			/*

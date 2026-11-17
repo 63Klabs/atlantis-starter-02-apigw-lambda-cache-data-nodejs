@@ -1,0 +1,11 @@
+{
+	"name": "ingress-standard-spec-tests",
+	"private": true,
+	"description": "Spec-local tests for the ingress standard change. Not part of the released starter.",
+	"engines": { "node": ">=24.0.0" },
+	"scripts": { "test": "jest" },
+	"devDependencies": {
+		"jest": "^30.5.2",
+		"js-yaml": "^4.1.0"
+	}
+}
