@@ -4,7 +4,7 @@
     "ApiPathBase": "$PROJECT_ID$-$STAGE_ID$",
     "FunctionMaxMemoryInMB": "2048",
     "FunctionTimeOutInSeconds": "10",
-    "ApiGatewayLoggingEnabled": "FALSE",
+    "ApiGatewayLoggingEnabled": "TRUE",
     "ApiIsBehindCloudFront": "false",
     "CacheDataS3BucketName": "",
     "CacheDataDynamoDbTableName": ""

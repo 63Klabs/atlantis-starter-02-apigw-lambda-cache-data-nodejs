@@ -447,6 +447,16 @@
         "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
         "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
         "timestamp": 1794881355127
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959002047
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959141933
       }
     ],
     "V3 The raw URL without the secret returns `401` with `Cache-Control: no-store`, and a request through the distribution succeeds (each stage, after the flag is set).": [
@@ -454,6 +464,16 @@
         "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
         "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
         "timestamp": 1794881355376
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959005533
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959142735
       }
     ],
     "V4 An `OPTIONS` request to the raw URL carries no data (TEST).": [
@@ -461,6 +481,11 @@
         "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
         "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
         "timestamp": 1794881355694
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959005959
       }
     ],
     "V5 The `API-Gateway-Execution-Logs_*` group holds no header values (TEST, logging enabled, flag `true`).": [
@@ -468,6 +493,16 @@
         "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
         "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
         "timestamp": 1794881355950
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959006956
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959144106
       }
     ],
     "V6 `[INGRESS_UNVERIFIED]` lines appear in the dashboard widget (PROD dashboard; TEST reads the Lambda log group).": [
@@ -475,6 +510,16 @@
         "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
         "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
         "timestamp": 1794881356232
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959007770
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959145360
       }
     ],
     "V7 The spec-local tests pass against the final code on the maintainer's machine, before merging toward `test`.": [
@@ -482,6 +527,11 @@
         "executionId": "2c2f0333-87db-4fa2-a2c0-02f2c303c8a1",
         "chatSessionId": "sess_1af5dcb2-5fcc-44e9-baa8-f2766a339761",
         "timestamp": 1794881356490
+      },
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959008795
       }
     ],
     "V8 The per-stage flag value reaches the stack through the SAM configuration repository (confirmed in task 6.1 and written in `DEPLOYMENT.md`).": [
@@ -557,6 +607,13 @@
         "executionId": "4f009448-d1f0-4229-8d2a-81ad223052d2",
         "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
         "timestamp": 1794887072268
+      }
+    ],
+    "V8 The per-stage flag value reaches the stack through the literal in `template-configuration.json` on the branch being deployed (confirmed by the maintainer in task 6.1 and written in `DEPLOYMENT.md`).": [
+      {
+        "executionId": "347b21b0-313c-47c7-b082-04ee451ac731",
+        "chatSessionId": "sess_46b3bcdd-e037-4732-8789-f32719e0ef42",
+        "timestamp": 1794959009714
       }
     ]
   }
