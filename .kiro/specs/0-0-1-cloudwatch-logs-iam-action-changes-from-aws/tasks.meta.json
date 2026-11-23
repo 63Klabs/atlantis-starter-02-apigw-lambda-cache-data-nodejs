@@ -1,0 +1,296 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Check the working tree and the tools": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376112153
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376118445
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376217620
+      }
+    ],
+    "1.2 Record the lint baseline": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376112305
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376219890
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795397921848
+      }
+    ],
+    "1.3 Run the changelog version lookup": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376112455
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795397926738
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795398905411
+      }
+    ],
+    "2.1 Replace the `LambdaAccessToWriteLogs` statement with the two statements": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376112560
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795398908611
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795398970501
+      }
+    ],
+    "2.2 Update the header version": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376112652
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795398973696
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399047964
+      }
+    ],
+    "3.1 Lint after the change": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376112752
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399050380
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399076086
+      }
+    ],
+    "3.2 Read the final statements against the checklist": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376112851
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399078338
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399148712
+      }
+    ],
+    "4.1 Repeat the changelog version lookup": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376112938
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399150978
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399167017
+      }
+    ],
+    "4.2 Write the entry": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113035
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399169353
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399269892
+      }
+    ],
+    "4.3 Check the entry": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113151
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399272267
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399304622
+      }
+    ],
+    "5.1 Check the release boundary": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113247
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399306877
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399392371
+      }
+    ],
+    "5.2 Check nothing sensitive or widened was added": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113335
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399394637
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399748026
+      }
+    ],
+    "5.3 Write the task summary": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113437
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399750361
+      },
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399779544
+      }
+    ],
+    "V1 The Role's inline policy shows the two new statements and no `LambdaAccessToWriteLogs` (TEST, then each stage).": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113531
+      }
+    ],
+    "V2 A request through the stage succeeds and log events appear in `/aws/lambda/<Prefix>-<ProjectId>-<StageId>-WebService` (TEST, then each stage).": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113623
+      }
+    ],
+    "V3 The stack update shows the Role as `Modify`, not `Replace` (TEST).": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113714
+      }
+    ],
+    "V4 No permission boundary or SCP scopes `logs:` resources with `:*` only (each account, before 2027-04-26).": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113809
+      }
+    ],
+    "V5 Optional: an IAM policy simulation allows `logs:CreateLogGroup` on the Log Group ARN of `WebServiceLogGroup`. If it denies, reopen PLAN.md Q1 and use the fallback in requirement 7.5.": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795376113906
+      }
+    ],
+    "1. Confirm the starting point": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795398905545
+      }
+    ],
+    "2. Edit `TEMPLATE`": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399048083
+      }
+    ],
+    "3. Verify the Template": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399148829
+      }
+    ],
+    "4. Update `CHANGELOG.md`": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399304730
+      }
+    ],
+    "5. Final checks": [
+      {
+        "executionId": "cfb96526-0584-4509-9be6-797525cdfdc6",
+        "chatSessionId": "sess_48c0aa2e-4903-4148-bd52-604de52cb5eb",
+        "timestamp": 1795399779669
+      }
+    ]
+  }
+}

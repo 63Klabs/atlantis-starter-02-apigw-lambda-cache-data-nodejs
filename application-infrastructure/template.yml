@@ -5,7 +5,7 @@
 # Atlantis for AWS SAM Deployments
 # Starter 02 - API Gateway and Lambda using Cache-Data (NodeJS)
 # Author: Chad Kluck - 63klabs.net
-# Version: v2.0.7/2026-11-16
+# Version: v2.0.8/2026-11-22
 
 # Documentation, Issues/Feature Requests, Latest Updates, and Security Reports on GitHub:
 # https://github.com/63Klabs/atlantis-starter-02-apigw-lambda-cache-data-nodejs
@@ -580,13 +580,20 @@ Resources:
         PolicyDocument:
           Statement:
 
-          - Sid: LambdaAccessToWriteLogs
+          # CloudWatch Logs uses two ARN forms. Fn::GetAtt Arn on AWS::Logs::LogGroup returns a Log Stream ARN
+          # (it ends in :*), which authorizes only the log stream actions. Log group actions need the plain
+          # Log Group ARN. From April 26, 2027 AWS no longer accepts a Log Stream ARN for log group actions.
+          - Sid: LambdaAccessToWriteLogStreams
             Action:
-            - logs:CreateLogGroup
             - logs:CreateLogStream
             - logs:PutLogEvents
             Effect: Allow
-            Resource: !GetAtt WebServiceLogGroup.Arn
+            Resource: !GetAtt WebServiceLogGroup.Arn # Log Stream ARN (ends in :*)
+          - Sid: LambdaAccessToCreateLogGroup
+            Action:
+            - logs:CreateLogGroup
+            Effect: Allow
+            Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${WebServiceLogGroup}' # Log Group ARN (Ref is the log group name)
 
           - Sid: LambdaAccessToSSMParameters
             Action:
