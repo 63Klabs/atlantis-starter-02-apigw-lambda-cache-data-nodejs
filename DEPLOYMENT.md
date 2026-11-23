@@ -131,7 +131,7 @@ This application's API is a **Regional** API Gateway REST API. It is meant to si
 |------|----------|
 | API endpoint type | Always `REGIONAL`, in every stage and for every value of `ApiIsBehindCloudFront`. An edge-optimized API is not supported by this starter. If you need one, change `template.yml` yourself. |
 | Client address | `CACHE_DATA_TRUSTED_PROXY_HOPS` is `"0"`. The client address in logs is the address API Gateway recorded (`requestContext.identity.sourceIp`), whether the request came through the distribution or straight to the API. A caller cannot choose it with a header such as `X-Forwarded-For`. Do not raise the value. |
-| Origin secret | Every stage has a generated Secrets Manager secret named `Prefix-ProjectId-StageId-OriginSecret`. It is created whether or not enforcement is on, so the network stack can reference it before enforcement starts. It is not output, exported, or passed as a parameter. |
+| Origin secret | A stage with `ApiIsBehindCloudFront` set to `"true"` has a generated Secrets Manager secret named `Prefix-ProjectId-StageId-OriginSecret`. When the value is `"false"` the secret is not created, so a stage that is not behind CloudFront does not pay for one. It is not output, exported, or passed as a parameter. |
 | `ApiIsBehindCloudFront` | The only switch for enforcement. Default `"false"`. It does **not** change the API endpoint type. |
 
 When `ApiIsBehindCloudFront` is `"true"`:
@@ -141,7 +141,7 @@ When `ApiIsBehindCloudFront` is `"true"`:
 - A request that is not verified gets `401`, `Cache-Control: no-store`, and a fixed JSON body. The refusal happens first in request handling, before routing, validation, or any data access.
 - API Gateway execution data tracing (`DataTraceEnabled`) is turned off in every environment, so request headers are not written to the `API-Gateway-Execution-Logs_*` log group. In PROD it is always off.
 
-When `ApiIsBehindCloudFront` is `"false"`, there is no environment variable, no extra permission, and no guard. Requests are handled as before.
+When `ApiIsBehindCloudFront` is `"false"`, there is no secret, no environment variable, no extra permission, and no guard. Requests are handled as before.
 
 > The origin secret shows that a request passed through a distribution that holds the secret. It does not authenticate the caller. Authenticate callers in your application or with an authorizer.
 
@@ -173,11 +173,11 @@ When `ApiIsBehindCloudFront` is `"false"`, there is no environment variable, no 
 
 Do these three steps for each stage, in the order `test`, `beta`, `main` (stage `prod`). Finish one stage and confirm it works before you start the next.
 
-1. **Deploy the application stack with `ApiIsBehindCloudFront` set to `"false"`.** This creates the origin secret. For an existing stage it also changes the API from edge-optimized to Regional in place. The `execute-api` hostname and the logical ID of the API do not change. See [Existing stages: check before the Regional switch](#existing-stages-check-before-the-regional-switch).
-2. **Deploy the stage's network stack with `ApiOriginProtection=true`.** The distribution now sends `X-Atlantis-Origin-Secret` with the value of this stage's secret. Check that a request through the distribution still succeeds.
-3. **Set `"ApiIsBehindCloudFront"` to `"true"` in `template-configuration.json` on that stage's branch, merge, and let the pipeline deploy.** The function now refuses requests without the secret.
+1. **Deploy the application stack with `ApiIsBehindCloudFront` set to `"false"` (first deployment of this version only).** For an existing stage this changes the API from edge-optimized to Regional in place. The `execute-api` hostname and the logical ID of the API do not change. See [Existing stages: check before the Regional switch](#existing-stages-check-before-the-regional-switch). No secret is created at this point.
+2. **Set `"ApiIsBehindCloudFront"` to `"true"` in `template-configuration.json` on that stage's branch, merge, and let the pipeline deploy.** This creates the origin secret and turns enforcement on in the same deployment. The function now refuses requests that do not carry the secret.
+3. **Deploy the stage's network stack with `ApiOriginProtection=true` as soon as step 2 finishes.** The distribution now sends `X-Atlantis-Origin-Secret` with the value of this stage's secret. Check that a request through the distribution succeeds.
 
-> **Do not swap steps 2 and 3.** If the function enforces before the distribution sends the header, every request gets `401` (the log reason is `missing-header`). If this happens, set the flag back to `"false"` and deploy.
+> **Requests through the distribution get `401` between steps 2 and 3.** The secret does not exist before step 2, so the network stack cannot reference it earlier, and the function enforces as soon as the secret exists. Plan steps 2 and 3 back to back, and do them when brief refusals are acceptable for the stage. The log reason for these refusals is `missing-header`. If you need to undo step 2, set the flag back to `"false"` and deploy.
 
 Then check that:
 
@@ -191,7 +191,7 @@ In this order:
 1. Set `"ApiIsBehindCloudFront"` to `"false"` on the stage's branch and let the pipeline deploy.
 2. Deploy the network stack with `ApiOriginProtection=false`.
 
-Do not stop the distribution from sending the header first, or every request gets `401` until the flag is `false`. The origin secret and the Regional endpoint stay in place after a rollback. Rollback does not return the API to edge-optimized.
+Do not stop the distribution from sending the header first, or every request gets `401` until the flag is `false`. Setting the flag to `"false"` deletes the origin secret with the application stack update, and the Regional endpoint stays in place. Rollback does not return the API to edge-optimized. Secrets Manager keeps a deleted secret for a recovery window, so turning the flag back to `"true"` before the window ends can fail because the name is still in use. Plan for this before you roll back and try again.
 
 ### PROD gradual deployment
 
@@ -200,7 +200,7 @@ In PROD, CodeDeploy shifts the `live` alias to the new function version over the
 - The old version does not guard. It serves every request.
 - The new version guards. It serves only requests that carry the secret.
 
-If step 2 is done, the distribution sends the secret to both versions, so users see no outage during the shift. The raw `execute-api` URL is refused only by the new version, so it stays open for part of the shift period. The change of the API to Regional is applied immediately and does not depend on the shift. The same mixed behavior applies on rollback.
+If the network stack step is done, the distribution sends the secret to both versions, so users see no outage during the shift. The raw `execute-api` URL is refused only by the new version, so it stays open for part of the shift period. The change of the API to Regional is applied immediately and does not depend on the shift. The same mixed behavior applies on rollback.
 
 ### Rotate the secret
 
@@ -220,7 +220,7 @@ Rotate in this order. Do not change `ApiOriginSecretRevision` early, because the
 
 ### The secret: lifetime, access, and permissions
 
-- **Deletion.** The secret is deleted with the application stack. Secrets Manager keeps a deleted secret for a recovery window, so recreating a stack with the same name can fail while the window is open. Plan for this before you delete and recreate a stage.
+- **Deletion.** The secret is deleted with the application stack, or when the flag is set back to `"false"`. Secrets Manager keeps a deleted secret for a recovery window, so recreating a stack with the same name can fail while the window is open. Plan for this before you delete and recreate a stage.
 - **Who can read it.** Anyone with `secretsmanager:GetSecretValue` on the secret can read its value. So can anyone with `cloudfront:GetDistributionConfig` on the distribution, because the header value is part of the distribution's origin configuration. Grant those permissions with care.
 - **Logs.** The function and cache-data do not write the secret. The sanitized `DEBUG` event log can show at most the last four characters of the header value. Keep `DEBUG` logging off in PROD.
 - **Pipeline and service roles.** The pipeline's CloudFormation service role must be allowed to create, tag, and delete the secret (for example `secretsmanager:CreateSecret`, `secretsmanager:TagResource`, `secretsmanager:DeleteSecret`, `secretsmanager:GetRandomPassword`, and the matching describe and update actions). The network stack's service role must be allowed to read the secret by name. If your organization uses a permissions boundary, it must allow the same actions. Add these through the pipeline's managed policy settings (`CloudFormationSvcRoleIncludeManagedPolicyArns`), not by editing Atlantis templates.

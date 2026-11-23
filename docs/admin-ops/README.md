@@ -5,7 +5,7 @@ This page is the operator's view of origin protection for the API. The full proc
 ## What an operator needs to know
 
 - The API is always a **Regional** API Gateway REST API. The client address in the logs is the address API Gateway recorded, and a caller cannot change it with a header.
-- Every stage has a generated secret named `Prefix-ProjectId-StageId-OriginSecret`, whether or not origin protection is on.
+- A stage with origin protection on has a generated secret named `Prefix-ProjectId-StageId-OriginSecret`. A stage with it off has no secret.
 - Origin protection is **off** until you turn it on for a stage. While it is off, requests are handled as before.
 - When it is on, a request that did not come through the stage's CloudFront distribution gets `401`.
 
@@ -25,18 +25,17 @@ Because the file merges forward (`dev`, `test`, `beta`, `main`), a `"true"` merg
 
 Go stage by stage: `test`, then `beta`, then `main`.
 
-1. Deploy the application stack with the flag `"false"`.
-2. Deploy the stage's network stack with `ApiOriginProtection=true`.
-3. Set the flag to `"true"` and deploy the application stack.
+1. Set the flag to `"true"` and deploy the application stack. This creates the secret and turns enforcement on.
+2. Deploy the stage's network stack with `ApiOriginProtection=true` right away. Requests through the distribution get `401` until this finishes.
 
-Never swap steps 2 and 3. If the function enforces before the distribution sends the header, every request gets `401` with the reason `missing-header`. Details: [Adopt origin protection, one stage at a time](../../DEPLOYMENT.md#adopt-origin-protection-one-stage-at-a-time).
+The `401` responses in the gap have the reason `missing-header`. The secret cannot exist before the flag is `"true"`, so the steps cannot be reordered. Details: [Adopt origin protection, one stage at a time](../../DEPLOYMENT.md#adopt-origin-protection-one-stage-at-a-time).
 
 ## Roll back
 
 1. Set the flag to `"false"` and deploy the application stack.
 2. Deploy the network stack with `ApiOriginProtection=false`.
 
-The secret and the Regional endpoint stay. See [Roll back](../../DEPLOYMENT.md#roll-back).
+The secret is deleted when the flag is `"false"`, and the Regional endpoint stays. See [Roll back](../../DEPLOYMENT.md#roll-back).
 
 ## Rotate the secret
 
@@ -78,7 +77,7 @@ When every request gets `401`, including requests through the distribution, the 
 
 - The pipeline's CloudFormation service role must be allowed to create, tag, and delete the secret. The network stack's service role must be allowed to read it by name. Any permissions boundary must allow the same actions. See [The secret: lifetime, access, and permissions](../../DEPLOYMENT.md#the-secret-lifetime-access-and-permissions).
 - Anyone with `secretsmanager:GetSecretValue` on the secret, or `cloudfront:GetDistributionConfig` on the distribution, can read the secret value.
-- The secret is deleted with the stack. Secrets Manager keeps it for a recovery window, so recreating a stack with the same name can fail during that window.
+- The secret is deleted with the stack, or when the flag is set to `"false"`. Secrets Manager keeps it for a recovery window, so recreating a stack with the same name can fail during that window.
 - The origin secret shows that a request passed through the distribution. It does not authenticate a caller.
 
 ## Checking a stage

@@ -5,7 +5,7 @@
 # Atlantis for AWS SAM Deployments
 # Starter 02 - API Gateway and Lambda using Cache-Data (NodeJS)
 # Author: Chad Kluck - 63klabs.net
-# Version: v2.0.8/2026-11-22
+# Version: v2.0.9/2026-11-23
 
 # Documentation, Issues/Feature Requests, Latest Updates, and Security Reports on GitHub:
 # https://github.com/63Klabs/atlantis-starter-02-apigw-lambda-cache-data-nodejs
@@ -429,10 +429,11 @@ Resources:
   # ---------------------------------------------------------------------------
   # Secrets
 
-  # Generated in every stage so the network stack can reference it by name before enforcement is turned on.
+  # Created only when ApiIsBehindCloudFront is true, so stages that are not behind CloudFront do not pay for a secret.
   # Never output or exported. The function receives its ARN only when ApiIsBehindCloudFront is true.
   OriginSecret:
     Type: AWS::SecretsManager::Secret
+    Condition: IsApiBehindCloudFront
     Properties:
       Name: !Sub '${Prefix}-${ProjectId}-${StageId}-OriginSecret'
       Description: "Shared secret the stage's CloudFront distribution sends in X-Atlantis-Origin-Secret. Generated, never output, never exported."
